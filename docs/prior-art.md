@@ -33,6 +33,24 @@ Each line below survived at least 2 of 3 verifiers. Use this before any write-up
 - Not found anywhere: post-hoc LoRA on ~1% of parameters repairing multi-key recall at 32K on an already-converted model,
   with transfer to an unseen template and unchanged general benchmarks.
 
+## Added 2026-10-16 night (checked against arXiv search results, not full text)
+- **Attention Amnesia (arXiv 2606.11052, June 2026; HKUST(GZ), UCL, Mistral, Tsinghua, SUTD).** Chain-of-thought SFT degrades
+  long-range recall in hybrids (HypeNet, Jet-Nemotron); e.g. HypeNet-9B NIAH-S2 at 256K from 67.2 to 9.4. Cause attributed to
+  W_Q / W_K drifting toward short-range patterns; fix "QK-Restore" (training-free: restore W_Q, W_K from the pre-SFT checkpoint).
+  **This pre-empts the basic form of our step 2** ("fine-tuning silently breaks hybrid recall"). What remains open: ordinary
+  (non-CoT) instruction SFT; whether our LoRA repair survives SFT; whether QK-Restore and the repair compose; the freeze rule.
+  Note our repair trains q/k projections among others, which is consistent with their routing explanation.
+- **When Synthetic Data Hurts (arXiv 2609.10750, Sept 2026).** Aggressive LoRA (rank 16-32) on synthetic skill-retrieval data for
+  LLM agents overfits and forgets real data; mitigations compared (anchor, LwF, L2-init, EWC). Different task family (agent skill
+  lookup, bi-encoder style) and they measure forgetting on retrieval tasks, not on LM/commonsense. Cite as the expected objection to
+  synthetic-data fine-tuning; our ARC/HellaSwag/bpb numbers are the answer, and our +0.4% bpb is the honest cost.
+- **Corrections to an AI-drafted related-work note seen on 2026-10-16:** RADLADS is Goldstein et al. (Recursal), not Hatamizadeh;
+  Lizard is a linearisation of LLaMA-3-8B-Instruct trained at 2K that keeps 50% softmax layers and reports RULER parity to 32K,
+  not an architecture trained from scratch with "perfect recall"; Jet-Nemotron is 2B, not 1.5B; numbered references like [109]
+  were placeholders; Shivagunde et al. 2026 was not verified. The "numeric vs UUID" result is a boundary of the *repair's*
+  training coverage, not a property of hybrid memory (the source model is also weak on UUIDs: 0.40); the multi-hop collapse was
+  a data-induced shortcut removed by the v2 mix, and must be reported as such.
+
 ## What RULER would see
 RULER's default suite has niah_multikey_1/2/3, multivalue and multiquery; in principle it detects the same pattern. No
 per-subtask RULER breakdown is published for Jet-Nemotron, and nothing was found for Qwen3.5-4B, Falcon-H1 or Kimi Linear.
