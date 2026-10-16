@@ -66,9 +66,11 @@ def cmd_run(a: argparse.Namespace) -> None:
     todo = tuple(c for c in cases if c.id not in done)
     print(f"{a.model}: {len(todo)} cases to run ({len(done)} already in {out})", file=sys.stderr)
     tok, model = hf.load(a.model, a.attn, a.trust_remote_code)
+    prefill = "" if a.allow_think else hf.no_think_prefill(tok)
+    print(f"  prefill after Answer: {prefill!r}", file=sys.stderr)
     with out.open("a") as f:
         for i, case in enumerate(sorted(todo, key=lambda c: c.ref_tokens), 1):
-            text, wall_s = hf.complete(tok, model, case.prompt, MAX_NEW_TOKENS)
+            text, wall_s = hf.complete(tok, model, case.prompt, prefill, MAX_NEW_TOKENS)
             r = to_result(case, a.model, text, wall_s)
             f.write(json.dumps(asdict(r)) + "\n")
             f.flush()
@@ -111,6 +113,7 @@ def main(argv: list[str] | None = None) -> None:
     r.add_argument("--attn", default="sdpa")
     r.add_argument("--trust-remote-code", action="store_true")
     r.add_argument("--limit", type=int, default=0)
+    r.add_argument("--allow-think", action="store_true", help="do not prefill the empty <think> block")
     r.add_argument("--tasks", nargs="*", default=())
     r.add_argument("--lengths", type=int, nargs="*", default=())
     r.set_defaults(fn=cmd_run)

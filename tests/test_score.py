@@ -1,4 +1,4 @@
-from recall_guard.score import score
+from recall_guard.score import score, strip_think
 
 
 def test_score_rules():
@@ -8,3 +8,9 @@ def test_score_rules():
     assert score("482913", ("111111",), "\n\n111111 then 482913") == (True, False, False)
     assert score("482913", (), "") == (False, False, False)
     assert score("482913", (), "48291") == (False, False, False)
+
+
+def test_think_blocks_are_stripped_before_scoring():
+    assert score("980205", (), "\n\n<think>\n\n</think>\n\n980205") == (True, True, False)
+    assert score("980205", (), "<think>\nreasoning 111111 cut off") == (False, False, False)
+    assert strip_think("a<think>x</think>b<think>y") == "ab"

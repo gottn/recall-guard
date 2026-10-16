@@ -21,9 +21,16 @@ def load(model_id: str, attn: str, trust_remote_code: bool) -> tuple[AutoTokeniz
 
 
 @torch.inference_mode()
-def complete(tok: AutoTokenizer, model: AutoModelForCausalLM, prompt: str, max_new_tokens: int) -> tuple[str, float]:
-    """(completion text, wall seconds) for one prompt; the prompt itself is excluded from the text."""
-    ids = tok(prompt, return_tensors="pt").input_ids.to(model.device)
+def no_think_prefill(tok: AutoTokenizer) -> str:
+    """The official empty reasoning block for models with a <think> token (Qwen3 family); empty otherwise."""
+    return "<think>\n\n</think>\n\n" if "<think>" in tok.get_vocab() else ""
+
+
+def complete(
+    tok: AutoTokenizer, model: AutoModelForCausalLM, prompt: str, prefill: str, max_new_tokens: int
+) -> tuple[str, float]:
+    """(completion text, wall seconds) for one prompt; prompt and prefill are excluded from the text."""
+    ids = tok(prompt + prefill, return_tensors="pt").input_ids.to(model.device)
     t0 = time.perf_counter()
     out = model.generate(
         ids, max_new_tokens=max_new_tokens, do_sample=False, pad_token_id=tok.pad_token_id or tok.eos_token_id
