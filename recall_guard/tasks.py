@@ -140,3 +140,29 @@ TASKS = {
     "updated": updated,
     "multihop": multihop,
 }
+
+
+# --- held-out template family: same skill, different surface form (parcels and pickup codes) ---
+def parcel_keys(n: int, rng: random.Random) -> tuple[str, ...]:
+    """'parcel 48213-K': five digits and a letter, distinct numbers."""
+    out: list[str] = []
+    while len(out) < n:
+        k = f"{rng.randint(10_000, 99_999)}-{rng.choice(LETTERS)}"
+        if all(k[:5] != o[:5] for o in out):
+            out.append(k)
+    return tuple(out)
+
+
+def heldout_many(seed: int) -> TaskInstance:
+    """16 parcels with pickup codes; query one. Never used for training data, so it measures transfer."""
+    rng = random.Random(seed)
+    keys, values = parcel_keys(MANY_KEYS, rng), distinct_codes(MANY_KEYS, rng)
+    facts = tuple(
+        Fact(f"Parcel {k} has the pickup code {v}.", d) for k, v, d in zip(keys, values, depths(MANY_KEYS, rng), strict=True)
+    )
+    target = rng.randrange(MANY_KEYS)
+    others = tuple(v for i, v in enumerate(values) if i != target)
+    return TaskInstance("heldout_many", facts, f"What is the pickup code for parcel {keys[target]}?", values[target], others)
+
+
+TASKS["heldout_many"] = heldout_many
