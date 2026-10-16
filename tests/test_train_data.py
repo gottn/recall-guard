@@ -7,14 +7,16 @@ def words(text: str) -> int:
 
 
 def test_documents_cycle_kinds_and_answers_are_planted():
-    for seed in range(6):
+    for seed in range(8):
         doc = make_document(seed)
-        assert doc.kind == KINDS[seed % 3]
+        assert doc.kind == KINDS[seed % 4]
         assert 1 <= len(doc.qa) <= 8
         for _q, a in doc.qa:
             assert any(a in f.sentence for f in doc.facts)
         if doc.kind == "updated":
             assert all(q.startswith("What is the current") for q, _ in doc.qa)
+        if doc.kind == "multihop":
+            assert all("assigned to" in q for q, _ in doc.qa) and len(doc.facts) % 2 == 0
 
 
 def test_segments_train_only_on_answers():

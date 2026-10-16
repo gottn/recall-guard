@@ -73,3 +73,17 @@ def merge(model: torch.nn.Module, adapter_dir: str) -> int:
         delta = (state[f"{name}.B"] @ state[f"{name}.A"]) * scale
         lin.weight += delta.to(lin.weight.device, lin.weight.dtype)
     return len(cfg["modules"])
+
+
+@torch.no_grad()
+def attach(model: torch.nn.Module, adapter_dir: str) -> int:
+    """Wrap the saved modules with LoRALinear and load A/B, leaving base weights untouched (unmerged inference)."""
+    cfg = json.loads((Path(adapter_dir) / "adapter_config.json").read_text())
+    state = torch.load(Path(adapter_dir) / "adapter.pt", map_location="cpu")
+    leaves = tuple(sorted({n.rsplit(".", 1)[-1] for n in cfg["modules"]}))
+    inject(model, leaves, cfg["r"], cfg["alpha"])
+    for name in cfg["modules"]:
+        m = model.get_submodule(name)
+        m.A.copy_(state[f"{name}.A"].to(m.A.device))
+        m.B.copy_(state[f"{name}.B"].to(m.B.device))
+    return len(cfg["modules"])

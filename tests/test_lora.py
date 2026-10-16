@@ -26,3 +26,19 @@ def test_inject_train_merge_roundtrip(tmp_path):
     fresh.q_proj.load_state_dict(m.q_proj.base.state_dict())
     assert lora.merge(fresh, str(tmp_path)) == 1
     assert torch.allclose(fresh.q_proj(x), y_adapter, atol=1e-5)
+
+
+def test_attach_matches_merge(tmp_path):
+    torch.manual_seed(1)
+    m = Tiny()
+    lora.inject(m, ("q_proj",), r=2, alpha=4)
+    with torch.no_grad():
+        m.q_proj.B.copy_(torch.randn(8, 2))
+    lora.save(m, str(tmp_path), 2, 4)
+    x = torch.randn(2, 8)
+    merged, attached = Tiny(), Tiny()
+    for t in (merged, attached):
+        t.q_proj.load_state_dict(m.q_proj.base.state_dict())
+    lora.merge(merged, str(tmp_path))
+    assert lora.attach(attached, str(tmp_path)) == 1
+    assert torch.allclose(merged.q_proj(x), attached.q_proj(x), atol=1e-5)

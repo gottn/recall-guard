@@ -34,6 +34,7 @@ class Case:
     answer: str
     distractors: tuple[str, ...]
     ref_tokens: int
+    rule: str = "code"  # "code": six-digit code on the first visible line; "contains": every "|"-part anywhere (RULER)
 
 
 @dataclass(frozen=True)
@@ -49,3 +50,4 @@ class Result:
     exact: bool
     stale: bool
     wall_s: float
+    model_tokens: int = 0  # prompt length under the evaluated model's own tokenizer (0 in files before 2026-10-16 evening)
