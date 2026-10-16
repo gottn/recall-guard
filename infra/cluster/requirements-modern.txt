@@ -4,3 +4,4 @@ accelerate
 flash-linear-attention
 peft>=0.18
 datasets
+torchao>=0.16
