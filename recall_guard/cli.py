@@ -129,7 +129,7 @@ def main(argv: list[str] | None = None) -> None:
     r.set_defaults(fn=cmd_run)
     t = sub.add_parser("report")
     t.add_argument("--results", nargs="+", required=True)
-    t.add_argument("--pair", nargs="*", default=(), help="hybrid=full model id pairs")
+    t.add_argument("--pair", action="append", default=[], help="hybrid=full model id pair (repeatable)")
     t.add_argument("--out", default="")
     t.set_defaults(fn=cmd_report)
     a = p.parse_args(argv)
