@@ -41,8 +41,10 @@ def cmd_generate(a: argparse.Namespace) -> None:
     cases = build_suite(spec, a.seed, lambda s: len(tok(s).input_ids))
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    with out.open("w") as f:
+    tmp = out.with_suffix(".jsonl.tmp")  # write-then-rename: parallel jobs sharing a run dir never read a partial file
+    with tmp.open("w") as f:
         f.writelines(json.dumps(asdict(c)) + "\n" for c in cases)
+    tmp.replace(out)
     prov = {"tokenizer": a.tokenizer, "seed": a.seed, "spec": asdict(spec), "cases": len(cases), "wall_s": time.perf_counter() - t0}
     out.with_suffix(".prov.json").write_text(json.dumps(prov, indent=1))
     print(f"wrote {len(cases)} cases to {out} in {prov['wall_s']:.1f}s", file=sys.stderr)

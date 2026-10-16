@@ -73,6 +73,11 @@ def question(key: str) -> str:
     return f"What is the access code for locker {key}?"
 
 
+def current_question(key: str) -> str:
+    """For overwritten facts the question must say 'current': without it a base model echoes the first assignment."""
+    return f"What is the current access code for locker {key}?"
+
+
 def needle(seed: int) -> TaskInstance:
     """Control: one random key, one static fact (the classic needle-in-a-haystack)."""
     rng = random.Random(seed)
@@ -109,7 +114,7 @@ def updated(seed: int) -> TaskInstance:
         d_old, d_new = sorted(depths(2, rng))
         facts += [Fact(fact_sentence(k, v_old), d_old), Fact(update_sentence(k, v_new), d_new)]
     target = rng.randrange(UPDATED_KEYS)
-    return TaskInstance("updated", tuple(facts), question(keys[target]), new[target], (old[target],))
+    return TaskInstance("updated", tuple(facts), current_question(keys[target]), new[target], (old[target],))
 
 
 def multihop(seed: int) -> TaskInstance:

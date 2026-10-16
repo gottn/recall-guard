@@ -27,6 +27,7 @@ def test_updated_latest_value_comes_after_old_one():
     d_old = next(f.depth for f in inst.facts if old in f.sentence)
     d_new = next(f.depth for f in inst.facts if inst.answer in f.sentence)
     assert d_old < d_new
+    assert inst.question.startswith("What is the current access code")
     assert len(inst.facts) == 16
 
 
