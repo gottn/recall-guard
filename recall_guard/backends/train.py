@@ -6,6 +6,7 @@ import time
 from dataclasses import dataclass
 
 import torch
+import torch.nn.functional as F
 from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -51,6 +52,16 @@ def tokenize_segments(tok: AutoTokenizer, segs: tuple[Segment, ...]) -> tuple[to
     return torch.tensor([ids]), torch.tensor([labels])
 
 
+def answer_loss(model: torch.nn.Module, ids: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+    """Cross-entropy on answer positions only, applying lm_head just there: full-sequence logits at 16K x 152K
+    vocab in float32 are 9.3 GiB, which is what OOMed the first smoke."""
+    base = model.get_base_model() if hasattr(model, "get_base_model") else model
+    hidden = base.model(input_ids=ids).last_hidden_state[0]
+    pos = (labels[0, 1:] != -100).nonzero().squeeze(-1)
+    logits = base.lm_head(hidden[pos]).float()
+    return F.cross_entropy(logits, labels[0, 1:][pos])
+
+
 def train(cfg: TrainConfig) -> dict:
     torch.manual_seed(cfg.seed)
     tok = AutoTokenizer.from_pretrained(cfg.model_id, trust_remote_code=cfg.trust_remote_code)
@@ -75,9 +86,9 @@ def train(cfg: TrainConfig) -> dict:
     for i in range(n):
         segs = training_segments(cfg.seed * 100_000 + i, cfg.lengths[i % len(cfg.lengths)], count, tps)
         ids, labels = tokenize_segments(tok, segs)
-        out = model(input_ids=ids.to(device), labels=labels.to(device))
-        (out.loss / cfg.grad_accum).backward()
-        losses.append(out.loss.item())
+        loss = answer_loss(model, ids.to(device), labels.to(device))
+        (loss / cfg.grad_accum).backward()
+        losses.append(loss.item())
         tokens += ids.shape[1]
         if (i + 1) % cfg.grad_accum == 0:
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
