@@ -1,0 +1,5 @@
+# Env "jet": Jet-Nemotron pins transformers<=4.53 and its own fla fork. Never share this venv with "modern".
+transformers==4.53.0
+accelerate
+datasets==4.0.0
+flash-linear-attention @ git+https://github.com/jet-ai-projects/flash-linear-attention.git@jetai

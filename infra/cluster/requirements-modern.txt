@@ -1,0 +1,4 @@
+# Env "modern": Qwen3 / Qwen3.5 / Falcon-H1 / Qwen2.5. torch comes from the container (system-site-packages).
+transformers>=5.0
+accelerate
+flash-linear-attention
