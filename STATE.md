@@ -39,7 +39,7 @@ Jet repair seeds 1-3 = 1089544-46, Qwen2.5 repair seeds 1-2 = 1089547-48. Each e
 ARC/HellaSwag, bits per byte on Moby Dick at 16K; repair jobs train the v2 mix (with multi-hop) and add the unmerged-adapter
 and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<run>/ exp03_robust/results/raw/`
 then `exp03_robust/run_all.sh report`.
-Pending user action for item 9: Llama-3.1-8B is gated; accept the licence on Hugging Face and put HF_TOKEN in ~/.bashrc on aau.
+Item 9 unblocked 2026-10-16 evening: Llama 3.1 licence accepted (user musab96) and a fine-grained token stored at ~/hf_cache/token on aau (HF_TOKEN also in ~/.bashrc); a real gated download returns 200. A background agent is integrating the Mamba-in-the-Llama and LoLCATs loaders (recall_guard/backends/loaders.py, env `mil`, infra/slurm/mil_smoke.sbatch).
 Candidate 8B checkpoints: JunxiongWang/Llama3.1-Mamba2-8B-dpo (Mamba-in-the-Llama), hazyresearch/lolcats-llama-3.1-8b-ft-lora.
 
 ## Next
