@@ -37,6 +37,11 @@ def load(
     return tok, model.eval()
 
 
+def peak_memory_gib() -> float:
+    """Peak memory torch allocated on the GPU in this process, GiB (0 on CPU)."""
+    return torch.cuda.max_memory_allocated() / 2**30 if torch.cuda.is_available() else 0.0
+
+
 @torch.inference_mode()
 def no_think_prefill(tok: AutoTokenizer) -> str:
     """The official empty reasoning block for models with a <think> token (Qwen3 family); empty otherwise."""

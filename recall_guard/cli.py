@@ -75,7 +75,9 @@ def cmd_run(a: argparse.Namespace) -> None:
     done = {d["case_id"] for d in read_jsonl(out)}
     todo = tuple(c for c in cases if c.id not in done)
     print(f"{a.model}: {len(todo)} cases to run ({len(done)} already in {out})", file=sys.stderr)
+    t0 = time.perf_counter()
     tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, a.adapter_mode)
+    print(f"  loaded in {time.perf_counter() - t0:.0f}s, {hf.peak_memory_gib():.1f} GiB", file=sys.stderr)
     prefill = "" if a.allow_think else hf.no_think_prefill(tok)
     print(f"  prefill after Answer: {prefill!r}; chat={a.chat}; adapter_mode={a.adapter_mode}", file=sys.stderr)
     with out.open("a") as f:
@@ -87,6 +89,7 @@ def cmd_run(a: argparse.Namespace) -> None:
             f.flush()
             if i % 25 == 0 or i == len(todo):
                 print(f"  {i}/{len(todo)} {case.id} contains={r.contains} wall={wall_s:.1f}s", file=sys.stderr)
+    print(f"  peak GPU memory {hf.peak_memory_gib():.1f} GiB", file=sys.stderr)
 
 
 def cmd_train(a: argparse.Namespace) -> None:
