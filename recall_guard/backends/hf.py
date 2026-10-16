@@ -20,17 +20,15 @@ def load(
     Families registered in loaders.py (converted hybrids AutoModel cannot build) go through their own loader."""
     target = loaders.loader_for(model_id)
     if target:
-        if adapter:
-            raise ValueError(f"{model_id}: adapters are not wired for registry loaders ({target})")
         tok, model = loaders.resolve(target)(model_id, attn)
-        return tok, model.eval()
-    tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=trust_remote_code)
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    kwargs = {DTYPE_KWARG: torch.bfloat16 if device == "cuda" else torch.float32}
-    model = AutoModelForCausalLM.from_pretrained(
-        model_id, attn_implementation=attn, trust_remote_code=trust_remote_code, device_map=device, **kwargs
-    )
-    if adapter:
+    else:
+        tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=trust_remote_code)
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        kwargs = {DTYPE_KWARG: torch.bfloat16 if device == "cuda" else torch.float32}
+        model = AutoModelForCausalLM.from_pretrained(
+            model_id, attn_implementation=attn, trust_remote_code=trust_remote_code, device_map=device, **kwargs
+        )
+    if adapter:  # the adapter names modules by path, which is the same structure whichever loader built the model
         from recall_guard.backends import lora
 
         (lora.merge if adapter_mode == "merge" else lora.attach)(model, adapter)
