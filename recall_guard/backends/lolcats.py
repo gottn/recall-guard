@@ -11,11 +11,19 @@ materialises the full fp32 score matrix (128 GB at 32K) and needs transformers 4
 - decode: softmax over the last 64 keys (current included), linear over everything older, state kept in the model dtype.
 f(x) = clamp(cat(softmax(xW), softmax(-xW)), 1e-12) per head with W: (head_dim, 64), on rotated, kv-repeated q and k."""
 
+import re
+
 import torch
 import torch.nn.functional as F
+from huggingface_hub import hf_hub_download
 from torch import Tensor
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers.models.llama.modeling_llama import apply_rotary_pos_emb, repeat_kv
 
+BASE = "meta-llama/Llama-3.1-8B"
 WINDOW = 64
+LORA_SCALE = 16 / 8
+KEY = re.compile(r"layers\.(\d+)\.self_attn\.(feature_map_[qk]\.mlp\.layer|window_factors|[qkvo]_proj\.lora_[AB])(?:\.default)?(?:\.weight)?$")
 
 
 def feature_map(x: torch.Tensor, w: torch.Tensor) -> torch.Tensor:
@@ -72,3 +80,72 @@ def decode_step(
     y = y / (a.sum(-1, keepdim=True) + (fq.float() * ks.float()).sum(-1, keepdim=True))
     return y.to(v.dtype), (kc, vc, kv, ks)
 
+
+class LolcatsAttention(torch.nn.Module):
+    """Drop-in for LlamaAttention (same projections and call); the decode state lives in the HF cache of the call."""
+
+    def __init__(self, base: torch.nn.Module, layer_idx: int, heads: int, kv_heads: int, feature_dim: int = 64):
+        super().__init__()
+        self.q_proj, self.k_proj, self.v_proj, self.o_proj = base.q_proj, base.k_proj, base.v_proj, base.o_proj
+        self.layer_idx, self.heads, self.kv_heads = layer_idx, heads, kv_heads
+        self.head_dim = self.q_proj.out_features // heads
+        like = {"device": self.q_proj.weight.device, "dtype": self.q_proj.weight.dtype}
+        self.fmap_q = torch.nn.Parameter(torch.empty(heads, self.head_dim, feature_dim, **like))
+        self.fmap_k = torch.nn.Parameter(torch.empty(heads, self.head_dim, feature_dim, **like))
+        self.window_factors = torch.nn.Parameter(torch.empty(1, heads, 1, 1, **like))
+
+    def forward(self, hidden_states: torch.Tensor, position_embeddings: tuple, past_key_values: object = None, **_: object):
+        b, n, _ = hidden_states.shape
+        split = lambda x, h: x.view(b, n, h, self.head_dim).transpose(1, 2)  # noqa: E731
+        q, k = apply_rotary_pos_emb(split(self.q_proj(hidden_states), self.heads),
+                                    split(self.k_proj(hidden_states), self.kv_heads), *position_embeddings)
+        k, v = (repeat_kv(x, self.heads // self.kv_heads) for x in (k, split(self.v_proj(hidden_states), self.kv_heads)))
+        fq, wf = feature_map(q, self.fmap_q), torch.sigmoid(self.window_factors)
+        states = vars(past_key_values).setdefault("rg_lolcats", {}) if past_key_values is not None else {}
+        if self.layer_idx in states:
+            y, states[self.layer_idx] = decode_step(q, k, v, fq, states[self.layer_idx], wf, self.fmap_k)
+        else:
+            fk = feature_map(k, self.fmap_k)
+            y = prefill(q, k, v, fq, fk, wf)
+            if past_key_values is not None:
+                states[self.layer_idx] = decode_state(k, v, fk)
+        if past_key_values is not None:  # one-wide dummies keep the HF cache length right
+            dummy = hidden_states.new_zeros(b, 1, n, 1)
+            past_key_values.update(dummy, dummy, self.layer_idx)
+        return self.o_proj(y.transpose(1, 2).reshape(b, n, -1)), None
+
+
+def checkpoint_tensors(repo_id: str) -> dict[tuple[int, str], torch.Tensor]:
+    """{(layer, name): tensor} from a LoLCATs model.pt, whatever prefix (peft or plain) its keys carry."""
+    sd = torch.load(hf_hub_download(repo_id, "model.pt"), map_location="cpu", weights_only=True)
+    sd = sd.get("model_state_dict", sd)
+    out = {(int(m[1]), m[2]): t for key, t in sd.items() if (m := KEY.search(key))}
+    if len(out) != len(sd):
+        raise ValueError(f"{repo_id}: unrecognised keys, e.g. {sorted(set(sd) - {k for k in sd if KEY.search(k)})[:3]}")
+    return out
+
+
+def load(model_id: str, attn: str) -> tuple[AutoTokenizer, torch.nn.Module]:
+    distill = model_id.replace("-ft-lora", "-distill")
+    tok = AutoTokenizer.from_pretrained(BASE)
+    model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.bfloat16, attn_implementation=attn, device_map="cuda")
+    cfg = model.config
+    fmaps = checkpoint_tensors(distill)
+    lora = checkpoint_tensors(model_id) if model_id != distill else {}
+    if {n for _, n in fmaps} != {"feature_map_q.mlp.layer", "feature_map_k.mlp.layer", "window_factors"} or any(
+        "lora" not in n for _, n in lora
+    ):
+        raise ValueError(f"unexpected tensors: distill {sorted({n for _, n in fmaps})}, ft {sorted({n for _, n in lora})}")
+    for i, layer in enumerate(model.model.layers):
+        new = LolcatsAttention(layer.self_attn, i, cfg.num_attention_heads, cfg.num_key_value_heads)
+        with torch.no_grad():
+            new.fmap_q.copy_(fmaps[i, "feature_map_q.mlp.layer"])
+            new.fmap_k.copy_(fmaps[i, "feature_map_k.mlp.layer"])
+            new.window_factors.copy_(fmaps[i, "window_factors"])
+            for p in ("q_proj", "k_proj", "v_proj", "o_proj") if lora else ():
+                w = getattr(new, p).weight
+                delta = lora[i, f"{p}.lora_B"].float().to(w.device) @ lora[i, f"{p}.lora_A"].float().to(w.device)
+                w.copy_((w.float() + LORA_SCALE * delta).to(w.dtype))
+        layer.self_attn = new
+    print(f"lolcats: {len(fmaps)} feature-map tensors from {distill}, {len(lora)} LoRA tensors from {model_id}")
+    return tok, model

@@ -1,8 +1,9 @@
 import math
 
 import torch
+from transformers import AutoModelForCausalLM, LlamaConfig
 
-from recall_guard.backends.lolcats import decode_state, decode_step, feature_map, prefill
+from recall_guard.backends.lolcats import LolcatsAttention, decode_state, decode_step, feature_map, prefill
 
 W, H, D = 4, 2, 8  # window, heads, head dim
 
@@ -43,3 +44,18 @@ def test_prefill_and_decode_match_the_quadratic_reference():
             ref = sliding(q[:, :, t:t + 1], k[:, :, :t + 1], v[:, :, :t + 1], fq[:, :, t:t + 1], fk[:, :, :t + 1], wf)
             assert torch.allclose(y, ref, atol=1e-5)
 
+
+def test_module_generates_through_the_hf_cache():
+    torch.manual_seed(0)
+    cfg = LlamaConfig(hidden_size=32, intermediate_size=64, num_hidden_layers=2, num_attention_heads=4,
+                      num_key_value_heads=2, vocab_size=50, max_position_embeddings=256, eos_token_id=None)
+    model = AutoModelForCausalLM.from_config(cfg, attn_implementation="sdpa").eval()
+    for i, layer in enumerate(model.model.layers):
+        layer.self_attn = LolcatsAttention(layer.self_attn, i, 4, 2, feature_dim=3)
+        torch.nn.init.normal_(layer.self_attn.fmap_q), torch.nn.init.normal_(layer.self_attn.fmap_k)
+        torch.nn.init.zeros_(layer.self_attn.window_factors)
+    ids = torch.randint(0, 50, (1, 150))
+    with torch.no_grad():
+        out = model.generate(ids, max_new_tokens=4, do_sample=False, pad_token_id=0)
+        first = model(ids, use_cache=False).logits[:, -1].argmax(-1)
+    assert out.shape[1] == 154 and out[0, 150] == first[0]

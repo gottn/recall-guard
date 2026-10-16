@@ -10,6 +10,7 @@ from collections.abc import Callable
 LOADERS: tuple[tuple[str, str], ...] = (
     ("JunxiongWang/Llama3.1-Mamba2-", "recall_guard.backends.mil:load"),
     ("JunxiongWang/Llama3.2-Mamba2-", "recall_guard.backends.mil:load"),
+    ("hazyresearch/lolcats-llama-3.1-8b-", "recall_guard.backends.lolcats:load"),
 )
 
 
