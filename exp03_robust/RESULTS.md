@@ -45,7 +45,20 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 4. **Base damage-check values** (for the after-numbers to be compared against): bits per byte on Moby Dick at 16K,
    Jet 1.082, Qwen2.5 1.064; ARC-Easy / HellaSwag as in exp02 (Jet 0.764 / 0.508, Qwen2.5 0.746 / 0.520).
 
-## Pending (jobs 1089544-1089548)
+## Repair stage, Jet seeds 1 and 2 complete (v2 mix with multi-hop; seed 3 and the controls pending)
+
+5. **Repair replicates across training seeds and the multi-hop regression is gone (items 1, 5).** At 32K, n = 100:
+   many_random 1.00 / 0.97, many_similar 1.00 / 0.97, held-out parcels 0.98 / 0.95, needle 1.00 / 1.00, updated 1.00 / 1.00,
+   and multi-hop 0.88 / 0.88 (base 0.11; the exp02 v1 mix had driven it to 0.03).
+6. **Transfer to RULER is real for numeric values and absent for UUIDs (item 2, after repair, seed 1).** multikey_1 at 32K
+   0.56 to 0.90 (source model 0.94); multikey_2 0.26 to 0.53 (0.72); multivalue at 16K 0.24 to 0.68 (0.74); multiquery
+   at 16K 0.08 to 0.62 (0.64); multikey_3 with UUID keys and values unchanged (0.16 to 0.18). The repair data only
+   contained numeric values, so the model learned numeric retrieval: coverage of the training mix sets the boundary.
+7. **Damage (item 6):** ARC-Easy 0.764 to 0.776 / 0.770, HellaSwag 0.508 to 0.492 / 0.510 (SE 0.022, unchanged); bits per
+   byte on Moby Dick at 16K 1.082 to 1.086 / 1.087, a consistent +0.4% across seeds and across all 8 windows. Small, but
+   it is a real cost and should be reported as one.
+
+## Pending (jobs 1089546-1089548)
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 
