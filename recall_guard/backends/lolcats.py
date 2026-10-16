@@ -126,9 +126,13 @@ def checkpoint_tensors(repo_id: str) -> dict[tuple[int, str], torch.Tensor]:
 
 
 def load(model_id: str, attn: str) -> tuple[AutoTokenizer, torch.nn.Module]:
+    """`model_id` may end in ":<base repo>" to graft the LoLCATs weights on another base (their demo config names
+    meta-llama/Meta-Llama-3-8B while the checkpoints and README say Llama 3.1)."""
+    model_id, _, base = model_id.partition(":")
+    base = base or BASE
     distill = model_id.replace("-ft-lora", "-distill")
-    tok = AutoTokenizer.from_pretrained(BASE)
-    model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.bfloat16, attn_implementation=attn, device_map="cuda")
+    tok = AutoTokenizer.from_pretrained(base)
+    model = AutoModelForCausalLM.from_pretrained(base, dtype=torch.bfloat16, attn_implementation=attn, device_map="cuda")
     cfg = model.config
     fmaps = checkpoint_tensors(distill)
     lora = checkpoint_tensors(model_id) if model_id != distill else {}
@@ -147,5 +151,5 @@ def load(model_id: str, attn: str) -> tuple[AutoTokenizer, torch.nn.Module]:
                 delta = lora[i, f"{p}.lora_B"].float().to(w.device) @ lora[i, f"{p}.lora_A"].float().to(w.device)
                 w.copy_((w.float() + LORA_SCALE * delta).to(w.dtype))
         layer.self_attn = new
-    print(f"lolcats: {len(fmaps)} feature-map tensors from {distill}, {len(lora)} LoRA tensors from {model_id}")
+    print(f"lolcats: base {base}, {len(fmaps)} feature-map tensors from {distill}, {len(lora)} LoRA tensors from {model_id}")
     return tok, model
