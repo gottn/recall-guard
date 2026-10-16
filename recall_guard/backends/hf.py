@@ -8,13 +8,22 @@ import torch
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from recall_guard.backends import loaders
+
 DTYPE_KWARG = "dtype" if int(transformers.__version__.split(".")[0]) >= 5 else "torch_dtype"
 
 
 def load(
     model_id: str, attn: str, trust_remote_code: bool, adapter: str = "", adapter_mode: str = "merge"
 ) -> tuple[AutoTokenizer, AutoModelForCausalLM]:
-    """Base model, or base + adapter: merged into the weights (default) or attached unmerged (a check that merging is exact)."""
+    """Base model, or base + adapter: merged into the weights (default) or attached unmerged (a check that merging is exact).
+    Families registered in loaders.py (converted hybrids AutoModel cannot build) go through their own loader."""
+    target = loaders.loader_for(model_id)
+    if target:
+        if adapter:
+            raise ValueError(f"{model_id}: adapters are not wired for registry loaders ({target})")
+        tok, model = loaders.resolve(target)(model_id, attn)
+        return tok, model.eval()
     tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=trust_remote_code)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     kwargs = {DTYPE_KWARG: torch.bfloat16 if device == "cuda" else torch.float32}
