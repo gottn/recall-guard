@@ -1,0 +1,9 @@
+# Env "mil": converted 8B hybrids that need their authors' layer code (recall_guard/backends/loaders.py).
+# torch and triton come from the container. No CUDA extension is built: Mamba-2 runs on mamba_ssm's Triton kernels
+# (imported without its __init__, see backends/mil.py), the depthwise conv on torch, attention layers are HF Llama.
+transformers==5.20.0
+accelerate==1.15.0
+einops
+packaging
+#src https://github.com/state-spaces/mamba v2.2.6.post3
+#src https://github.com/jxiw/MambaInLlama b03f123152eeba5f2ae9d8694f4a001147e0a14c
