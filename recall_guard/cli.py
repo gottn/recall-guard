@@ -13,7 +13,15 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 
-from recall_guard.aggregate import gap_markdown, gaps, markdown, pivot_markdown, rows, separation_markdown, separations
+from recall_guard.aggregate import (
+    gap_markdown,
+    gaps,
+    markdown,
+    pivot_markdown,
+    rows,
+    separation_markdown,
+    separations,
+)
 from recall_guard.score import to_result
 from recall_guard.suite import LENGTHS, SuiteSpec, build_suite
 from recall_guard.tasks import TASKS
