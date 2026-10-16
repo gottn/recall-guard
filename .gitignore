@@ -5,3 +5,4 @@ __pycache__/
 .ruff_cache/
 exp01_step1/results/*.jsonl
 *.egg-info/
+exp02_repair/results/raw/adapter-*/

@@ -1,0 +1,20 @@
+{
+ "tokenizer": "Qwen/Qwen2.5-1.5B",
+ "seed": 1,
+ "spec": {
+  "tasks": [
+   "heldout_many"
+  ],
+  "lengths": [
+   1024,
+   2048,
+   4096,
+   8192,
+   16384,
+   32768
+  ],
+  "cases_per_cell": 25
+ },
+ "cases": 150,
+ "wall_s": 6.372687782626599
+}
