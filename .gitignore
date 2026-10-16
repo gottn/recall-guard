@@ -6,3 +6,7 @@ __pycache__/
 exp01_step1/results/*.jsonl
 *.egg-info/
 exp02_repair/results/raw/adapter-*/
+exp03_robust/results/raw/suite-*.jsonl
+exp03_robust/results/raw/heldout.jsonl
+exp03_robust/results/raw/multihop25.jsonl
+exp03_robust/results/raw/adapter-*/
