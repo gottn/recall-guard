@@ -1,0 +1,88 @@
+"""Results -> table rows -> markdown. Pure; the CLI writes the strings."""
+
+from dataclasses import dataclass
+
+from recall_guard.types import Result
+
+
+@dataclass(frozen=True)
+class Row:
+    model: str
+    task: str
+    length_bucket: int
+    n: int
+    contains_rate: float
+    exact_rate: float
+    stale_rate: float
+    mean_wall_s: float
+
+
+@dataclass(frozen=True)
+class Gap:
+    hybrid: str
+    full: str
+    task: str
+    length_bucket: int
+    hybrid_rate: float
+    full_rate: float
+
+
+def rows(results: tuple[Result, ...]) -> tuple[Row, ...]:
+    keys = sorted({(r.model, r.task, r.length_bucket) for r in results})
+    out = []
+    for model, task, length in keys:
+        rs = [r for r in results if (r.model, r.task, r.length_bucket) == (model, task, length)]
+        n = len(rs)
+        out.append(
+            Row(
+                model, task, length, n,
+                sum(r.contains for r in rs) / n, sum(r.exact for r in rs) / n, sum(r.stale for r in rs) / n,
+                sum(r.wall_s for r in rs) / n,
+            )
+        )
+    return tuple(out)
+
+
+def gaps(table: tuple[Row, ...], pairs: tuple[tuple[str, str], ...]) -> tuple[Gap, ...]:
+    """Hybrid-minus-full recall per (task, length) for each (hybrid, full) model pair, on the contains rate."""
+    by_key = {(r.model, r.task, r.length_bucket): r for r in table}
+    return tuple(
+        Gap(h, f, task, length, by_key[(h, task, length)].contains_rate, by_key[(f, task, length)].contains_rate)
+        for h, f in pairs
+        for task, length in sorted({(r.task, r.length_bucket) for r in table})
+        if (h, task, length) in by_key and (f, task, length) in by_key
+    )
+
+
+def markdown(table: tuple[Row, ...]) -> str:
+    head = "| model | task | ref tokens | n | contains | exact | stale | wall s |\n|---|---|---:|---:|---:|---:|---:|---:|"
+    body = (
+        f"| {r.model} | {r.task} | {r.length_bucket} | {r.n} | {r.contains_rate:.2f} | {r.exact_rate:.2f} "
+        f"| {r.stale_rate:.2f} | {r.mean_wall_s:.1f} |"
+        for r in table
+    )
+    return "\n".join((head, *body))
+
+
+def pivot_markdown(table: tuple[Row, ...]) -> str:
+    """One line per (model, task), one column per length: the view that shows where recall breaks."""
+    lengths = sorted({r.length_bucket for r in table})
+    by_key = {(r.model, r.task, r.length_bucket): r for r in table}
+    head = "| model | task | " + " | ".join(str(ln) for ln in lengths) + " |\n|---|---|" + "---:|" * len(lengths)
+    body = (
+        f"| {model} | {task} | "
+        + " | ".join(f"{by_key[(model, task, ln)].contains_rate:.2f}" if (model, task, ln) in by_key else "" for ln in lengths)
+        + " |"
+        for model, task in sorted({(r.model, r.task) for r in table})
+    )
+    return "\n".join((head, *body))
+
+
+def gap_markdown(table: tuple[Gap, ...]) -> str:
+    head = "| hybrid | full | task | ref tokens | hybrid | full | gap |\n|---|---|---|---:|---:|---:|---:|"
+    body = (
+        f"| {g.hybrid} | {g.full} | {g.task} | {g.length_bucket} | {g.hybrid_rate:.2f} | {g.full_rate:.2f} "
+        f"| {g.hybrid_rate - g.full_rate:+.2f} |"
+        for g in table
+    )
+    return "\n".join((head, *body))
