@@ -65,7 +65,11 @@ Items refer to docs/robustness.md. Predictions there were written before these n
    pair; it is meaningful only for instruct models and will be read from the 8B pair (Llama-3.1-8B-Instruct and the
    Mamba-in-the-Llama DPO model).
 
-## Pending (jobs 1089546-1089548)
+9. **Three seeds agree (item 1).** At 32K, n = 100 per seed: many_random 1.00 / 0.98 / 1.00, many_similar 1.00 / 0.98 / 1.00,
+   held-out parcels 0.98 / 0.96 / 0.93, multi-hop 0.89 / 0.88 / 0.81, needle and updated 1.00 on all. Seed 3's bench and bpb are
+   in results/raw (same pattern as seeds 1-2).
+
+## Pending (control repairs 1089547-1089548; 8B base 1091447-1091448; 8B repair 1091449)
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 

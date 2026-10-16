@@ -96,3 +96,25 @@ Full per-cell rows (exact and stale rates, wall seconds) are in `results/tables.
 2. Capacity curve: vary keys (16 → 32 → 64) and extend Jet to 64K (its trained length).
 3. A second matched pair: LoLCATs-Llama-3-8B or Mamba-in-the-Llama vs Llama-3-8B (fits one A100-40GB in bf16).
 4. Then step 2: fine-tune a hybrid and use this suite as the before/after recall metric.
+
+
+## Addendum (night of 2026-10-16): the 8B converted pair reproduces the signature, earlier and harder
+
+Mamba-in-the-Llama 8B (JunxiongWang/Llama3.1-Mamba2-8B-dpo: half the layers replaced by Mamba-2, initialised from
+Llama-3.1-8B-Instruct; loaded through recall_guard/backends/mil.py) against Llama-3.1-8B-Instruct, same 750 prompts, n = 25.
+
+| task | length | hybrid 8B | Llama-3.1-8B-Instruct | gap |
+|---|---:|---:|---:|---:|
+| needle | 1K-32K | 1.00 | 1.00 | 0.00 |
+| many_random | 4K | 0.76 | 1.00 | 0.24 |
+| many_random | 8K | 0.52 | 1.00 | 0.48 |
+| many_random | 32K | 0.12 | 0.96 | **0.84** |
+| many_similar | 8K | 0.08 | 0.88 | 0.80 |
+| many_similar | 32K | 0.08 | 1.00 | **0.92** |
+| updated | 32K | 0.24 | 0.88 | 0.64 |
+| multihop | 8K | 0.04 | 0.88 | 0.84 |
+
+Verdict rule (first length with gap >= 0.20 and flat needle): many_random and many_similar at 4K, updated and multihop
+at 2K. The 8B conversion loses multi-key recall far earlier than Jet-Nemotron-2B (which held 0.80 at 8K), consistent
+with it keeping fewer attention layers in the long-range path. Misses are well-formed wrong codes. Peak memory 21.3 GiB.
+The repair at 8B (trained at <= 16K, tested at 32K) is job 1091449 in the exp03 run.
