@@ -1,0 +1,2 @@
+9c90b4ce686564f831bf2baca024961659eec05d
+exp(exp03): 8B base — hybrid 0.25 vs Llama 0.99 on 16 keys at 16K-32K; RULER MK1 0.72 vs 1.00

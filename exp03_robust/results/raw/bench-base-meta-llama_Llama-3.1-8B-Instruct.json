@@ -1,0 +1,15 @@
+{
+ "arc_easy": {
+  "n": 500,
+  "acc": 0.808,
+  "acc_norm": 0.748,
+  "se": 0.022360679774997897
+ },
+ "hellaswag": {
+  "n": 500,
+  "acc": 0.598,
+  "acc_norm": 0.768,
+  "se": 0.022360679774997897
+ },
+ "model": "meta-llama/Llama-3.1-8B-Instruct"
+}
