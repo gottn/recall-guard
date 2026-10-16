@@ -11,14 +11,22 @@ Compare hybrid vs full-attention pairs on five tasks × six context lengths:
 `needle` (control), `many_random` (16 unrelated keys), `many_similar` (16 near-duplicate keys),
 `updated` (facts overwritten mid-document), `multihop` (2-hop chains).
 Pairs: Qwen3.5-4B (hybrid) vs Qwen3-4B; Jet-Nemotron-2B (hybrid, Qwen2.5 MLPs) vs Qwen2.5-1.5B.
-Verdict rule: the tool earns its existence if a stressor separates the pairs at a length where `needle` does not.
+Verdict rule: the tool earns its existence if a stressor separates the pairs at a length where `needle` does not. **Met** (2026-10-16): see exp01_step1/RESULTS.md.
 
-## Status (2026-10-16)
+## Status (2026-10-16, evening)
+- **Step 1 done, verdict yes for the matched pair**: Jet-Nemotron-2B keeps needle=1.00 to 32K but drops to 0.16–0.20 on 16 keys at 32K vs 0.68–0.72 for its Qwen2.5-1.5B base; gap opens at 16K. Qwen3.5-4B shows no key deficit, a 0.24–0.28 multi-hop deficit at 8–16K. Hybrids win on overwritten facts. See exp01_step1/RESULTS.md.
+- Earlier today:
 - Harness complete and gated (13 tests, purity grep): generate / run / report. Local CPU smoke on Qwen2.5-0.5B passed.
 - Cluster: repo cloned to ~/projects/recall-guard via deploy key; jobs submit only through infra/cluster/submit.sh.
 - Modern smoke passed on an A10 (torch 2.9 nv25.09, transformers 5.20); jet venv builds in ~25 min, cached in ~/pydeps/rg-jet.
 - step1 run dir: ~/runs/rg/step1/20261016-121320-8beb29d (suite.jsonl, 750 cases, generated at 8beb29d). Jobs: Qwen2.5-1.5B 1085911, Qwen3.5-4B 1086038, Qwen3-4B 1086039. Jet-Nemotron-2B awaits its smoke (1086025).
 - Mac: `.venv` has CPU torch; `exp01_step1/run_all.sh report` builds the tables from pulled JSONL.
+
+## Next
+1. n=100 at 16K/32K, three seeds, Jet pair (confirms the 16K gap).
+2. Key count 16→64 and 64K for Jet (capacity curve).
+3. Second matched pair (LoLCATs or Mamba-in-the-Llama vs Llama-3-8B).
+4. Step 2: fine-tune a hybrid, measure before/after with this suite.
 
 ## Decisions
 - Completion-style prompts, no chat template, greedy decoding, 16 new tokens, for every model.
