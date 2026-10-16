@@ -27,7 +27,9 @@ LoRA (own implementation, recall_guard/backends/lora.py) on every linear project
 answer tokens, synthetic documents of 16-48 keys (random / near-duplicate / overwritten) at 8K-16K, 8 questions each.
 Evaluate after: step1 suite (same file), `heldout_many` (parcel template, never trained on), ARC-Easy + HellaSwag (500 each).
 Control: identical recipe on Qwen2.5-1.5B. Gain in both = format familiarity; gain only in the hybrid = repair.
-Status: smoke jobs 1087132 (Jet) / 1087133 (Qwen2.5-1.5B) at 7a5eee1; full runs not yet submitted.
+Smokes passed (Jet: 9.4 GB peak, 1344 tok/s at 16K; control 8422 tok/s). Full runs submitted 2026-10-16 13:26 into
+`~/runs/rg/exp02/20261016-132629-5c3e622`: Jet base 1087235, Jet repair 1087236, Qwen2.5 base 1087237, Qwen2.5 repair 1087238
+(600 docs at 8K/16K/32K, seed 0). Pull with `rsync -a 'aau:<run>/*.jsonl' 'aau:<run>/*.json' exp02_repair/results/raw/` then `exp02_repair/run_all.sh report`.
 
 ## Next
 1. n=100 at 16K/32K, three seeds, Jet pair (confirms the 16K gap).
