@@ -32,6 +32,16 @@ Smokes passed (Jet: 9.4 GB peak, 1344 tok/s at 16K; control 8422 tok/s). Full ru
 `~/runs/rg/exp02/20261016-132629-5c3e622`: Jet base 1087235, Jet repair 1087236, Qwen2.5 base 1087237, Qwen2.5 repair 1087238
 (600 docs at 8K/16K/32K, seed 0). Pull with `rsync -a 'aau:<run>/*.jsonl' 'aau:<run>/*.json' exp02_repair/results/raw/` then `exp02_repair/run_all.sh report`.
 
+## Experiment 3 (exp03_robust) — robustness items 1, 2, 5, 6, 7
+Run dir `~/runs/rg/robust/20261016-171229-9f67d4b`, submitted 2026-10-16 17:12. Jobs: Jet base 1089542, Qwen2.5 base 1089543,
+Jet repair seeds 1-3 = 1089544-46, Qwen2.5 repair seeds 1-2 = 1089547-48. Each evaluates: our suites seed 1 and 2 (n=50 at
+16K/32K), held-out parcels, 25 multi-hop cases, six RULER needle variants at 16K/32K (NVIDIA generator, ~/data/rg/ruler),
+ARC/HellaSwag, bits per byte on Moby Dick at 16K; repair jobs train the v2 mix (with multi-hop) and add the unmerged-adapter
+and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<run>/ exp03_robust/results/raw/`
+then `exp03_robust/run_all.sh report`.
+Pending user action for item 9: Llama-3.1-8B is gated; accept the licence on Hugging Face and put HF_TOKEN in ~/.bashrc on aau.
+Candidate 8B checkpoints: JunxiongWang/Llama3.1-Mamba2-8B-dpo (Mamba-in-the-Llama), hazyresearch/lolcats-llama-3.1-8b-ft-lora.
+
 ## Next
 1. Length generalisation of the repair: train at <=16K, test at 32K/64K.
 2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
@@ -52,6 +62,8 @@ Read docs/prior-art.md before writing anything public. Key points: Qwen2.5-1.5B 
 - PEFT >= 0.21 refuses the image's torchao 0.13; torchao >= 0.16 needs torch 2.10 (image has 2.9). Use the own LoRA; never add peft/torchao.
 - Full-vocabulary logits at 16K are 9.3 GiB in float32: apply lm_head only at answer positions (train.answer_loss).
 - Commit subjects are measured in bytes by the hook: the em dash costs 3, so keep subjects under ~95 characters.
+- After a hook rejection the index stays staged: run `git reset` before re-adding, or the next commit sweeps everything
+  (commits 19aa2a0 and 9f67d4b are complete but mislabeled for this reason).
 - `ENV` is overwritten by the container shell (/etc/shinit_v2): the env selector is `RG_ENV`.
 - Triton inside singularity needs `TRITON_LIBCUDA_PATH=/.singularity.d/libs` (env.sh sets it) or fla kernels die with 'libcuda.so cannot found'.
 - A100 partition needs `--qos=unprivileged`; the account default QOS `normal` is refused.
