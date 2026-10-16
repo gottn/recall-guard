@@ -23,7 +23,7 @@ else
   mkdir -p "$OUT"
 fi
 git log -1 --format='%H%n%s' > "$OUT/commit-$(date +%Y%m%d-%H%M%S).txt"
-export RG_OUT="$OUT" RG_SHA="$SHA" RG_ROOT="$ROOT" MODEL="${MODEL:-}" ENV="${ENV:-modern}" JOB_ARGS="${JOB_ARGS:-}"
+export RG_OUT="$OUT" RG_SHA="$SHA" RG_ROOT="$ROOT" MODEL="${MODEL:-}" RG_ENV="${RG_ENV:-modern}" JOB_ARGS="${JOB_ARGS:-}"
 NAME="rg-$JOB${MODEL:+-${MODEL##*/}}"
 JOBID=$(sbatch --parsable --job-name="$NAME" --output="$OUT/slurm-%j.out" "$@" "$SCRIPT")
 echo "submitted $JOB as job $JOBID @ $SHA"

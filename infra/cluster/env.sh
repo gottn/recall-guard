@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Sourced INSIDE the container by every job: builds (once) and selects the venv for $ENV (modern|jet).
+# Sourced INSIDE the container by every job: builds (once) and selects the venv for $ENV (modern|jet) via RG_ENV; "ENV" itself is reserved by the container shell.
 # Venvs live in ~/pydeps so they survive across runs; torch is inherited from the container.
 set -euo pipefail
-ENV="${ENV:-modern}"
-VENV="$HOME/pydeps/rg-$ENV"
-REQ="$RG_ROOT/infra/cluster/requirements-$ENV.txt"
+RG_ENV="${RG_ENV:-modern}"
+VENV="$HOME/pydeps/rg-$RG_ENV"
+REQ="$RG_ROOT/infra/cluster/requirements-$RG_ENV.txt"
 [ -x "$VENV/bin/python" ] || python -m venv --system-site-packages "$VENV"
 STAMP="$VENV/.req-$(md5sum "$REQ" | cut -c1-8)"
 [ -f "$STAMP" ] || { "$VENV/bin/pip" install -q -r "$REQ" && touch "$STAMP"; }
