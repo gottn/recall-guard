@@ -13,7 +13,7 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 
-from recall_guard.aggregate import gap_markdown, gaps, markdown, pivot_markdown, rows
+from recall_guard.aggregate import gap_markdown, gaps, markdown, pivot_markdown, rows, separation_markdown, separations
 from recall_guard.score import to_result
 from recall_guard.suite import LENGTHS, SuiteSpec, build_suite
 from recall_guard.tasks import TASKS
@@ -85,6 +85,8 @@ def cmd_report(a: argparse.Namespace) -> None:
     text = "\n\n".join(
         s for s in (
             "## Recall (contains) by reference length\n\n" + pivot_markdown(table),
+            "## Verdict rule: first length where a stressor separates the pair and the needle does not\n\n"
+            + separation_markdown(separations(table, pairs)) if pairs else "",
             "## Hybrid minus full attention\n\n" + gap_markdown(gaps(table, pairs)) if pairs else "",
             "## All rows\n\n" + markdown(table),
         ) if s

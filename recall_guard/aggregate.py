@@ -86,3 +86,39 @@ def gap_markdown(table: tuple[Gap, ...]) -> str:
         for g in table
     )
     return "\n".join((head, *body))
+
+
+@dataclass(frozen=True)
+class Separation:
+    """First length where a stressor separates a pair while the needle does not (the step1 verdict rule)."""
+
+    hybrid: str
+    full: str
+    task: str
+    length_bucket: int
+    gap: float
+    needle_gap: float
+
+
+def separations(table: tuple[Row, ...], pairs: tuple[tuple[str, str], ...], threshold: float = 0.2) -> tuple[Separation, ...]:
+    """Per (pair, task): the shortest length where full - hybrid >= threshold and |needle gap| < threshold."""
+    by_key = {(r.model, r.task, r.length_bucket): r.contains_rate for r in table}
+    out = []
+    for h, f in pairs:
+        for task in sorted({r.task for r in table if r.task != "needle"}):
+            for length in sorted({r.length_bucket for r in table}):
+                keys = ((h, task, length), (f, task, length), (h, "needle", length), (f, "needle", length))
+                if not all(k in by_key for k in keys):
+                    continue
+                gap = by_key[keys[1]] - by_key[keys[0]]
+                needle_gap = by_key[keys[3]] - by_key[keys[2]]
+                if gap >= threshold and abs(needle_gap) < threshold:
+                    out.append(Separation(h, f, task, length, gap, needle_gap))
+                    break
+    return tuple(out)
+
+
+def separation_markdown(table: tuple[Separation, ...]) -> str:
+    head = "| hybrid | full | task | first length with gap | full - hybrid | needle gap |\n|---|---|---|---:|---:|---:|"
+    body = (f"| {s.hybrid} | {s.full} | {s.task} | {s.length_bucket} | {s.gap:+.2f} | {s.needle_gap:+.2f} |" for s in table)
+    return "\n".join((head, *body)) if table else head + "\n| (none) | | | | | |"
