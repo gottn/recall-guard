@@ -1,4 +1,4 @@
-# Experiment 3 — robustness of exp01 and exp02 (interim: base stage complete, repair seeds running)
+# Experiment 3 — robustness of exp01 and exp02 (2B stage complete; 8B base/repair pending)
 
 Run dir `~/runs/rg/robust/20261016-171229-9f67d4b`, commit `9f67d4b`, A100-SXM4-40GB. Reproduce: `exp03_robust/run_all.sh`.
 Items refer to docs/robustness.md. Predictions there were written before these numbers.
@@ -69,7 +69,42 @@ Items refer to docs/robustness.md. Predictions there were written before these n
    held-out parcels 0.98 / 0.96 / 0.93, multi-hop 0.89 / 0.88 / 0.81, needle and updated 1.00 on all. Seed 3's bench and bpb are
    in results/raw (same pattern as seeds 1-2).
 
-## Pending (control repairs 1089547-1089548; 8B base 1091447-1091448; 8B repair 1091449)
+## Control stage complete (Qwen2.5-1.5B, two training seeds): what is repair and what is familiarity
+
+10. **On our suites the control also climbs to the ceiling**, so the hybrid's post-repair level (1.00) equals the
+    control's (1.00): at 32K, pooled n = 200, many_random 0.90 to 1.00, many_similar 0.75 to 0.96, updated 0.34 to 1.00,
+    multi-hop 0.14 to 0.99, held-out 0.94 to 0.99. The hybrid's only remaining shortfall after repair is multi-hop
+    (0.86 vs 0.99).
+11. **On RULER the control was already at the ceiling for numeric multi-key, so the hybrid's gains there are repair,
+    not familiarity.** Pooled over seeds (control n = 100, hybrid n = 150) at 32K:
+
+    | RULER task | control before | control after | hybrid before | hybrid after |
+    |---|---:|---:|---:|---:|
+    | multikey_1 | 0.94 | 0.96 | 0.56 | 0.81 |
+    | multikey_2 | 0.72 | 0.97 | 0.26 | 0.49 |
+    | multikey_3 (UUID) | 0.40 | 0.57 | 0.16 | 0.19 |
+    | multivalue | 0.46 | 0.37 | 0.02 | 0.12 |
+    | multiquery | 0.48 | 0.50 | 0.00 | 0.05 |
+
+    At 16K the hybrid recovers more (multikey_1 0.85, multikey_2 0.86, multivalue 0.62, multiquery 0.49) while the
+    control *drops* on multivalue (0.74 to 0.57) and multiquery (0.64 to 0.54).
+12. **The repair format has a side effect: single-answer training hurts multi-answer questions.** The control's drop on
+    multivalue and multiquery, and the hybrid's weak recovery on them, follow from a training mix in which every
+    question has exactly one value. This is the third instance of the coverage rule (after multi-hop and UUIDs), and it
+    is a cost, not a footnote: a production repair mix must include multi-answer questions.
+13. **Damage is a property of the recipe, not of hybrids.** Control after training: ARC-Easy 0.746 to 0.736 / 0.732,
+    HellaSwag 0.520 to 0.520 / 0.518 (within SE), bits per byte 1.064 to 1.070 / 1.068 (+0.4-0.6%), the same small cost
+    the hybrid pays.
+
+## Verdicts against docs/robustness.md (2B)
+- Item 1 (power): headline gaps ≥ 3 SE at n = 100; three seeds agree. **Met.** Prediction 1 was wrong in direction.
+- Item 2 (RULER): RULER detects the failure. **No detection advantage**, as pre-registered. Prediction 2 confirmed.
+- Item 5 (coverage): multi-hop regression removed by the v2 mix. **Met**, with a new gap found (multi-answer questions).
+- Item 6 (damage): ARC/HellaSwag flat; bpb +0.4-0.6% in both models. **Met with a stated cost.**
+- Item 7 (alternatives): merge exact; chat-template check inapplicable to base models; generation deterministic. **Met.**
+- Items 3, 9 (length generalisation, 8B): decided by jobs 1091447-1091449 (8B base x2, 8B repair trained ≤16K).
+
+## Pending (8B base 1091447-1091448; 8B repair 1091449)
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 
