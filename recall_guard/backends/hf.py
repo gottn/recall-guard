@@ -19,9 +19,9 @@ def load(model_id: str, attn: str, trust_remote_code: bool, adapter: str = "") -
         model_id, attn_implementation=attn, trust_remote_code=trust_remote_code, device_map=device, **kwargs
     )
     if adapter:
-        from peft import PeftModel
+        from recall_guard.backends import lora
 
-        model = PeftModel.from_pretrained(model, adapter).merge_and_unload()
+        lora.merge(model, adapter)
     return tok, model.eval()
 
 

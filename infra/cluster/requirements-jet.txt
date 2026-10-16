@@ -3,4 +3,3 @@ transformers==4.53.0
 accelerate
 datasets==4.0.0
 flash-linear-attention @ git+https://github.com/jet-ai-projects/flash-linear-attention.git@jetai
-peft==0.15.2
