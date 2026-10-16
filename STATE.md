@@ -41,6 +41,11 @@ and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --excl
 then `exp03_robust/run_all.sh report`.
 Item 9 unblocked 2026-10-16 evening: Llama 3.1 licence accepted (user musab96) and a fine-grained token stored at ~/hf_cache/token on aau (HF_TOKEN also in ~/.bashrc); a real gated download returns 200. A background agent is integrating the Mamba-in-the-Llama and LoLCATs loaders (recall_guard/backends/loaders.py, env `mil`, infra/slurm/mil_smoke.sbatch).
 Candidate 8B checkpoints: JunxiongWang/Llama3.1-Mamba2-8B-dpo (Mamba-in-the-Llama), hazyresearch/lolcats-llama-3.1-8b-ft-lora.
+8B loaders (in progress 2026-10-16 17:50): `recall_guard/backends/loaders.py` routes ids to `backends/mil.py` (Mamba-in-the-Llama:
+HF Llama skeleton from the repo config + MambaInLlama Mamba-2 layers, Triton only, no CUDA builds); env `mil`
+(requirements-mil.txt, `#src` lines fetched by env.sh). Smoke submitted at 86512f5: L4 debug 1089694 (prioritized), A100 1089695,
+logs under `~/runs/rg/mil_smoke/`. Next: read the logs, fix, resubmit (`RG_ENV=mil infra/cluster/submit.sh mil_smoke`) until the
+4K needle has contains=True; then write `backends/lolcats.py` (base meta-llama/Llama-3.1-8B + distill + ft-lora, own LoRA merge, no peft).
 
 ## Next
 1. Length generalisation of the repair: train at <=16K, test at 32K/64K.
