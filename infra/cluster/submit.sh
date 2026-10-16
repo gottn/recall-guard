@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # The only way jobs start on the cluster. Run ON the front end, from the repo checkout:
 #   infra/cluster/submit.sh <job> [extra sbatch args]            e.g. infra/cluster/submit.sh smoke
-#   MODEL=Qwen/Qwen3.5-4B ENV=modern infra/cluster/submit.sh step1
+#   MODEL=Qwen/Qwen3.5-4B RG_ENV=modern infra/cluster/submit.sh step1
 #   RUN_IN=~/runs/rg/step1/<run> MODEL=... infra/cluster/submit.sh step1   add a model to an existing run
 # Pulls fast-forward only, refuses a dirty checkout, records the commit, writes outputs OUTSIDE the repo.
+# Whole script is one function so bash parses it fully BEFORE the pull can rewrite this file underneath it.
 set -euo pipefail
+main() {
 JOB="${1:?usage: submit.sh <job> [sbatch args]}"; shift || true
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
@@ -29,3 +31,5 @@ JOBID=$(sbatch --parsable --job-name="$NAME" --output="$OUT/slurm-%j.out" "$@" "
 echo "submitted $JOB as job $JOBID @ $SHA"
 echo "output:  $OUT"
 echo "watch:   squeue -j $JOBID ; tail -f $OUT/slurm-$JOBID.out"
+}
+main "$@"
