@@ -20,11 +20,13 @@ src_on_path() {
     echo "$d" >> "$site/rg-src.pth"
   done < <(grep '^#src ' "$REQ" || true)
 }
+exec 9>"$VENV.lock"; flock 9  # one builder at a time: parallel jobs raced on the same venv (exit 128)
 if [ ! -f "$STAMP" ]; then  # a failed install exits here instead of stamping a broken venv
   "$VENV/bin/pip" install -q -r "$REQ"
   "$VENV/bin/pip" uninstall -y -q peft torchao 2>/dev/null || true
   src_on_path
   touch "$STAMP"
 fi
+flock -u 9
 PY="$VENV/bin/python"
 $PY -c 'import torch, transformers; print("torch", torch.__version__, "cuda", torch.cuda.is_available(), torch.cuda.get_device_name(0)); print("transformers", transformers.__version__)'
