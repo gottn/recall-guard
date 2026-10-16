@@ -125,7 +125,29 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     Whatever the conversion's training did or did not teach matters more than how many softmax layers survive.
     The repair (job 1091466, trained at <= 16K, evaluated to 32K) is the test of whether that can be fixed post hoc at 8B.
 
-## Pending (Llama-3.1-8B-Instruct 32K RULER + bench 1091448; MIL bench rerun 1091465; MIL repair evaluation 1091466)
+17. **Llama-3.1-8B-Instruct on RULER at 32K (n = 50): 1.00 / 1.00 / 0.96 / 0.98 / 1.00** on multikey_1/2/3, multivalue,
+    multiquery, against the hybrid's 0.40 / 0.10 / 0.00 / 0.00 / 0.00. The 8B conversion's RULER deficit is total.
+18. **Base damage baselines, 8B.** Hybrid: ARC-Easy 0.848 / 0.804, HellaSwag 0.600 / 0.778, bits per byte 1.008 at 16K.
+    Llama-3.1-8B-Instruct: 0.808 / 0.748, 0.598 / 0.768, bits per byte 0.800. The conversion itself costs 26% in long-text
+    bits per byte relative to the model it came from, a cost the repair cannot be expected to recover.
+
+## 8B repair, trained at <= 16K, evaluated at 32K (item 3, length generalisation): interim, first suite only
+
+19. **The repair generalises past its training length.** At 32K, which the adapter never saw (about 20 cases per cell so far):
+
+    | task at 32K | 8B hybrid before | after repair (<= 16K training) |
+    |---|---:|---:|
+    | needle | 1.00 | 1.00 |
+    | many_random | 0.25 | 0.95 |
+    | many_similar | 0.09 | 0.87 |
+    | updated | 0.16 | 1.00 |
+    | multihop | 0.06 | 0.88 |
+    | heldout_many | 0.17 | 0.91 |
+
+    At 16K (trained length) every key task is at 1.00. Prediction 3 (>= 0.7 at 32K) is exceeded. Full counts, the
+    second suite, RULER after repair and the damage checks follow when job 1091466 completes.
+
+## Pending (MIL repair evaluation 1091466: second suite, held-out, RULER, bench, bpb)
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 
