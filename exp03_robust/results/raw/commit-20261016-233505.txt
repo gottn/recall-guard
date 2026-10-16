@@ -1,0 +1,2 @@
+e94c34685e615723a24dc32ea58485df6b76b198
+fix(train): checkpoint loader-swapped layers — 8B repair OOMed with 16 unwrapped Mamba-2 blocks
