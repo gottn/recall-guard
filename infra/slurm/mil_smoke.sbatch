@@ -2,6 +2,7 @@
 # Smoke for a converted 8B hybrid loaded through backends/loaders.py: builds the env, a 2-case suite at 4K (needle +
 # held-out parcels), one run, the report. Submit via submit.sh (defaults: MODEL=Mamba-in-the-Llama 8B, RG_ENV=mil):
 #   RG_ENV=mil infra/cluster/submit.sh mil_smoke          MODEL=hazyresearch/lolcats-llama-3.1-8b-ft-lora RG_ENV=mil ...
+# Diagnostics: LENGTHS="128 4096" (128 fits LoLCATs' softmax window), PPL_WINDOW=2048 adds bits per byte on Moby Dick.
 #SBATCH --partition=aicentre-a100
 #SBATCH --qos=unprivileged
 #SBATCH --gres=gpu:1
@@ -13,6 +14,7 @@ export HF_HOME="$HOME/hf_cache" PYTHONUNBUFFERED=1 RG_ENV=mil
 CONTAINER="${CONTAINER:-/home/container/pytorch/pytorch_25.09.sif}"
 MODEL="${MODEL:-JunxiongWang/Llama3.1-Mamba2-8B-dpo}"
 SLUG="$(echo "$MODEL" | tr / _)"
+LENGTHS="${LENGTHS:-4096}" PPL_WINDOW="${PPL_WINDOW:-}" TEXT="${TEXT:-$HOME/data/rg/mobydick.txt}"
 echo "commit $RG_SHA (checkout now $(git -C "$RG_ROOT" rev-parse --short HEAD)) on $(hostname), gpu=$(nvidia-smi --query-gpu=name --format=csv,noheader | head -1), env=$RG_ENV, model=$MODEL, out=$RG_OUT"
 srun singularity exec --nv "$CONTAINER" bash -c "
   set -euo pipefail
@@ -21,10 +23,11 @@ srun singularity exec --nv "$CONTAINER" bash -c "
   source infra/cluster/env.sh
   \$PY -c 'import sys, triton, einops; print(\"triton\", triton.__version__, \"python\", sys.version.split()[0])'
   echo \"env ready in \$((SECONDS - T0))s\"
-  \$PY -m recall_guard.cli generate --out $RG_OUT/mini.jsonl --cases 1 --lengths 4096 --tasks needle heldout_many
+  \$PY -m recall_guard.cli generate --out $RG_OUT/mini.jsonl --cases 1 --lengths $LENGTHS --tasks needle heldout_many
   \$PY -m recall_guard.cli run --suite $RG_OUT/mini.jsonl --model $MODEL --out $RG_OUT/mini-$SLUG.jsonl
   cat $RG_OUT/mini-$SLUG.jsonl
   \$PY -m recall_guard.cli report --results $RG_OUT/mini-$SLUG.jsonl
+  [ -z \"$PPL_WINDOW\" ] || \$PY -m recall_guard.cli ppl --model $MODEL --text $TEXT --window-tokens $PPL_WINDOW --windows 4 --out $RG_OUT/bpb-$SLUG.json
   echo \"wall \$((SECONDS - T0))s\"
 "
 echo "mil smoke done: $MODEL"
