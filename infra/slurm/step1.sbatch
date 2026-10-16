@@ -3,6 +3,7 @@
 # Submit only via infra/cluster/submit.sh:   MODEL=Qwen/Qwen3.5-4B RG_ENV=modern infra/cluster/submit.sh step1
 # The suite is regenerated deterministically from (commit, seed, Qwen2.5 tokenizer) so every model sees the same prompts.
 #SBATCH --partition=aicentre-a100
+#SBATCH --qos=unprivileged
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
