@@ -58,6 +58,13 @@ Items refer to docs/robustness.md. Predictions there were written before these n
    byte on Moby Dick at 16K 1.082 to 1.086 / 1.087, a consistent +0.4% across seeds and across all 8 windows. Small, but
    it is a real cost and should be reported as one.
 
+8. **Alternative explanations (item 7, seed 1 at 32K, 300 cases).** Unmerged adapter vs merged weights: identical
+   scores on every task (0.98 / 1.00 / 1.00 / 0.88 / 1.00 / 1.00), 269 / 300 completions byte-identical, the rest
+   differing only in bf16 rounding of the merge. Chat-template prompting: Jet-Nemotron-2B is a base model and, wrapped
+   in its chat template, echoes the instruction back (0.00 on everything), so this check is inapplicable to the 2B
+   pair; it is meaningful only for instruct models and will be read from the 8B pair (Llama-3.1-8B-Instruct and the
+   Mamba-in-the-Llama DPO model).
+
 ## Pending (jobs 1089546-1089548)
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
