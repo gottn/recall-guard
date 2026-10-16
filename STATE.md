@@ -60,6 +60,13 @@ WORSE with more context (0.875 -> 0.955 -> 1.055 at 128/1K/2K) while Llama impro
 hurts. Distill-only (no LoRA) 1.40 at 1K. Do not run the full suite on LoLCATs before the base question is settled.
 Full suite: `MODEL=JunxiongWang/Llama3.1-Mamba2-8B-dpo RG_ENV=mil RUN_IN=<step1 run> infra/cluster/submit.sh step1`.
 
+## 8B pair (item 9), submitted night of 2026-10-16
+Mamba-in-the-Llama 8B (JunxiongWang/Llama3.1-Mamba2-8B-dpo, env `mil`, 50% Mamba-2 layers, from Llama-3.1-8B-Instruct) done on the
+step1 suite (job 1091249, peak 21.3 GiB): needle 1.00 everywhere, many_random 0.52 / 0.48 / 0.12 at 8K / 16K / 32K, many_similar 0.08
+from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct: job 1091250. Robust jobs in the exp03 run dir: 1091447 (MIL base), 1091448
+(Llama-Instruct base), 1091449 (MIL repair seed 1, TRAIN_LENGTHS="8192 16384", tag -le16k: trains below 32K, so its 32K numbers
+are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
+
 ## Next
 1. Length generalisation of the repair: train at <=16K, test at 32K/64K.
 2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
