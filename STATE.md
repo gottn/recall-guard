@@ -41,11 +41,12 @@ and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --excl
 then `exp03_robust/run_all.sh report`.
 Item 9 unblocked 2026-10-16 evening: Llama 3.1 licence accepted (user musab96) and a fine-grained token stored at ~/hf_cache/token on aau (HF_TOKEN also in ~/.bashrc); a real gated download returns 200. A background agent is integrating the Mamba-in-the-Llama and LoLCATs loaders (recall_guard/backends/loaders.py, env `mil`, infra/slurm/mil_smoke.sbatch).
 Candidate 8B checkpoints: JunxiongWang/Llama3.1-Mamba2-8B-dpo (Mamba-in-the-Llama), hazyresearch/lolcats-llama-3.1-8b-ft-lora.
-8B loaders (in progress 2026-10-16 17:50): `recall_guard/backends/loaders.py` routes ids to `backends/mil.py` (Mamba-in-the-Llama:
-HF Llama skeleton from the repo config + MambaInLlama Mamba-2 layers, Triton only, no CUDA builds); env `mil`
-(requirements-mil.txt, `#src` lines fetched by env.sh). Smoke submitted at 86512f5: L4 debug 1089694 (prioritized), A100 1089695,
-logs under `~/runs/rg/mil_smoke/`. Next: read the logs, fix, resubmit (`RG_ENV=mil infra/cluster/submit.sh mil_smoke`) until the
-4K needle has contains=True; then write `backends/lolcats.py` (base meta-llama/Llama-3.1-8B + distill + ft-lora, own LoRA merge, no peft).
+8B loaders (2026-10-16 18:15): `recall_guard/backends/loaders.py` routes ids to `backends/mil.py` (Mamba-in-the-Llama) and
+`backends/lolcats.py` (LoLCATs); env `mil` (requirements-mil.txt; `#src` lines fetched by env.sh; builds in ~15 min, cached
+in ~/pydeps/rg-mil). MIL smoke PASSED on an L4 (job 1089694, 86512f5): 4K needle contains=True exact=True, heldout_many
+contains=True, load 237 s (33 GB fp32 .bin, ~4 min download), peak 16.2 GiB, first case 120 s (Triton JIT), second 1.5 s.
+A100 proof run 1089695 still queued. LoLCATs smoke 1089746 (L4, 9207ab5) submitted; logs under `~/runs/rg/mil_smoke/`.
+Full suite: `MODEL=JunxiongWang/Llama3.1-Mamba2-8B-dpo RG_ENV=mil RUN_IN=<step1 run> infra/cluster/submit.sh step1`.
 
 ## Next
 1. Length generalisation of the repair: train at <=16K, test at 32K/64K.
