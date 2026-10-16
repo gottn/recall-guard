@@ -39,6 +39,26 @@ def tokenize_segments(tok: AutoTokenizer, segs: tuple[Segment, ...]) -> tuple[to
     return torch.tensor([ids]), torch.tensor([labels])
 
 
+def checkpoint_custom_layers(model: torch.nn.Module) -> int:
+    """transformers >= 5 checkpoints only layers that subclass GradientCheckpointingLayer; layers swapped in by a loader
+    (Mamba-2 blocks in Mamba-in-the-Llama) are plain modules and would keep full activations. Wrap their forward."""
+    import torch.utils.checkpoint as cp
+    from transformers.modeling_layers import GradientCheckpointingLayer
+
+    wrapped = 0
+    for layer in getattr(getattr(model, "model", None), "layers", ()):
+        if isinstance(layer, GradientCheckpointingLayer):
+            continue
+        fwd = layer.forward
+
+        def wrapped_forward(*args, _fwd=fwd, **kwargs):
+            return cp.checkpoint(_fwd, *args, use_reentrant=False, **kwargs)
+
+        layer.forward = wrapped_forward
+        wrapped += 1
+    return wrapped
+
+
 def answer_loss(model: torch.nn.Module, ids: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """Cross-entropy on answer positions only, applying lm_head just there: full-sequence logits at 16K x 152K
     vocab in float32 are 9.3 GiB, which is what OOMed the first smoke."""
@@ -60,6 +80,7 @@ def train(cfg: TrainConfig) -> dict:
     if device == "cuda":
         model.gradient_checkpointing_enable()
         model.enable_input_require_grads()
+        print(f"  checkpointed {checkpoint_custom_layers(model)} non-transformers layers", file=sys.stderr)
     opt = torch.optim.AdamW(params, lr=cfg.lr, weight_decay=0.0)
     def count(text: str) -> int:
         return len(tok(text, add_special_tokens=False).input_ids)
