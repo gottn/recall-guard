@@ -14,6 +14,6 @@ case "${1:-report}" in
     .venv/bin/python -m recall_guard.cli report --results exp03_robust/results/raw/suite-s*-*.jsonl exp03_robust/results/raw/heldout-*.jsonl exp03_robust/results/raw/multihop25-*.jsonl --out exp03_robust/results/tables-suites.md
     .venv/bin/python -m recall_guard.cli report --results exp03_robust/results/raw/ruler-*.jsonl --out exp03_robust/results/tables-ruler.md
     echo "wrote exp03_robust/results/tables-suites.md and tables-ruler.md"
-    cat exp03_robust/results/raw/bench-*.json exp03_robust/results/raw/bpb-*.json 2>/dev/null | python3 -c 'import sys,json; [print(json.dumps({k:v for k,v in json.loads(l).items() if k!="bpb_values"})) for l in sys.stdin.read().replace("}{","}\n{").splitlines() if l.strip()]' ;;
+    for f in exp03_robust/results/raw/bench-*.json exp03_robust/results/raw/bpb-*.json; do [ -f "$f" ] && python3 -c "import json,sys; d=json.load(open(sys.argv[1])); d.pop('bpb_values',None); print(json.dumps(d))" "$f"; done ;;
   *) echo "usage: run_all.sh report"; exit 1 ;;
 esac
