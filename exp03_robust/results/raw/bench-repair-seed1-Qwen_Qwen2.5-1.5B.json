@@ -1,0 +1,15 @@
+{
+ "arc_easy": {
+  "n": 500,
+  "acc": 0.736,
+  "acc_norm": 0.696,
+  "se": 0.022360679774997897
+ },
+ "hellaswag": {
+  "n": 500,
+  "acc": 0.52,
+  "acc_norm": 0.654,
+  "se": 0.022360679774997897
+ },
+ "model": "Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1"
+}
