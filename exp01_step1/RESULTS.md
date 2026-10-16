@@ -16,7 +16,8 @@ both many-key tasks at every length, above Qwen3-4B's 0.84 at 32K) but a **multi
 
 Two results the design did not predict:
 
-- **Overwritten facts favour the hybrids.** Jet beats its base on `updated` at every length (+0.08 to +0.56), and
+- **Overwritten facts favour the hybrids** (downgraded by exp02: after recall training the full-attention control
+  scores 1.00 on `updated`; the base models' deficit was prompt-following, not memory). Jet beats its base on `updated` at every length (+0.08 to +0.56), and
   Qwen3.5-4B beats Qwen3-4B at 2K–16K (+0.16 to +0.36). This matches the Stage A finding that delta-rule style
   states overwrite cleanly, but note the full-attention base models show a primacy bias (they echo the first
   assignment), which is a prompt-following property, not a memory-capacity one.
