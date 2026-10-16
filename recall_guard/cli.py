@@ -7,6 +7,7 @@
 
 import argparse
 import json
+import os
 import sys
 import time
 from dataclasses import asdict
@@ -41,7 +42,7 @@ def cmd_generate(a: argparse.Namespace) -> None:
     cases = build_suite(spec, a.seed, lambda s: len(tok(s).input_ids))
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    tmp = out.with_suffix(".jsonl.tmp")  # write-then-rename: parallel jobs sharing a run dir never read a partial file
+    tmp = out.with_name(f"{out.name}.{os.getpid()}.tmp")  # per-process temp, then rename: parallel jobs never collide
     with tmp.open("w") as f:
         f.writelines(json.dumps(asdict(c)) + "\n" for c in cases)
     tmp.replace(out)

@@ -2,6 +2,8 @@
 # Sourced INSIDE the container by every job: builds (once) and selects the venv for $ENV (modern|jet) via RG_ENV; "ENV" itself is reserved by the container shell.
 # Venvs live in ~/pydeps so they survive across runs; torch is inherited from the container.
 set -euo pipefail
+# Triton (used by flash-linear-attention) looks for libcuda.so via ldconfig, which the image lacks; --nv mounts it here.
+export TRITON_LIBCUDA_PATH=/.singularity.d/libs
 RG_ENV="${RG_ENV:-modern}"
 VENV="$HOME/pydeps/rg-$RG_ENV"
 REQ="$RG_ROOT/infra/cluster/requirements-$RG_ENV.txt"
