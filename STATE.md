@@ -45,7 +45,14 @@ Candidate 8B checkpoints: JunxiongWang/Llama3.1-Mamba2-8B-dpo (Mamba-in-the-Llam
 `backends/lolcats.py` (LoLCATs); env `mil` (requirements-mil.txt; `#src` lines fetched by env.sh; builds in ~15 min, cached
 in ~/pydeps/rg-mil). MIL smoke PASSED on an L4 (job 1089694, 86512f5): 4K needle contains=True exact=True, heldout_many
 contains=True, load 237 s (33 GB fp32 .bin, ~4 min download), peak 16.2 GiB, first case 120 s (Triton JIT), second 1.5 s.
-A100 proof run 1089695 still queued. LoLCATs smoke 1089746 (L4, 9207ab5) submitted; logs under `~/runs/rg/mil_smoke/`.
+A100 proof run 1089695 still queued (behind the exp03 jobs). Logs under `~/runs/rg/mil_smoke/`.
+LoLCATs (base Llama-3.1-8B + distill + ft LoRA merged) loads in 30-70 s, peak 18.0 GiB at 4K, fluent output, but FIDELITY
+UNVERIFIED: needle right at 128 and 512 tokens, wrong at 1K/4K; heldout_many wrong from 512 up; Moby Dick bits/byte 0.955
+at 1K and 1.055 at 2K vs 0.315/0.301 for Llama-3.1-8B (jobs 1089746-50). Suspect: their demo config loads
+meta-llama/Meta-Llama-3-8B (403 for us, licence not accepted) while the repo names say 3.1. Test once access exists:
+`MODEL=hazyresearch/lolcats-llama-3.1-8b-ft-lora:meta-llama/Meta-Llama-3-8B LENGTHS="512 4096" PPL_WINDOW=1024 RG_ENV=mil
+infra/cluster/submit.sh mil_smoke --partition=prioritized --qos=normal --gres=gpu:l4:1`. Pending diagnostics 1089772-74
+(bpb at 128 tokens for LoLCATs and Llama; distill-only at 1K). Do not run the full suite on LoLCATs before this is settled.
 Full suite: `MODEL=JunxiongWang/Llama3.1-Mamba2-8B-dpo RG_ENV=mil RUN_IN=<step1 run> infra/cluster/submit.sh step1`.
 
 ## Next
