@@ -22,6 +22,13 @@ Verdict rule: the tool earns its existence if a stressor separates the pairs at 
 - step1 run dir: ~/runs/rg/step1/20261016-121320-8beb29d (suite.jsonl, 750 cases, generated at 8beb29d). Jobs: Qwen2.5-1.5B 1085911, Qwen3.5-4B 1086038, Qwen3-4B 1086039. Jet-Nemotron-2B awaits its smoke (1086025).
 - Mac: `.venv` has CPU torch; `exp01_step1/run_all.sh report` builds the tables from pulled JSONL.
 
+## Experiment 2 (exp02_repair) — can training repair a hybrid's long-context recall?
+LoRA (own implementation, recall_guard/backends/lora.py) on every linear projection outside the MLPs, loss only on
+answer tokens, synthetic documents of 16-48 keys (random / near-duplicate / overwritten) at 8K-16K, 8 questions each.
+Evaluate after: step1 suite (same file), `heldout_many` (parcel template, never trained on), ARC-Easy + HellaSwag (500 each).
+Control: identical recipe on Qwen2.5-1.5B. Gain in both = format familiarity; gain only in the hybrid = repair.
+Status: smoke jobs 1087132 (Jet) / 1087133 (Qwen2.5-1.5B) at 7a5eee1; full runs not yet submitted.
+
 ## Next
 1. n=100 at 16K/32K, three seeds, Jet pair (confirms the 16K gap).
 2. Key count 16→64 and 64K for Jet (capacity curve).
@@ -34,6 +41,9 @@ Verdict rule: the tool earns its existence if a stressor separates the pairs at 
 - Two cluster envs: `modern` (transformers main, Qwen3/3.5) and `jet` (transformers 4.53 + jet-ai fla fork).
 
 ## Traps
+- PEFT >= 0.21 refuses the image's torchao 0.13; torchao >= 0.16 needs torch 2.10 (image has 2.9). Use the own LoRA; never add peft/torchao.
+- Full-vocabulary logits at 16K are 9.3 GiB in float32: apply lm_head only at answer positions (train.answer_loss).
+- Commit subjects are measured in bytes by the hook: the em dash costs 3, so keep subjects under ~95 characters.
 - `ENV` is overwritten by the container shell (/etc/shinit_v2): the env selector is `RG_ENV`.
 - Triton inside singularity needs `TRITON_LIBCUDA_PATH=/.singularity.d/libs` (env.sh sets it) or fla kernels die with 'libcuda.so cannot found'.
 - A100 partition needs `--qos=unprivileged`; the account default QOS `normal` is refused.
