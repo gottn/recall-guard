@@ -7,10 +7,9 @@ from dataclasses import dataclass
 
 import torch
 import torch.nn.functional as F
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoTokenizer
 
-from recall_guard.backends import lora
-from recall_guard.backends.hf import DTYPE_KWARG
+from recall_guard.backends import hf, lora
 from recall_guard.filler import filler_sentences
 from recall_guard.train_data import Segment, training_segments
 
@@ -51,10 +50,8 @@ def answer_loss(model: torch.nn.Module, ids: torch.Tensor, labels: torch.Tensor)
 
 def train(cfg: TrainConfig) -> dict:
     torch.manual_seed(cfg.seed)
-    tok = AutoTokenizer.from_pretrained(cfg.model_id, trust_remote_code=cfg.trust_remote_code)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    dtype = {DTYPE_KWARG: torch.bfloat16 if device == "cuda" else torch.float32}
-    model = AutoModelForCausalLM.from_pretrained(cfg.model_id, trust_remote_code=cfg.trust_remote_code, device_map=device, **dtype)
+    tok, model = hf.load(cfg.model_id, "sdpa", cfg.trust_remote_code)  # same registry path as evaluation
     targets = lora.target_names(model)
     wrapped = lora.inject(model, targets, cfg.rank, cfg.alpha)
     params = lora.trainable(model)
