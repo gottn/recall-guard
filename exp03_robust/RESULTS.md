@@ -104,7 +104,28 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 - Item 7 (alternatives): merge exact; chat-template check inapplicable to base models; generation deterministic. **Met.**
 - Items 3, 9 (length generalisation, 8B): decided by jobs 1091447-1091449 (8B base x2, 8B repair trained ≤16K).
 
-## Pending (8B base 1091447-1091448; 8B repair 1091449)
+## 8B pair, base stage (item 9): the signature at scale, on fresh suites and on RULER
+
+14. **Fresh suites, n = 100 per cell.** Mamba-in-the-Llama 8B vs Llama-3.1-8B-Instruct, the model it was initialised from:
+
+    | task | 16K hybrid | 16K Llama | 32K hybrid | 32K Llama |
+    |---|---:|---:|---:|---:|
+    | needle | 1.00 | 1.00 | 1.00 | 1.00 |
+    | many_random | 0.25 | 0.99 | 0.25 | 0.99 |
+    | many_similar | 0.11 | 0.95 | 0.09 | 1.00 |
+    | updated | 0.42 | 0.87 | 0.16 | 0.74 |
+    | multihop | 0.15 | 0.63 | 0.06 | 0.49 |
+    | heldout_many (parcels) | 0.33 | 1.00 | 0.17 | 1.00 |
+
+15. **RULER at 16K, n = 50.** Hybrid vs Llama-3.1-8B-Instruct: single_1 1.00 / 1.00, multikey_1 0.72 / 1.00, multikey_2
+    0.40 / 1.00, multikey_3 (UUID) 0.10 / 0.98, multivalue 0.32 / 0.91, multiquery 0.14 / 1.00. At 32K the hybrid is at
+    0.40 / 0.10 / 0.00 / 0.00 / 0.00 on the five multi-key variants with single_1 still 1.00 (Llama's 32K rows pending).
+16. **Reading.** This conversion keeps half its attention layers and still collapses from 4K, far earlier than Jet-Nemotron-2B
+    with two of 28. Attention-layer count alone does not predict the deficit; Lizard's 50%-softmax conversion reported parity.
+    Whatever the conversion's training did or did not teach matters more than how many softmax layers survive.
+    The repair (job 1091466, trained at <= 16K, evaluated to 32K) is the test of whether that can be fixed post hoc at 8B.
+
+## Pending (Llama-3.1-8B-Instruct 32K RULER + bench 1091448; MIL bench rerun 1091465; MIL repair evaluation 1091466)
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 
