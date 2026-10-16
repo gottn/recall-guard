@@ -51,8 +51,10 @@ UNVERIFIED: needle right at 128 and 512 tokens, wrong at 1K/4K; heldout_many wro
 at 1K and 1.055 at 2K vs 0.315/0.301 for Llama-3.1-8B (jobs 1089746-50). Suspect: their demo config loads
 meta-llama/Meta-Llama-3-8B (403 for us, licence not accepted) while the repo names say 3.1. Test once access exists:
 `MODEL=hazyresearch/lolcats-llama-3.1-8b-ft-lora:meta-llama/Meta-Llama-3-8B LENGTHS="512 4096" PPL_WINDOW=1024 RG_ENV=mil
-infra/cluster/submit.sh mil_smoke --partition=prioritized --qos=normal --gres=gpu:l4:1`. Pending diagnostics 1089772-74
-(bpb at 128 tokens for LoLCATs and Llama; distill-only at 1K). Do not run the full suite on LoLCATs before this is settled.
+infra/cluster/submit.sh mil_smoke --partition=prioritized --qos=normal --gres=gpu:l4:1`. Diagnostics 1089772-74: at 128
+tokens (inside the softmax window) LoLCATs 0.875 vs Llama 0.792 bits/byte, so the window + LoRA path is sane; LoLCATs gets
+WORSE with more context (0.875 -> 0.955 -> 1.055 at 128/1K/2K) while Llama improves (0.79 -> 0.32): the linear branch
+hurts. Distill-only (no LoRA) 1.40 at 1K. Do not run the full suite on LoLCATs before the base question is settled.
 Full suite: `MODEL=JunxiongWang/Llama3.1-Mamba2-8B-dpo RG_ENV=mil RUN_IN=<step1 run> infra/cluster/submit.sh step1`.
 
 ## Next
