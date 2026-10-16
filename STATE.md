@@ -63,7 +63,7 @@ Full suite: `MODEL=JunxiongWang/Llama3.1-Mamba2-8B-dpo RG_ENV=mil RUN_IN=<step1 
 ## 8B pair (item 9), submitted night of 2026-10-16
 Mamba-in-the-Llama 8B (JunxiongWang/Llama3.1-Mamba2-8B-dpo, env `mil`, 50% Mamba-2 layers, from Llama-3.1-8B-Instruct) done on the
 step1 suite (job 1091249, peak 21.3 GiB): needle 1.00 everywhere, many_random 0.52 / 0.48 / 0.12 at 8K / 16K / 32K, many_similar 0.08
-from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct: job 1091250. Robust jobs in the exp03 run dir: 1091447 (MIL base), 1091448
+from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.00 on 16 keys at 32K, needle 1.00; the 8B gap opens at 4K (+0.24) and reaches 0.84-0.92 at 32K. See exp01_step1/RESULTS.md addendum. Robust jobs in the exp03 run dir: 1091447 (MIL base), 1091448
 (Llama-Instruct base), 1091449 (MIL repair seed 1, TRAIN_LENGTHS="8192 16384", tag -le16k: trains below 32K, so its 32K numbers
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
@@ -72,7 +72,7 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
 3. Capacity frontier after repair: 32/64/128 keys at 32K.
 4. Scale to a matched 8B pair (LoLCATs or Mamba-in-the-Llama vs Llama-3-8B).
-5. Step 2: does an ordinary instruction fine-tune undo the repair or break an unrepaired hybrid?
+5. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore and the adapter compose.
 6. Still owed from exp01: n=100 with seeds at 16K (the 16K gap was template-dependent: parcels held 0.96).
 
 ## Decisions
