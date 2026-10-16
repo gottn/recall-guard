@@ -1,0 +1,1 @@
+Read STATE.md first, then STYLE.md. Pure functions, effects only in backends/ and cli.py, Conventional Commits with a measured effect, ./check.sh before every commit. Heavy runs go to the AAU cluster via infra/cluster/submit.sh; the Mac only edits, tests and aggregates.

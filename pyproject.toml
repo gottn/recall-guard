@@ -1,0 +1,24 @@
+[project]
+name = "recall-guard"
+version = "0.1.0"
+description = "Recall-regression harness for long-context LLMs: finds the recall failures of hybrid (linear-attention) models that needle tests miss."
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["ruff", "pytest", "transformers>=4.45", "tokenizers"]
+run = ["torch", "transformers", "accelerate"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = [".venv", "exp01_step1/results"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I", "UP", "PLW0603", "PLW0602", "B006", "B008", "RUF"]
+ignore = ["E501", "RUF001", "RUF002", "RUF003"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

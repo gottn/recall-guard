@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+exp01_step1/results/*.jsonl
+exp01_step1/results/raw/
+*.egg-info/
