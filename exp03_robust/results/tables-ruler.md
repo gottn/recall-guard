@@ -14,6 +14,18 @@
 | jet-ai/Jet-Nemotron-2B | ruler_niah_multiquery | 0.08 | 0.00 |
 | jet-ai/Jet-Nemotron-2B | ruler_niah_multivalue | 0.24 | 0.02 |
 | jet-ai/Jet-Nemotron-2B | ruler_niah_single_1 | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_1 | 0.92 | 0.90 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_2 | 0.86 | 0.53 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_3 | 0.58 | 0.18 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multiquery | 0.62 | 0.06 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multivalue | 0.68 | 0.06 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_single_1 | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multikey_1 | 0.83 |  |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multikey_2 | 0.93 |  |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multikey_3 | 0.53 |  |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multiquery | 0.33 |  |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multivalue | 0.76 |  |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_single_1 | 1.00 |  |
 
 ## All rows
 
@@ -43,3 +55,21 @@
 | jet-ai/Jet-Nemotron-2B | ruler_niah_multivalue | 32768 | 50 | 0.02 | 0.00 | 0.00 | 3.5 |
 | jet-ai/Jet-Nemotron-2B | ruler_niah_single_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 0.9 |
 | jet-ai/Jet-Nemotron-2B | ruler_niah_single_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 1.7 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_1 | 16384 | 50 | 0.92 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_1 | 32768 | 30 | 0.90 | 0.00 | 0.00 | 3.7 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_2 | 16384 | 50 | 0.86 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_2 | 32768 | 43 | 0.53 | 0.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_3 | 16384 | 50 | 0.58 | 0.00 | 0.00 | 3.4 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multikey_3 | 32768 | 50 | 0.18 | 0.00 | 0.00 | 4.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multiquery | 16384 | 50 | 0.62 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multiquery | 32768 | 16 | 0.06 | 0.00 | 0.00 | 3.7 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multivalue | 16384 | 50 | 0.68 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_multivalue | 32768 | 17 | 0.06 | 0.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_single_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_niah_single_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multikey_1 | 16384 | 46 | 0.83 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multikey_2 | 16384 | 42 | 0.93 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multikey_3 | 16384 | 47 | 0.53 | 0.00 | 0.00 | 3.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multiquery | 16384 | 15 | 0.33 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_multivalue | 16384 | 17 | 0.76 | 0.00 | 0.00 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_niah_single_1 | 16384 | 49 | 1.00 | 0.00 | 0.00 | 3.1 |

@@ -1,0 +1,15 @@
+{
+ "arc_easy": {
+  "n": 500,
+  "acc": 0.77,
+  "acc_norm": 0.71,
+  "se": 0.022360679774997897
+ },
+ "hellaswag": {
+  "n": 500,
+  "acc": 0.51,
+  "acc_norm": 0.642,
+  "se": 0.022360679774997897
+ },
+ "model": "jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2"
+}

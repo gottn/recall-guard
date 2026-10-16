@@ -17,13 +17,13 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | heldout_many | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.98 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | many_random |  |  |  |  | 1.00 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | many_similar |  |  |  |  | 1.00 | 1.00 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 1.00 | 0.96 | 0.96 | 0.89 | 0.97 | 0.89 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 1.00 | 0.96 | 0.96 | 0.92 | 0.98 | 0.88 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | needle |  |  |  |  | 1.00 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | updated |  |  |  |  | 1.00 | 1.00 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many |  |  |  |  | 1.00 | 0.94 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.95 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | many_random |  |  |  |  | 1.00 | 0.97 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | many_similar |  |  |  |  | 1.00 | 0.97 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop |  |  |  |  | 0.94 | 0.87 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 1.00 | 0.96 | 1.00 | 0.88 | 0.95 | 0.88 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | needle |  |  |  |  | 1.00 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | updated |  |  |  |  | 1.00 | 1.00 |
 
@@ -84,21 +84,29 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 1024 | 25 | 1.00 | 1.00 | 0.00 | 2.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 2048 | 25 | 0.96 | 0.96 | 0.04 | 1.3 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 4096 | 25 | 0.96 | 0.96 | 0.04 | 1.4 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 8192 | 19 | 0.89 | 0.89 | 0.11 | 1.5 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 16384 | 100 | 0.97 | 0.97 | 0.03 | 1.8 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 32768 | 100 | 0.89 | 0.89 | 0.11 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 8192 | 25 | 0.92 | 0.92 | 0.08 | 1.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 16384 | 125 | 0.98 | 0.98 | 0.02 | 1.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 32768 | 125 | 0.88 | 0.88 | 0.12 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 2.5 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 16384 | 100 | 1.00 | 1.00 | 0.00 | 2.0 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 32768 | 63 | 0.94 | 0.94 | 0.06 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 1024 | 25 | 1.00 | 1.00 | 0.00 | 2.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 2048 | 25 | 1.00 | 1.00 | 0.00 | 1.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 4096 | 25 | 1.00 | 1.00 | 0.00 | 1.4 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 8192 | 25 | 1.00 | 1.00 | 0.00 | 1.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 16384 | 125 | 1.00 | 1.00 | 0.00 | 1.9 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | heldout_many | 32768 | 88 | 0.95 | 0.95 | 0.05 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 2.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | many_random | 32768 | 63 | 0.97 | 0.97 | 0.03 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | many_similar | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | many_similar | 32768 | 64 | 0.97 | 0.97 | 0.03 | 2.5 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 16384 | 100 | 0.94 | 0.94 | 0.06 | 1.8 |
-| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 32768 | 69 | 0.87 | 0.87 | 0.13 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 1024 | 25 | 1.00 | 1.00 | 0.00 | 2.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 2048 | 25 | 0.96 | 0.96 | 0.04 | 1.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 4096 | 25 | 1.00 | 1.00 | 0.00 | 1.4 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 8192 | 25 | 0.88 | 0.88 | 0.08 | 1.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 16384 | 125 | 0.95 | 0.95 | 0.05 | 1.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 32768 | 94 | 0.88 | 0.88 | 0.11 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | needle | 32768 | 64 | 1.00 | 1.00 | 0.00 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
