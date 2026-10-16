@@ -1,7 +1,9 @@
 """Thin shell: parse arguments, do the I/O, call pure functions.
 
   generate  --out suite.jsonl --tokenizer Qwen/Qwen2.5-1.5B [--seed 0] [--cases 25] [--lengths ...] [--tasks ...]
-  run       --suite suite.jsonl --model <id> --out results.jsonl [--attn sdpa] [--trust-remote-code] [--limit N]
+  run       --suite suite.jsonl --model <id> --out results.jsonl [--adapter DIR] [--attn sdpa] [--trust-remote-code] [--limit N]
+  train     --model <id> --out DIR [--n-docs 600] [--lengths 8192 12288 16384] [--lr 2e-4] [--rank 16] [--max-steps N]
+  bench     --model <id> [--adapter DIR] [--n 500] --out bench.json
   report    --results a.jsonl b.jsonl [--pair hybrid=full ...] [--out RESULTS.md]
 """
 
@@ -73,17 +75,38 @@ def cmd_run(a: argparse.Namespace) -> None:
     done = {d["case_id"] for d in read_jsonl(out)}
     todo = tuple(c for c in cases if c.id not in done)
     print(f"{a.model}: {len(todo)} cases to run ({len(done)} already in {out})", file=sys.stderr)
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code)
+    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter)
     prefill = "" if a.allow_think else hf.no_think_prefill(tok)
     print(f"  prefill after Answer: {prefill!r}", file=sys.stderr)
     with out.open("a") as f:
         for i, case in enumerate(sorted(todo, key=lambda c: c.ref_tokens), 1):
             text, wall_s = hf.complete(tok, model, case.prompt, prefill, MAX_NEW_TOKENS)
-            r = to_result(case, a.model, text, wall_s)
+            r = to_result(case, a.model + (f"+{Path(a.adapter).name}" if a.adapter else ""), text, wall_s)
             f.write(json.dumps(asdict(r)) + "\n")
             f.flush()
             if i % 25 == 0 or i == len(todo):
                 print(f"  {i}/{len(todo)} {case.id} contains={r.contains} wall={wall_s:.1f}s", file=sys.stderr)
+
+
+def cmd_train(a: argparse.Namespace) -> None:
+    from recall_guard.backends.train import TrainConfig, train
+
+    cfg = TrainConfig(a.model, a.out, a.n_docs, tuple(a.lengths), a.seed, a.lr, a.rank, a.alpha, a.grad_accum, a.max_steps, a.trust_remote_code)
+    stats = train(cfg)
+    Path(a.out).mkdir(parents=True, exist_ok=True)
+    (Path(a.out) / "train_stats.json").write_text(json.dumps({**stats, "config": asdict(cfg)}, indent=1))
+    print(f"trained {stats['steps']} steps on {stats['tokens']} tokens in {stats['wall_s']:.0f}s, final loss {stats['final_loss']:.3f}", file=sys.stderr)
+
+
+def cmd_bench(a: argparse.Namespace) -> None:
+    from recall_guard.backends import hf, mc
+
+    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter)
+    out = {b: mc.accuracy(tok, model, mc.load_items(b, a.n, a.seed)) for b in mc.BENCHES}
+    out["model"] = a.model + (f"+{Path(a.adapter).name}" if a.adapter else "")
+    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+    Path(a.out).write_text(json.dumps(out, indent=1))
+    print(json.dumps(out), file=sys.stderr)
 
 
 def cmd_report(a: argparse.Namespace) -> None:
@@ -124,9 +147,32 @@ def main(argv: list[str] | None = None) -> None:
     r.add_argument("--trust-remote-code", action="store_true")
     r.add_argument("--limit", type=int, default=0)
     r.add_argument("--allow-think", action="store_true", help="do not prefill the empty <think> block")
+    r.add_argument("--adapter", default="", help="PEFT adapter directory to merge into the model")
     r.add_argument("--tasks", nargs="*", default=())
     r.add_argument("--lengths", type=int, nargs="*", default=())
     r.set_defaults(fn=cmd_run)
+    tr = sub.add_parser("train")
+    tr.add_argument("--model", required=True)
+    tr.add_argument("--out", required=True)
+    tr.add_argument("--n-docs", type=int, default=600)
+    tr.add_argument("--lengths", type=int, nargs="+", default=[8192, 12288, 16384])
+    tr.add_argument("--seed", type=int, default=0)
+    tr.add_argument("--lr", type=float, default=2e-4)
+    tr.add_argument("--rank", type=int, default=16)
+    tr.add_argument("--alpha", type=int, default=32)
+    tr.add_argument("--grad-accum", type=int, default=4)
+    tr.add_argument("--max-steps", type=int, default=0)
+    tr.add_argument("--trust-remote-code", action="store_true")
+    tr.set_defaults(fn=cmd_train)
+    b = sub.add_parser("bench")
+    b.add_argument("--model", required=True)
+    b.add_argument("--adapter", default="")
+    b.add_argument("--attn", default="sdpa")
+    b.add_argument("--trust-remote-code", action="store_true")
+    b.add_argument("--n", type=int, default=500)
+    b.add_argument("--seed", type=int, default=0)
+    b.add_argument("--out", required=True)
+    b.set_defaults(fn=cmd_bench)
     t = sub.add_parser("report")
     t.add_argument("--results", nargs="+", required=True)
     t.add_argument("--pair", action="append", default=[], help="hybrid=full model id pair (repeatable)")

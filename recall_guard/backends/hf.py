@@ -10,13 +10,18 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 DTYPE_KWARG = "dtype" if int(transformers.__version__.split(".")[0]) >= 5 else "torch_dtype"
 
 
-def load(model_id: str, attn: str, trust_remote_code: bool) -> tuple[AutoTokenizer, AutoModelForCausalLM]:
+def load(model_id: str, attn: str, trust_remote_code: bool, adapter: str = "") -> tuple[AutoTokenizer, AutoModelForCausalLM]:
+    """Base model, or base + a PEFT adapter merged into the weights (so completions cost the same as the base)."""
     tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=trust_remote_code)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     kwargs = {DTYPE_KWARG: torch.bfloat16 if device == "cuda" else torch.float32}
     model = AutoModelForCausalLM.from_pretrained(
         model_id, attn_implementation=attn, trust_remote_code=trust_remote_code, device_map=device, **kwargs
     )
+    if adapter:
+        from peft import PeftModel
+
+        model = PeftModel.from_pretrained(model, adapter).merge_and_unload()
     return tok, model.eval()
 
 
