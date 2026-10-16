@@ -7,3 +7,4 @@ einops
 packaging
 #src https://github.com/state-spaces/mamba v2.2.6.post3
 #src https://github.com/jxiw/MambaInLlama b03f123152eeba5f2ae9d8694f4a001147e0a14c
+datasets
