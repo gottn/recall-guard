@@ -45,7 +45,7 @@ Moved to A40 GPUs (prioritized partition, qos normal) because one user held all 
 Results so far (32K, n=100; bpb at 16K): heavy keys 0.98/0.91, multi-hop 0.85, bpb 1.156 (+15%); gentle keys 1.00/0.99, multi-hop 0.99,
 RULER MK1 0.96, bpb 1.065 (+5.7%), HS within noise; gentle+replay bpb 0.978 but multi-hop 0.30; full replay bpb 0.992 but multi-hop 0.36 and
 RULER multi-value 0.00. Dose keeps recall, replay removes damage; they oppose. Next recipe queued: 1092559 `-gentle2-replay25` (800 examples,
-lr 5e-5, one in four natural). qk (1091609) RULER/damage pending. Base: bpb 1.008, HS 0.600/0.778, keys 0.25.
+lr 5e-5, one in four natural). qk-only: recall 1.00/0.89/0.90 at 32K, RULER MK1 0.72, bpb 1.026 (+1.8%), HS unchanged. Full table in exp03_robust/RESULTS.md item 28. Base: bpb 1.008, HS 0.600/0.778, keys 0.25.
 Commit 56e52c0 is labelled ci but also carries the train.py/cli.py replay+targets+weight-decay code (hook rejection swept the index). See exp03_robust/RESULTS.md items 20-23.
 **2B stage complete (night of 2026-10-16):** three hybrid seeds and two control seeds; the hybrid reaches the control's post-training level on our suites (1.00); on RULER the control was already at ceiling so the hybrid's gains are repair; single-answer training hurts multi-answer RULER tasks in both models (coverage rule, third instance); bpb +0.4-0.6% in both. See exp03_robust/RESULTS.md items 10-13.
 **Base stage (earlier):** RULER multi-key sees the Jet failure (MK1 0.56 vs 0.94 at 32K; MV 0.02 vs 0.46), so the
@@ -77,9 +77,10 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
 ## Next
-1. Length generalisation of the repair: train at <=16K, test at 32K/64K.
+1. (done at 8B) Length generalisation: train at <=16K, test at 32K.
 2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
 3. Capacity frontier after repair: 32/64/128 keys at 32K.
+3b. 8B recipe: wait for the combined run; then two more seeds of the winner (gentle, or gentle+25% replay) and a `gentle + qk` variant.
 4. Scale to a matched 8B pair (LoLCATs or Mamba-in-the-Llama vs Llama-3-8B).
 5. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore and the adapter compose.
 6. Still owed from exp01: n=100 with seeds at 16K (the 16K gap was template-dependent: parcels held 0.96).
