@@ -1,4 +1,4 @@
-# Experiment 3 — robustness of exp01 and exp02 (2B stage complete; 8B base/repair pending)
+# Experiment 3 — robustness of exp01 and exp02 (2B and 8B stages complete)
 
 Run dir `~/runs/rg/robust/20261016-171229-9f67d4b`, commit `9f67d4b`, A100-SXM4-40GB. Reproduce: `exp03_robust/run_all.sh`.
 Items refer to docs/robustness.md. Predictions there were written before these numbers.
@@ -147,7 +147,37 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     At 16K (trained length) every key task is at 1.00. Prediction 3 (>= 0.7 at 32K) is exceeded. Full counts, the
     second suite, RULER after repair and the damage checks follow when job 1091466 completes.
 
-## Pending (MIL repair evaluation 1091466: second suite, held-out, RULER, bench, bpb)
+## 8B repair, final (one seed, trained at <= 16K, 600 docs, lr 2e-4): recall wins, the recipe costs more at 8B
+
+20. **Recall, fresh suites, n = 100 per cell** (hybrid before -> after | Llama-3.1-8B-Instruct):
+
+    | task | 16K | 32K (never trained) |
+    |---|---|---|
+    | needle | 1.00 -> 1.00 \| 1.00 | 1.00 -> 1.00 \| 1.00 |
+    | many_random | 0.25 -> 1.00 \| 0.99 | 0.25 -> **0.98** \| 0.99 |
+    | many_similar | 0.11 -> 0.99 \| 0.95 | 0.09 -> **0.91** \| 1.00 |
+    | updated | 0.42 -> 1.00 \| 0.87 | 0.16 -> 1.00 \| 0.74 |
+    | multihop | 0.15 -> 0.93 \| 0.63 | 0.06 -> 0.85 \| 0.49 |
+    | heldout_many | 0.33 -> 0.94 \| 1.00 | 0.17 -> 0.95 \| 1.00 |
+
+    Length generalisation (item 3) holds: trained at <= 16K, the 32K recall reaches the full-attention model's level.
+21. **RULER after repair** (hybrid before -> after | Llama), 32K: multikey_1 0.40 -> **1.00** | 1.00; multikey_2 0.10 ->
+    **0.96** | 1.00; multikey_3 (UUID) 0.00 -> 0.30 | 0.96; multivalue 0.00 -> 0.42 | 0.98; multiquery 0.00 -> 0.50 | 1.00.
+    16K: 1.00 / 0.98 / 0.58 / 0.68 / 0.72. Numeric multi-key recovers fully; UUIDs and multi-answer questions partially,
+    the same coverage boundary as at 2B.
+22. **Damage at 8B is real and larger than at 2B.** ARC-Easy 0.848 -> 0.836 (acc_norm 0.804 -> 0.776), HellaSwag
+    0.600 -> 0.566 (acc_norm 0.778 -> 0.728, about 2 SE), bits per byte on long text 1.008 -> 1.156 (**+15%**, every
+    window worse). The same recipe that cost 0.4% at 2B costs 15% of long-text modelling at 8B. Training loss reached
+    0.000, so this is over-fitting of a larger model to 11M synthetic tokens; a lighter recipe (fewer documents, lower
+    learning rate, or natural text mixed in) is the obvious next run (item 8) and is submitted as `-gentle`.
+23. The unmerged-adapter and chat-template checks did not run at 8B (the unmerged check crashed on a layer reading
+    `.weight` off the wrapper; fixed in 3787674). Merge exactness stands from the 2B check.
+
+## Verdicts, complete
+- Items 1, 2, 5, 6, 7 (2B): as above. Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention
+  level after <= 16K training. Item 9 (8B): the failure signature and the repair both **replicate**, with the damage
+  caveat in 22. Item 6 at 8B: **not met** with this recipe; the recall result stands, the "no damage" claim is 2B-only
+  until the lighter recipe is measured.
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 
