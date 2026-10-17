@@ -39,7 +39,11 @@ Jet repair seeds 1-3 = 1089544-46, Qwen2.5 repair seeds 1-2 = 1089547-48. Each e
 ARC/HellaSwag, bits per byte on Moby Dick at 16K; repair jobs train the v2 mix (with multi-hop) and add the unmerged-adapter
 and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<run>/ exp03_robust/results/raw/`
 then `exp03_robust/run_all.sh report`.
-**8B stage complete (2026-10-17 early):** repair trained at <=16K lifts the 8B hybrid to 0.98/0.91 on keys at 32K (Llama 0.99/1.00), RULER MK1/MK2 to 1.00/0.96; but damage is real at 8B: bpb +15%, HellaSwag -3 to -5 points. A gentle recipe (300 docs, lr 5e-5, tag -gentle) is submitted. See exp03_robust/RESULTS.md items 20-23.
+**8B stage complete (2026-10-17 early):** repair trained at <=16K lifts the 8B hybrid to 0.98/0.91 on keys at 32K (Llama 0.99/1.00), RULER MK1/MK2 to 1.00/0.96; but damage is real at 8B: bpb +15%, HellaSwag -3 to -5 points. Four 8B anti-forgetting runs are queued in the exp03 run dir (all seed 1, trained at <=16K, evaluated to 32K with RULER, bench, bpb):
+1091551 `-gentle` (300 docs, lr 5e-5); 1091552 `-replay` (600 docs, every other example a War-and-Peace window with full LM loss);
+1091553 `-qk` (600 docs, LoRA on q_proj/k_proj only); 1091554 `-gentle-replay` (300 docs, lr 5e-5, replay, weight decay 0.01).
+Compare each against base (bpb 1.008, HellaSwag 0.600/0.778, keys 0.25) and the heavy repair (bpb 1.156, HS 0.566/0.728, keys 0.98).
+Commit 56e52c0 is labelled ci but also carries the train.py/cli.py replay+targets+weight-decay code (hook rejection swept the index). See exp03_robust/RESULTS.md items 20-23.
 **2B stage complete (night of 2026-10-16):** three hybrid seeds and two control seeds; the hybrid reaches the control's post-training level on our suites (1.00); on RULER the control was already at ceiling so the hybrid's gains are repair; single-answer training hurts multi-answer RULER tasks in both models (coverage rule, third instance); bpb +0.4-0.6% in both. See exp03_robust/RESULTS.md items 10-13.
 **Base stage (earlier):** RULER multi-key sees the Jet failure (MK1 0.56 vs 0.94 at 32K; MV 0.02 vs 0.46), so the
 harness has no detection advantage over RULER; the 16K random-key gap is confirmed at n=100 (0.57 vs 0.90); Jet's needle at 32K is
