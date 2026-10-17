@@ -1,9 +1,11 @@
 """LoRA repair training: the only module that runs backward passes. Loss only on answer tokens (labels = -100
 elsewhere). Adapter saved with PEFT; `hf.load` merges it back for evaluation."""
 
+import re
 import sys
 import time
 from dataclasses import dataclass
+from pathlib import Path
 
 import torch
 import torch.nn.functional as F
@@ -27,6 +29,10 @@ class TrainConfig:
     grad_accum: int
     max_steps: int
     trust_remote_code: bool
+    targets: str = ""  # regex on leaf names; empty = every linear outside the MLPs
+    weight_decay: float = 0.0  # on the adapter only: decays A/B toward zero, i.e. toward the base model
+    replay_text: str = ""  # path to natural long text; when set, every other example is a window of it with full LM loss
+    replay_frac: float = 0.5
 
 
 def tokenize_segments(tok: AutoTokenizer, segs: tuple[Segment, ...]) -> tuple[torch.Tensor, torch.Tensor]:
@@ -59,6 +65,16 @@ def checkpoint_custom_layers(model: torch.nn.Module) -> int:
     return wrapped
 
 
+def replay_example(text: str, tok: AutoTokenizer, window_tokens: int, seed: int) -> tuple[torch.Tensor, torch.Tensor]:
+    """A random window of natural text with labels on every token (ordinary LM loss), the anti-forgetting replay."""
+    import random
+
+    rng = random.Random(seed)
+    start = rng.randrange(0, max(1, len(text) - window_tokens * 6))
+    ids = tok(text[start : start + window_tokens * 6], add_special_tokens=False, return_tensors="pt").input_ids[:, :window_tokens]
+    return ids, ids.clone()
+
+
 def answer_loss(model: torch.nn.Module, ids: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """Cross-entropy on answer positions only, applying lm_head just there: full-sequence logits at 16K x 152K
     vocab in float32 are 9.3 GiB, which is what OOMed the first smoke."""
@@ -73,6 +89,8 @@ def train(cfg: TrainConfig) -> dict:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tok, model = hf.load(cfg.model_id, "sdpa", cfg.trust_remote_code)  # same registry path as evaluation
     targets = lora.target_names(model)
+    if cfg.targets:
+        targets = tuple(n for n in targets if re.search(cfg.targets, n))
     wrapped = lora.inject(model, targets, cfg.rank, cfg.alpha)
     params = lora.trainable(model)
     n_train, n_all = sum(p.numel() for p in params), sum(p.numel() for p in model.parameters())
@@ -81,7 +99,8 @@ def train(cfg: TrainConfig) -> dict:
         model.gradient_checkpointing_enable()
         model.enable_input_require_grads()
         print(f"  checkpointed {checkpoint_custom_layers(model)} non-transformers layers", file=sys.stderr)
-    opt = torch.optim.AdamW(params, lr=cfg.lr, weight_decay=0.0)
+    opt = torch.optim.AdamW(params, lr=cfg.lr, weight_decay=cfg.weight_decay)
+    replay = Path(cfg.replay_text).read_text() if cfg.replay_text else ""
     def count(text: str) -> int:
         return len(tok(text, add_special_tokens=False).input_ids)
 
@@ -90,8 +109,11 @@ def train(cfg: TrainConfig) -> dict:
     t0, tokens, losses, step = time.perf_counter(), 0, [], 0
     n = min(cfg.n_docs, cfg.max_steps * cfg.grad_accum) if cfg.max_steps else cfg.n_docs
     for i in range(n):
-        segs = training_segments(cfg.seed * 100_000 + i, cfg.lengths[i % len(cfg.lengths)], count, tps)
-        ids, labels = tokenize_segments(tok, segs)
+        length = cfg.lengths[i % len(cfg.lengths)]
+        if replay and (i % 2 == 1) and cfg.replay_frac >= 0.5:
+            ids, labels = replay_example(replay, tok, length, cfg.seed * 100_000 + i)
+        else:
+            ids, labels = tokenize_segments(tok, training_segments(cfg.seed * 100_000 + i, length, count, tps))
         loss = answer_loss(model, ids.to(device), labels.to(device))
         (loss / cfg.grad_accum).backward()
         losses.append(loss.item())

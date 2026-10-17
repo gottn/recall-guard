@@ -8,6 +8,7 @@
 #   RUN_IN=$RUN STAGE=repair TRAIN_SEED=1 MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust --time=08:00:00
 #   TRAIN_LENGTHS="8192 16384" TRAIN_TAG=-le16k ... trains below 32K to test length generalisation (item 3)
 #   TRAIN_DOCS=300 TRAIN_EXTRA="--lr 5e-5" TRAIN_TAG=-gentle ... a lighter recipe (item 8: damage vs recall trade-off)
+#   TRAIN_EXTRA="--replay-text $HOME/data/rg/warandpeace.txt" TRAIN_TAG=-replay ... natural-text replay against forgetting
 # RULER suites come from ~/data/rg/ruler (generated on the Mac with NVIDIA's generator, converted by recall_guard.ruler).
 #SBATCH --partition=aicentre-a100
 #SBATCH --qos=unprivileged
@@ -24,6 +25,8 @@ TEXT="${TEXT:-$HOME/data/rg/mobydick.txt}"
 TRC=""; case "$MODEL" in jet-ai/*) TRC="--trust-remote-code";; esac
 SLUG="$(echo "$MODEL" | tr / _)"
 [ -f "$TEXT" ] || curl -sL -o "$TEXT" https://www.gutenberg.org/cache/epub/2701/pg2701.txt
+REPLAY="${REPLAY:-$HOME/data/rg/warandpeace.txt}"  # replay text must differ from the bpb eval text
+[ -f "$REPLAY" ] || curl -sL -o "$REPLAY" https://www.gutenberg.org/cache/epub/2600/pg2600.txt
 echo "commit $RG_SHA on $(hostname), gpu=$(nvidia-smi --query-gpu=name --format=csv,noheader | head -1), env=$RG_ENV, model=$MODEL, stage=$STAGE, seed=$TRAIN_SEED, out=$RG_OUT"
 srun singularity exec --nv "$CONTAINER" bash -c "
   set -euo pipefail

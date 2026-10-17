@@ -95,7 +95,8 @@ def cmd_run(a: argparse.Namespace) -> None:
 def cmd_train(a: argparse.Namespace) -> None:
     from recall_guard.backends.train import TrainConfig, train
 
-    cfg = TrainConfig(a.model, a.out, a.n_docs, tuple(a.lengths), a.seed, a.lr, a.rank, a.alpha, a.grad_accum, a.max_steps, a.trust_remote_code)
+    cfg = TrainConfig(a.model, a.out, a.n_docs, tuple(a.lengths), a.seed, a.lr, a.rank, a.alpha, a.grad_accum, a.max_steps, a.trust_remote_code,
+                      a.targets, a.weight_decay, a.replay_text, a.replay_frac)
     stats = train(cfg)
     Path(a.out).mkdir(parents=True, exist_ok=True)
     (Path(a.out) / "train_stats.json").write_text(json.dumps({**stats, "config": asdict(cfg)}, indent=1))
@@ -199,6 +200,10 @@ def main(argv: list[str] | None = None) -> None:
     tr.add_argument("--grad-accum", type=int, default=4)
     tr.add_argument("--max-steps", type=int, default=0)
     tr.add_argument("--trust-remote-code", action="store_true")
+    tr.add_argument("--targets", default="", help="regex on leaf names, e.g. 'q_proj|k_proj'")
+    tr.add_argument("--weight-decay", type=float, default=0.0)
+    tr.add_argument("--replay-text", default="", help="natural long text; every other example is a window with full LM loss")
+    tr.add_argument("--replay-frac", type=float, default=0.5)
     tr.set_defaults(fn=cmd_train)
     b = sub.add_parser("bench")
     b.add_argument("--model", required=True)
