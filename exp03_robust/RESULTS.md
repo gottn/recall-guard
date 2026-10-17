@@ -193,6 +193,27 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     and halves the retrieval signal: the harder tasks are the ones that go. The two levers oppose each other; the next
     recipe (`-gentle2-replay25`: 800 examples, lr 5e-5, one in four natural) looks for the point that keeps both.
 
+27. **qk-only** (600 docs, lr 2e-4, LoRA on q_proj / k_proj of the 16 attention layers only, 1.1M parameters): recall
+    at 32K random 1.00, similar 0.89, multi-hop 0.90, held-out 0.92; RULER multikey_1 0.72, multikey_2 0.36, multivalue
+    0.14; bits per byte **1.026** (+1.8%), HellaSwag 0.606 / 0.772 and ARC-Easy 0.848 / 0.784 (unchanged). The routing
+    projections alone carry most of the repair on our tasks at almost no cost, consistent with Attention Amnesia's
+    W_Q / W_K explanation, but they transfer least to RULER's templates.
+
+28. **The 8B recipe table at 32K** (n = 100; RULER n = 50; bits per byte at 16K; one training seed each):
+
+    | recipe | random | similar | multi-hop | held-out | RULER MK1 | MK2 | MV | bpb | HellaSwag |
+    |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+    | base (unrepaired) | 0.25 | 0.09 | 0.06 | 0.17 | 0.40 | 0.10 | 0.00 | 1.008 | 0.600 |
+    | heavy (600 docs, lr 2e-4) | 0.98 | 0.91 | 0.85 | 0.95 | 1.00 | 0.96 | 0.42 | 1.156 | 0.566 |
+    | gentle (300 docs, lr 5e-5) | 1.00 | 0.99 | 0.99 | 1.00 | 0.96 | 0.90 | 0.80 | 1.065 | 0.586 |
+    | gentle + replay | 0.99 | 0.77 | 0.30 | 0.85 | 0.64 | 0.54 | 0.08 | 0.978 | 0.582 |
+    | replay (600 docs, lr 2e-4) | 0.99 | 0.86 | 0.36 | 0.92 | 0.70 | 0.50 | 0.10 | 0.992 | 0.574 |
+    | qk-only (600 docs, lr 2e-4) | 1.00 | 0.89 | 0.90 | 0.92 | 0.72 | 0.36 | 0.14 | 1.026 | 0.606 |
+
+    Reading: dose is the first lever (gentle beats heavy on every recall column and cuts damage to a third); replay
+    buys perplexity with retrieval; restricting to q/k buys damage-freedom with transfer. The combined run
+    (`-gentle2-replay25`, job 1092559) tests whether a light replay share keeps the gentle recipe's recall.
+
 ## Verdicts, complete
 - Items 1, 2, 5, 6, 7 (2B): as above. Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention
   level after <= 16K training. Item 9 (8B): the failure signature and the repair both **replicate**, with the damage
