@@ -42,3 +42,9 @@ def test_attach_matches_merge(tmp_path):
     lora.merge(merged, str(tmp_path))
     assert lora.attach(attached, str(tmp_path)) == 1
     assert torch.allclose(merged.q_proj(x), attached.q_proj(x), atol=1e-5)
+
+
+def test_wrapped_linear_still_exposes_weight():
+    m = Tiny()
+    lora.inject(m, ("q_proj",), r=2, alpha=4)
+    assert m.q_proj.weight is m.q_proj.base.weight

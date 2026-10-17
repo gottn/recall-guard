@@ -21,6 +21,11 @@ class LoRALinear(torch.nn.Module):
         self.B = torch.nn.Parameter(torch.zeros(base.out_features, r, dtype=torch.float32, device=dev))
         torch.nn.init.kaiming_uniform_(self.A, a=math.sqrt(5))
 
+    @property
+    def weight(self) -> torch.nn.Parameter:
+        """Some layer code reads `.weight.device` / `.weight.dtype` off its projections (Mamba-2 blocks do)."""
+        return self.base.weight
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         delta = (x.to(torch.float32) @ self.A.T @ self.B.T) * self.scale
         return self.base(x) + delta.to(x.dtype)
