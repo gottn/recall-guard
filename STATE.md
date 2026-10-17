@@ -41,7 +41,7 @@ and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --excl
 then `exp03_robust/run_all.sh report`.
 **8B stage complete (2026-10-17 early):** repair trained at <=16K lifts the 8B hybrid to 0.98/0.91 on keys at 32K (Llama 0.99/1.00), RULER MK1/MK2 to 1.00/0.96; but damage is real at 8B: bpb +15%, HellaSwag -3 to -5 points. Four 8B anti-forgetting runs are queued in the exp03 run dir (all seed 1, trained at <=16K, evaluated to 32K with RULER, bench, bpb):
 Moved to A40 GPUs (prioritized partition, qos normal) because one user held all A100s: 1091565 `-gentle` (300 docs, lr 5e-5); 1091581 `-replay` (600 docs, every other example a War-and-Peace window with full LM loss; first attempt 1091566 OOMed on full-sequence logits, fixed by chunked loss in 5c7fb47);
-1091567 `-qk` (600 docs, LoRA on q_proj/k_proj only); 1091582 `-gentle-replay` (300 docs, lr 5e-5, replay, weight decay 0.01).
+1091609 `-qk` (600 docs, LoRA on q_proj/k_proj only; first attempt 1091567 trained q_proj only because the `|` in TRAIN_EXTRA became a shell pipe, its adapter is kept as `-qonly`, unevaluated); 1091582 `-gentle-replay` (300 docs, lr 5e-5, replay, weight decay 0.01).
 Compare each against base (bpb 1.008, HellaSwag 0.600/0.778, keys 0.25) and the heavy repair (bpb 1.156, HS 0.566/0.728, keys 0.98).
 Commit 56e52c0 is labelled ci but also carries the train.py/cli.py replay+targets+weight-decay code (hook rejection swept the index). See exp03_robust/RESULTS.md items 20-23.
 **2B stage complete (night of 2026-10-16):** three hybrid seeds and two control seeds; the hybrid reaches the control's post-training level on our suites (1.00); on RULER the control was already at ceiling so the hybrid's gains are repair; single-answer training hurts multi-answer RULER tasks in both models (coverage rule, third instance); bpb +0.4-0.6% in both. See exp03_robust/RESULTS.md items 10-13.
@@ -93,6 +93,7 @@ Read docs/prior-art.md before writing anything public. Key points: Qwen2.5-1.5B 
 - PEFT >= 0.21 refuses the image's torchao 0.13; torchao >= 0.16 needs torch 2.10 (image has 2.9). Use the own LoRA; never add peft/torchao.
 - Full-vocabulary logits at 16K are 9.3 GiB in float32: apply lm_head only at answer positions (train.answer_loss).
 - Commit subjects are measured in bytes by the hook: the em dash costs 3, so keep subjects under ~95 characters.
+- TRAIN_EXTRA / JOB_ARGS are interpolated unquoted into the job's `bash -c`: never put `|`, `;` or quotes in them (use `[qk]_proj`, not `q_proj|k_proj`).
 - After a hook rejection the index stays staged: run `git reset` before re-adding, or the next commit sweeps everything
   (commits 19aa2a0 and 9f67d4b are complete but mislabeled for this reason).
 - `ENV` is overwritten by the container shell (/etc/shinit_v2): the env selector is `RG_ENV`.
