@@ -173,6 +173,15 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 23. The unmerged-adapter and chat-template checks did not run at 8B (the unmerged check crashed on a layer reading
     `.weight` off the wrapper; fixed in 3787674). Merge exactness stands from the 2B check.
 
+## 8B anti-forgetting runs (item 8), first result: replay reverses the perplexity damage
+
+24. **gentle + replay** (300 docs, lr 5e-5, every other example a War-and-Peace window with full LM loss, weight decay 0.01):
+    bits per byte **0.978**, below the unrepaired hybrid's 1.008 (the heavy repair: 1.156); HellaSwag 0.582 / 0.744 and
+    ARC-Easy 0.826 / 0.776, within one to two SE of base. Recall on the first suite at 32K: random keys 0.98, similar keys
+    0.78, multi-hop 0.26, held-out 0.84: under-trained at this learning rate. So replay removes the damage and even
+    recovers part of the conversion's own long-text loss; the remaining question is whether full-strength replay keeps
+    recall (run `-replay`, 600 docs, lr 2e-4). `-gentle` (no replay) and `-qk` are pending.
+
 ## Verdicts, complete
 - Items 1, 2, 5, 6, 7 (2B): as above. Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention
   level after <= 16K training. Item 9 (8B): the failure signature and the repair both **replicate**, with the damage
