@@ -123,7 +123,8 @@ def train(cfg: TrainConfig) -> dict:
     n = min(cfg.n_docs, cfg.max_steps * cfg.grad_accum) if cfg.max_steps else cfg.n_docs
     for i in range(n):
         length = cfg.lengths[i % len(cfg.lengths)]
-        if replay and (i % 2 == 1) and cfg.replay_frac >= 0.5:
+        period = round(1 / cfg.replay_frac) if cfg.replay_frac > 0 else 0  # 0.5 -> every 2nd example, 0.25 -> every 4th
+        if replay and period and i % period == period - 1:
             ids, labels = replay_example(replay, tok, length, cfg.seed * 100_000 + i)
         else:
             ids, labels = tokenize_segments(tok, training_segments(cfg.seed * 100_000 + i, length, count, tps))
