@@ -1,0 +1,2 @@
+4395bbf49511496c354224d54c9f7b1021cb5f2f
+docs(state): four 8B anti-forgetting runs queued; note the swept commit

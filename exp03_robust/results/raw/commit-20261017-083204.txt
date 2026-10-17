@@ -1,0 +1,2 @@
+9e0c978fc7becf090166b448cd850284470c6a27
+exp(exp03): 8B repair — 32K keys 0.25 to 0.98 after <=16K training; bpb +15% and HellaSwag -4
