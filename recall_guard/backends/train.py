@@ -15,6 +15,8 @@ from recall_guard.backends import hf, lora
 from recall_guard.filler import filler_sentences
 from recall_guard.train_data import Segment, training_segments
 
+LOSS_CHUNK = 1024  # labelled positions per logits chunk: a replay window labels every token (16K x 128K logits = 8 GiB at once)
+
 
 @dataclass(frozen=True)
 class TrainConfig:
@@ -80,8 +82,19 @@ def answer_loss(model: torch.nn.Module, ids: torch.Tensor, labels: torch.Tensor)
     vocab in float32 are 9.3 GiB, which is what OOMed the first smoke."""
     hidden = model.model(input_ids=ids).last_hidden_state[0]
     pos = (labels[0, 1:] != -100).nonzero().squeeze(-1)
-    logits = model.lm_head(hidden[pos]).float()
-    return F.cross_entropy(logits, labels[0, 1:][pos])
+    targets = labels[0, 1:][pos]
+    if len(pos) <= LOSS_CHUNK:
+        return F.cross_entropy(model.lm_head(hidden[pos]).float(), targets)
+    import torch.utils.checkpoint as cp
+
+    def chunk_sum(h: torch.Tensor, y: torch.Tensor) -> torch.Tensor:  # recomputed in backward: one chunk of logits alive at a time
+        return F.cross_entropy(model.lm_head(h).float(), y, reduction="sum")
+
+    total = sum(
+        cp.checkpoint(chunk_sum, hidden[pos[i : i + LOSS_CHUNK]], targets[i : i + LOSS_CHUNK], use_reentrant=False)
+        for i in range(0, len(pos), LOSS_CHUNK)
+    )
+    return total / len(pos)
 
 
 def train(cfg: TrainConfig) -> dict:
