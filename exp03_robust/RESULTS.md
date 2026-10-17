@@ -187,6 +187,12 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     (random keys 1.00, similar 1.00, multi-hop ~0.98, held-out 1.00). Dose alone removes two thirds of the damage at no
     recall cost; replay removes all of it. The full-strength replay run is expected to combine the two.
 
+26. **replay, full strength** (600 docs, lr 2e-4, every other example natural text): bits per byte **0.992** (below base),
+    HellaSwag 0.574 / 0.746, ARC-Easy 0.822 / 0.782 (within noise); recall at 32K: random keys 0.99, similar 0.86,
+    multi-hop 0.36, held-out 0.92; RULER multikey_1 0.80, multikey_2 0.43, multivalue 0.00. Replay removes the damage
+    and halves the retrieval signal: the harder tasks are the ones that go. The two levers oppose each other; the next
+    recipe (`-gentle2-replay25`: 800 examples, lr 5e-5, one in four natural) looks for the point that keeps both.
+
 ## Verdicts, complete
 - Items 1, 2, 5, 6, 7 (2B): as above. Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention
   level after <= 16K training. Item 9 (8B): the failure signature and the repair both **replicate**, with the damage
