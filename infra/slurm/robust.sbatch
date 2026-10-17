@@ -7,6 +7,7 @@
 #   STAGE=base   MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust              -> RUN
 #   RUN_IN=$RUN STAGE=repair TRAIN_SEED=1 MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust --time=08:00:00
 #   TRAIN_LENGTHS="8192 16384" TRAIN_TAG=-le16k ... trains below 32K to test length generalisation (item 3)
+#   TRAIN_DOCS=300 TRAIN_EXTRA="--lr 5e-5" TRAIN_TAG=-gentle ... a lighter recipe (item 8: damage vs recall trade-off)
 # RULER suites come from ~/data/rg/ruler (generated on the Mac with NVIDIA's generator, converted by recall_guard.ruler).
 #SBATCH --partition=aicentre-a100
 #SBATCH --qos=unprivileged
@@ -33,7 +34,7 @@ srun singularity exec --nv "$CONTAINER" bash -c "
   [ -f $RG_OUT/multihop25.jsonl ] || \$PY -m recall_guard.cli generate --out $RG_OUT/multihop25.jsonl --seed 0 --cases 25 --tasks multihop
   if [ $STAGE = base ]; then TAG=base; ADP=''; else
     A=$RG_OUT/adapter-$SLUG-seed$TRAIN_SEED${TRAIN_TAG:-}; TAG=repair-seed$TRAIN_SEED${TRAIN_TAG:-}; ADP=\"--adapter \$A\"
-    [ -f \$A/adapter_config.json ] || \$PY -m recall_guard.cli train --model $MODEL $TRC --out \$A --seed $TRAIN_SEED --n-docs 600 --lengths $TRAIN_LENGTHS
+    [ -f \$A/adapter_config.json ] || \$PY -m recall_guard.cli train --model $MODEL $TRC --out \$A --seed $TRAIN_SEED --n-docs ${TRAIN_DOCS:-600} --lengths $TRAIN_LENGTHS ${TRAIN_EXTRA:-}
   fi
   for S in suite-s1 suite-s2 heldout multihop25; do \$PY -m recall_guard.cli run --suite $RG_OUT/\$S.jsonl --model $MODEL $TRC \$ADP --out $RG_OUT/\$S-\$TAG-$SLUG.jsonl; done
   for R in $RULER_DIR/*.jsonl; do \$PY -m recall_guard.cli run --suite \$R --model $MODEL $TRC \$ADP --max-new-tokens 64 --out $RG_OUT/\$(basename \$R .jsonl)-\$TAG-$SLUG.jsonl; done
