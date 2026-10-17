@@ -182,6 +182,11 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     recovers part of the conversion's own long-text loss; the remaining question is whether full-strength replay keeps
     recall (run `-replay`, 600 docs, lr 2e-4). `-gentle` (no replay) and `-qk` are pending.
 
+25. **gentle** (300 docs, lr 5e-5, no replay): bits per byte **1.065** (+5.7% vs base; the heavy recipe was +15%), HellaSwag
+    0.586 / 0.744, ARC-Easy 0.842 / 0.766 (within one to two SE of base), with full recall at 32K on the fresh suites
+    (random keys 1.00, similar 1.00, multi-hop ~0.98, held-out 1.00). Dose alone removes two thirds of the damage at no
+    recall cost; replay removes all of it. The full-strength replay run is expected to combine the two.
+
 ## Verdicts, complete
 - Items 1, 2, 5, 6, 7 (2B): as above. Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention
   level after <= 16K training. Item 9 (8B): the failure signature and the repair both **replicate**, with the damage
