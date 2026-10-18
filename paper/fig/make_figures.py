@@ -55,7 +55,7 @@ def fig1():
             needle = [rate(f, "needle", ln) for ln in LENGTHS]
             ax.plot(LENGTHS, keys, "-o", color=color, lw=1.6, ms=3.2, mec="white", mew=0.6)
             ax.plot(LENGTHS, needle, "--", color=color, lw=1.1)
-            dy = -9 if label == "full attention" else 9
+            dy = -9  # below the end point: the curves arrive from above
             ax.annotate(f"{label}, 16 keys", (LENGTHS[-1], keys[-1]), xytext=(-3, dy), textcoords="offset points", color=color, fontsize=7, ha="right", va="center")
         ax.annotate("needle, both models", (LENGTHS[0], 1.0), xytext=(4, 6), textcoords="offset points", color="#444441", fontsize=7, ha="left", va="bottom")
         ax.set_xscale("log", base=2)
