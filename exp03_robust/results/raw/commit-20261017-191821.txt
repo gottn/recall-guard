@@ -1,0 +1,2 @@
+dc75fe194cf97fb1088c6abbe69f299f9949db4e
+docs(state): qk-only result and the next recipe steps

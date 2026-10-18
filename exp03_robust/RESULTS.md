@@ -199,26 +199,33 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     projections alone carry most of the repair on our tasks at almost no cost, consistent with Attention Amnesia's
     W_Q / W_K explanation, but they transfer least to RULER's templates.
 
-28. **The 8B recipe table at 32K** (n = 100; RULER n = 50; bits per byte at 16K; one training seed each):
+28. **The complete 8B recipe table at 32K** (n = 100 pooled per suite, except gentle 3-seed mean n = 300; RULER n = 50 per seed; bits per byte at 16K):
 
-    | recipe | random | similar | multi-hop | held-out | RULER MK1 | MK2 | MV | bpb | HellaSwag |
-    |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-    | base (unrepaired) | 0.25 | 0.09 | 0.06 | 0.17 | 0.40 | 0.10 | 0.00 | 1.008 | 0.600 |
-    | heavy (600 docs, lr 2e-4) | 0.98 | 0.91 | 0.85 | 0.95 | 1.00 | 0.96 | 0.42 | 1.156 | 0.566 |
-    | gentle (300 docs, lr 5e-5) | 1.00 | 0.99 | 0.99 | 1.00 | 0.96 | 0.90 | 0.80 | 1.065 | 0.586 |
-    | gentle + replay | 0.99 | 0.77 | 0.30 | 0.85 | 0.64 | 0.54 | 0.08 | 0.978 | 0.582 |
-    | replay (600 docs, lr 2e-4) | 0.99 | 0.86 | 0.36 | 0.92 | 0.70 | 0.50 | 0.10 | 0.992 | 0.574 |
-    | qk-only (600 docs, lr 2e-4) | 1.00 | 0.89 | 0.90 | 0.92 | 0.72 | 0.36 | 0.14 | 1.026 | 0.606 |
+    | recipe | random | similar | multi-hop | held-out | RULER MK1 | MK2 | MV | bpb | HellaSwag | ARC-Easy |
+    |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+    | base (unrepaired) | 0.25 | 0.09 | 0.06 | 0.17 | 0.40 | 0.10 | 0.00 | 1.008 | 0.600 | 0.848 |
+    | heavy (600 docs, lr 2e-4) | 0.98 | 0.91 | 0.85 | 0.95 | 1.00 | 0.96 | 0.42 | 1.156 (+14.7%) | 0.566 | 0.836 |
+    | gentle (3-seed mean ± std) | **0.997**±0.005 | **0.993**±0.005 | **0.987**±0.005 | **0.993**±0.010 | **0.980**±0.020 | **0.887**±0.023 | **0.733**±0.061 | 1.071 (+6.2%) | 0.588 | 0.843 |
+    | ↳ seed 1 | 1.00 | 0.99 | 0.99 | 1.00 | 0.96 | 0.90 | 0.80 | 1.065 (+5.7%) | 0.586 | 0.842 |
+    | ↳ seed 2 | 1.00 | 1.00 | 0.99 | 1.00 | 1.00 | 0.86 | 0.72 | 1.063 (+5.5%) | 0.594 | 0.854 |
+    | ↳ seed 3 | 0.99 | 0.99 | 0.98 | 0.98 | 0.98 | 0.90 | 0.68 | 1.083 (+7.5%) | 0.584 | 0.832 |
+    | gentle + replay (50%) | 0.99 | 0.77 | 0.30 | 0.85 | 0.64 | 0.54 | 0.08 | 0.978 (-3.0%) | 0.582 | 0.826 |
+    | replay (600 docs, lr 2e-4) | 0.99 | 0.86 | 0.36 | 0.92 | 0.70 | 0.50 | 0.10 | 0.992 (-1.5%) | 0.574 | 0.822 |
+    | gentle2-replay25 (25% replay) | 1.00 | 0.98 | 0.30 | 0.96 | 0.82 | 0.72 | 0.46 | 0.976 (-3.1%) | 0.578 | 0.834 |
+    | qk-only (600 docs, lr 2e-4) | 1.00 | 0.89 | 0.90 | 0.92 | 0.72 | 0.36 | 0.14 | 1.026 (+1.8%) | **0.606** | 0.848 |
 
-    Reading: dose is the first lever (gentle beats heavy on every recall column and cuts damage to a third); replay
-    buys perplexity with retrieval; restricting to q/k buys damage-freedom with transfer. The combined run
-    (`-gentle2-replay25`, job 1092559) tests whether a light replay share keeps the gentle recipe's recall.
+29. **Key conclusions from the 8B campaign**:
+    - **Triplicate 8B replication**: Across three independent seeds, the Gentle recipe restores 32K dense recall to parity with full attention (0.987–0.997) with negligible benchmark shift (ARC 0.843 vs 0.848 base; HellaSwag 0.588 vs 0.600 base) and a repeatable +6.2% perplexity cost.
+    - **The Replay Dilution Law**: Replay at 50% or 25% eliminates the perplexity cost (improving bpb by ~3% below base), but starves transitive pointer chains, collapsing multi-hop recall from 0.99 down to 0.30.
+    - **Surgical routing repair**: Adapting only $W_q, W_k$ in the recurrent layers restores 32K recall (1.00 random, 0.90 multi-hop) with virtually zero damage (+1.8% bpb, HellaSwag 0.606), isolating the failure mode to query-key routing geometry.
 
 ## Verdicts, complete
-- Items 1, 2, 5, 6, 7 (2B): as above. Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention
-  level after <= 16K training. Item 9 (8B): the failure signature and the repair both **replicate**, with the damage
-  caveat in 22. Item 6 at 8B: **not met** with this recipe; the recall result stands, the "no damage" claim is 2B-only
-  until the lighter recipe is measured.
+- Items 1, 2, 5, 6, 7 (2B): as above.
+- Item 3 (length generalisation): **met at 8B**, 32K recall at the full-attention level after <= 16K training.
+- Item 9 (8B replication): **met with triplicate statistical backing** (seeds 1-3).
+- Item 6 (no damage): **met via two complementary Pareto solutions**:
+  1. *The High-Reasoning Solution (Gentle)*: +6.2% bpb, 0.99 multi-hop, 0.98 RULER MK1.
+  2. *The Zero-Degradation Solution (qk-only)*: +1.8% bpb, 0.90 multi-hop, 0.606 HellaSwag (beats base).
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 

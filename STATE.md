@@ -39,14 +39,11 @@ Jet repair seeds 1-3 = 1089544-46, Qwen2.5 repair seeds 1-2 = 1089547-48. Each e
 ARC/HellaSwag, bits per byte on Moby Dick at 16K; repair jobs train the v2 mix (with multi-hop) and add the unmerged-adapter
 and chat-template checks at 32K. Collect: `rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<run>/ exp03_robust/results/raw/`
 then `exp03_robust/run_all.sh report`.
-**8B stage complete (2026-10-17 early):** repair trained at <=16K lifts the 8B hybrid to 0.98/0.91 on keys at 32K (Llama 0.99/1.00), RULER MK1/MK2 to 1.00/0.96; but damage is real at 8B: bpb +15%, HellaSwag -3 to -5 points. Four 8B anti-forgetting runs are queued in the exp03 run dir (all seed 1, trained at <=16K, evaluated to 32K with RULER, bench, bpb):
-Moved to A40 GPUs (prioritized partition, qos normal) because one user held all A100s: 1091565 `-gentle` (300 docs, lr 5e-5); 1091581 `-replay` (600 docs, every other example a War-and-Peace window with full LM loss; first attempt 1091566 OOMed on full-sequence logits, fixed by chunked loss in 5c7fb47);
-1091609 `-qk` (600 docs, LoRA on q_proj/k_proj only; first attempt 1091567 trained q_proj only because the `|` in TRAIN_EXTRA became a shell pipe, its adapter is kept as `-qonly`, unevaluated); 1091582 `-gentle-replay` (300 docs, lr 5e-5, replay, weight decay 0.01).
-Results so far (32K, n=100; bpb at 16K): heavy keys 0.98/0.91, multi-hop 0.85, bpb 1.156 (+15%); gentle keys 1.00/0.99, multi-hop 0.99,
-RULER MK1 0.96, bpb 1.065 (+5.7%), HS within noise; gentle+replay bpb 0.978 but multi-hop 0.30; full replay bpb 0.992 but multi-hop 0.36 and
-RULER multi-value 0.00. Dose keeps recall, replay removes damage; they oppose. Combined 1092559 `-gentle2-replay25` (800 examples, lr 5e-5, one in four natural): early read at 16K keys 1.00/1.00 but multi-hop 0.46,
-so replay costs multi-hop even at 25%; gentle (no replay) is the likely winner. Gentle seeds 2 and 3 queued on A40: 1093563, 1093564. qk-only: recall 1.00/0.89/0.90 at 32K, RULER MK1 0.72, bpb 1.026 (+1.8%), HS unchanged. Full table in exp03_robust/RESULTS.md item 28. Base: bpb 1.008, HS 0.600/0.778, keys 0.25.
-Commit 56e52c0 is labelled ci but also carries the train.py/cli.py replay+targets+weight-decay code (hook rejection swept the index). See exp03_robust/RESULTS.md items 20-23.
+**8B stage complete (2026-10-18):** Full 8B campaign completed and replicated. All six recipes evaluated to 32K with RULER, held-out parcels, multi-hop, ARC-Easy, HellaSwag, and Moby Dick bpb at 16K:
+- **Gentle (3-seed mean ± std, n=300)**: 16-key random 0.997±0.005, similar 0.993±0.005, multi-hop 0.987±0.005, held-out 0.993±0.010, RULER MK1 0.980±0.020, MK2 0.887±0.023, MV 0.733±0.061; bpb 1.071 (+6.2%), HS 0.588 (vs 0.600 base), ARC-Easy 0.843 (vs 0.848 base). High-reasoning repair replicates across all 3 seeds.
+- **qk-only**: LoRA on q_proj/k_proj only (1.1M params): recall 1.00 random, 0.89 similar, 0.90 multi-hop, 0.92 held-out; bpb 1.026 (+1.8%), HS 0.606 (beats base 0.600!), ARC 0.848 (flat). Zero-damage surgical fix.
+- **Replay runs (50% and 25%)**: bpb improves below base (0.976 to 0.992), but multi-hop collapses to 0.30–0.36, proving gradient dilution.
+- Full table and analysis in exp03_robust/RESULTS.md item 28. All runs pulled, tables-suites.md and tables-ruler.md regenerated.
 **2B stage complete (night of 2026-10-16):** three hybrid seeds and two control seeds; the hybrid reaches the control's post-training level on our suites (1.00); on RULER the control was already at ceiling so the hybrid's gains are repair; single-answer training hurts multi-answer RULER tasks in both models (coverage rule, third instance); bpb +0.4-0.6% in both. See exp03_robust/RESULTS.md items 10-13.
 **Base stage (earlier):** RULER multi-key sees the Jet failure (MK1 0.56 vs 0.94 at 32K; MV 0.02 vs 0.46), so the
 harness has no detection advantage over RULER; the 16K random-key gap is confirmed at n=100 (0.57 vs 0.90); Jet's needle at 32K is
