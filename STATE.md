@@ -13,7 +13,8 @@ Compare hybrid vs full-attention pairs on five tasks × six context lengths:
 Pairs: Qwen3.5-4B (hybrid) vs Qwen3-4B; Jet-Nemotron-2B (hybrid, Qwen2.5 MLPs) vs Qwen2.5-1.5B.
 Verdict rule: the tool earns its existence if a stressor separates the pairs at a length where `needle` does not. **Met** (2026-10-16): see exp01_step1/RESULTS.md.
 
-## Status (2026-10-16, night)
+## Status (2026-10-18)
+- **Exp03 complete.** 8B recipe sweep done on A40s: gentle (300 docs, lr 5e-5) replicates over three seeds with full recall at 32K after <=16K training, RULER MK1 0.96-1.00, bpb +5.5-7.4%, benchmarks flat; gentle+25% replay gives bpb 0.976 (below base) at the price of multi-hop (0.30). Recommendation in exp03_robust/RESULTS.md. Nothing queued.
 - **Exp02 done, verdict yes**: 42 min of LoRA on one A100 lifts Jet-Nemotron-2B from 0.16 to 0.92 on 16 keys at 32K (control 0.91), transfers to the unseen parcel template (0.24 to 0.84), ARC/HellaSwag unchanged. Regression: multi-hop (untrained) collapses to ~0.03 via a one-hop shortcut. The exp01 overwrite advantage is downgraded (prompt-following). See exp02_repair/RESULTS.md.
 - **Step 1 done, verdict yes for the matched pair**: Jet-Nemotron-2B keeps needle=1.00 to 32K but drops to 0.16–0.20 on 16 keys at 32K vs 0.68–0.72 for the Qwen2.5-1.5B it was converted from; gap opens at 16K. Qwen3.5-4B shows no key deficit, a 0.24–0.28 multi-hop deficit at 8–16K. Hybrids win on overwritten facts. See exp01_step1/RESULTS.md.
 - Earlier today:
@@ -77,7 +78,7 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 1. (done at 8B) Length generalisation: train at <=16K, test at 32K.
 2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
 3. Capacity frontier after repair: 32/64/128 keys at 32K.
-3b. 8B recipe: wait for the combined run; then two more seeds of the winner (gentle, or gentle+25% replay) and a `gentle + qk` variant.
+3b. (done) 8B recipe sweep; optional follow-up: `gentle + qk` variant, and replay at 10%.
 4. Scale to a matched 8B pair (LoLCATs or Mamba-in-the-Llama vs Llama-3-8B).
 5. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore and the adapter compose.
 6. Still owed from exp01: n=100 with seeds at 16K (the 16K gap was template-dependent: parcels held 0.96).

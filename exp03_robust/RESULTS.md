@@ -1,4 +1,4 @@
-# Experiment 3 — robustness of exp01 and exp02 (2B and 8B stages complete)
+# Experiment 3 — robustness of exp01 and exp02 (complete: 2B, 8B, and the 8B recipe sweep)
 
 Run dir `~/runs/rg/robust/20261016-171229-9f67d4b`, commit `9f67d4b`, A100-SXM4-40GB. Reproduce: `exp03_robust/run_all.sh`.
 Items refer to docs/robustness.md. Predictions there were written before these numbers.
@@ -218,6 +218,29 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     - **Triplicate 8B replication**: Across three independent seeds, the Gentle recipe restores 32K dense recall to parity with full attention (0.987–0.997) with negligible benchmark shift (ARC 0.843 vs 0.848 base; HellaSwag 0.588 vs 0.600 base) and a repeatable +6.2% perplexity cost.
     - **The Replay Dilution Law**: Replay at 50% or 25% eliminates the perplexity cost (improving bpb by ~3% below base), but starves transitive pointer chains, collapsing multi-hop recall from 0.99 down to 0.30.
     - **Surgical routing repair**: Adapting only $W_q, W_k$ in the recurrent layers restores 32K recall (1.00 random, 0.90 multi-hop) with virtually zero damage (+1.8% bpb, HellaSwag 0.606), isolating the failure mode to query-key routing geometry.
+
+29. **The gentle recipe replicates at 8B (three seeds).** 32K, n = 100; RULER n = 50; bpb at 16K:
+
+    | seed | random | similar | multi-hop | held-out | RULER MK1 | MK2 | MV | bpb | HellaSwag acc |
+    |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+    | 1 | 1.00 | 0.99 | 0.99 | 1.00 | 0.96 | 0.90 | 0.80 | 1.065 | 0.586 |
+    | 2 | 1.00 | 1.00 | 0.99 | 1.00 | 1.00 | 0.86 | 0.72 | 1.063 | 0.594 |
+    | 3 | 0.99 | 0.99 | 0.98 | 0.98 | 0.98 | 0.90 | 0.68 | 1.083 | 0.584 |
+
+    Base: 0.25 / 0.09 / 0.06 / 0.17; RULER 0.40 / 0.10 / 0.00; bpb 1.008; HellaSwag 0.600. Cost: bits per byte +5.5% to
+    +7.4%, HellaSwag within one SE, ARC-Easy unchanged. UUID keys (MK3 0.08 to 0.32) remain the unrepaired case.
+30. **gentle + 25% replay** (800 examples, lr 5e-5, one in four natural): bits per byte **0.976** (below base), keys 1.00 /
+    0.98, held-out 0.96, RULER MK1 0.82, MK2 0.72, MV 0.46, **multi-hop 0.30**. Across all three replay variants
+    multi-hop lands at 0.30 to 0.36 while key recall stays near 1.00: natural-text replay specifically removes the
+    two-hop skill, which needs the most retrieval signal. That is a clean trade, not noise.
+
+## Recipe recommendation (8B, converted hybrid)
+- **Default: gentle** (300 synthetic docs at 8K-16K, lr 5e-5, LoRA r = 16 on every linear projection outside the MLPs,
+  loss on answer tokens). Full multi-key and multi-hop recall at 32K after training below it, RULER numeric multi-key at
+  the source model's level, about 6% more bits per byte on long natural text, no measurable benchmark change.
+- **When perplexity matters more than multi-hop: gentle + 25% replay.** Perplexity below the unrepaired model, key
+  recall intact, multi-hop sacrificed.
+- **Do not use the 2B dose at 8B** (heavy: +15% bits per byte, HellaSwag -3 to -5).
 
 ## Verdicts, complete
 - Items 1, 2, 5, 6, 7 (2B): as above.
