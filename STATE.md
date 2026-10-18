@@ -79,6 +79,10 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 Status 2026-10-18 (late): two cold reads applied (52 items, incl. the 8B UUID/multi-answer reframing: repaired at 16K, not at 32K), compiled 12 pages, `make arxiv` bundle at `paper/arxiv-submission.tar.gz`;
 awaiting the author's veto on the title and the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
 Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
+Submission runbook (on the author's "submit"): make gottn/recall-guard public; arXiv new submission, primary cs.CL,
+cross-list cs.LG, licence CC BY 4.0 (author's choice), upload `paper/arxiv-submission.tar.gz` (main.tex, main.bbl,
+fig/*.pdf), title and abstract from main.tex, author Musaab Ahmed Mahjoub, Aalborg University, muahma@build.aau.dk;
+stop at the final submit button. A first cs.CL submission may require endorsement. Build: `cd paper && make figures && make && make arxiv`.
 Training-free baseline done (2026-10-18, exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
 < 0.01 to Qwen; 8B worse than unrepaired: 32K random 0.04, needle 0.72). Paper Section 4.3 carries it in prose. All
