@@ -7,7 +7,7 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.pyplot as plt
 
 plt.rcParams.update({
     "font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 8,
@@ -56,7 +56,7 @@ def fig1():
             ax.plot(LENGTHS, keys, "-o", color=color, lw=1.6, ms=3.2, mec="white", mew=0.6)
             ax.plot(LENGTHS, needle, "--", color=color, lw=1.1)
             dy = -9 if label == "full attention" else 9
-            ax.annotate(f"{label}, 16 keys", (LENGTHS[-1], keys[-1]), xytext=(0, dy), textcoords="offset points", color=color, fontsize=7, ha="right", va="center")
+            ax.annotate(f"{label}, 16 keys", (LENGTHS[-1], keys[-1]), xytext=(-3, dy), textcoords="offset points", color=color, fontsize=7, ha="right", va="center")
         ax.annotate("needle, both models", (LENGTHS[0], 1.0), xytext=(4, 6), textcoords="offset points", color="#444441", fontsize=7, ha="left", va="bottom")
         ax.set_xscale("log", base=2)
         ax.set_xticks(LENGTHS, [f"{ln // 1024}K" for ln in LENGTHS])
@@ -110,21 +110,25 @@ def fig3():
             ("gentle s3", "repair-seed3-gentle"), ("gentle + 25% replay", "repair-seed1-gentle2-replay25"),
             ("gentle + 50% replay", "repair-seed1-gentle-replay"), ("50% replay, full lr", "repair-seed1-replay"), ("q/k only", "repair-seed1-qk"))
     fig, ax = plt.subplots(figsize=(4.2, 3.0))
-    offsets = {"heavy (2B dose)": (-6, -12), "gentle s1": (6, -12), "gentle s2": None, "gentle s3": None, "gentle + 25% replay": (6, 4),
-               "gentle + 50% replay": (6, -10), "50% replay, full lr": (6, 4), "q/k only": (6, 2)}
+    # leader lines for the three clustered replay points; direct offsets for the rest
+    placed = {"gentle + 25% replay": (-7.5, 0.52), "gentle + 50% replay": (-7.5, 0.16), "50% replay, full lr": (1.0, 0.50)}
+    offsets = {"heavy (2B dose)": (-6, -12), "gentle s1": (6, -12), "q/k only": (6, 2)}
     for name, stage in runs:
         bpb = json.load(open(E3 / f"bpb-{stage}-{M}.json"))["bpb_mean"]
         hop = rate(glob.glob(str(E3 / f"suite-s?-{stage}-{M}.jsonl")), "multihop", 32768)
         dx = 100 * (bpb / base_bpb - 1)
         color = AQUA if name.startswith("gentle s") else GRAY
         ax.scatter(dx, hop, s=30, color=color, zorder=3, linewidths=0)
-        if offsets[name] is not None:
+        if name in placed:
+            ax.annotate(name, (dx, hop), xytext=placed[name], textcoords="data", fontsize=6.5, color="#444441", ha="left", va="center",
+                        arrowprops=dict(arrowstyle="-", color="#b4b2a9", lw=0.6, shrinkA=0, shrinkB=3))
+        elif name in offsets:
             text = "gentle, 3 seeds" if name == "gentle s1" else name
             ax.annotate(text, (dx, hop), fontsize=6.5, xytext=offsets[name], textcoords="offset points", color="#444441")
     ax.axvline(0, color="#c3c2b7", lw=0.8)
     ax.set_xlabel("long-text bits per byte, change from unrepaired (%)")
     ax.set_ylabel("multi-hop recall at 32K")
-    ax.set_xlim(-6, 19)
+    ax.set_xlim(-8.5, 19)
     style(ax)
     fig.subplots_adjust(left=0.15, right=0.98, bottom=0.17, top=0.97)
     save(fig, "fig3_tradeoff")

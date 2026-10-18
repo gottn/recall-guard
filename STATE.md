@@ -76,8 +76,9 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 
 ## Preprint
 `paper/main.tex` (+ refs.bib, fig/make_figures.py). Build: `cd paper && make figures && make`. Style: short declarative sentences, numbers in tables.
-Status 2026-10-18: compiled 8 pages; awaiting the author's review of the author block, affiliation and the AI-assistance acknowledgement
-before arXiv submission (cs.CL, cross-list cs.LG). Submission is the author's action.
+Status 2026-10-18: compiled 10 pages, review fixes applied, `make arxiv` bundle at `paper/arxiv-submission.tar.gz`;
+awaiting the author's veto on the title and the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
+Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
 
 ## Next
 1. (done at 8B) Length generalisation: train at <=16K, test at 32K.
