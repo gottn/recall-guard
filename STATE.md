@@ -79,12 +79,11 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 Status 2026-10-18: compiled 10 pages, review fixes applied, `make arxiv` bundle at `paper/arxiv-submission.tar.gz`;
 awaiting the author's veto on the title and the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
 Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
-Before submission, a training-free baseline (QK-Restore of arXiv 2606.11052 with the conversion source as the reference,
-`STAGE=restore`) runs in the exp03 run dir, submitted 2026-10-18 on the A40/L40S pool (A100 node booked for two days):
-1096972 Jet, layers 14/19/20/21 from Qwen2.5-1.5B (tag `restore`); 1096973 Jet, full-attention layers 14/19 only (tag
-`restore-attn2`); 1096981 Mamba-in-the-Llama 8B, 16 attention layers from Llama-3.1-8B-Instruct (tag `restore`).
-Outputs: `*-restore*-<slug>.jsonl`, `bench-restore*`, `bpb-restore*`. If recall stays low, the paper gains one sentence
-(the free fix does not cover conversion deficits); if it recovers, Section 4.2's claim narrows to the coverage analysis.
+Training-free baseline done (2026-10-18, exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
+conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
+< 0.01 to Qwen; 8B worse than unrepaired: 32K random 0.04, needle 0.72). Paper Section 4.3 carries it in prose. All
+restore jobs finished or cancelled; nothing queued. Open follow-up: whether their restore (with a real pre-SFT checkpoint)
+and our adapter compose.
 
 ## Next
 1. (done at 8B) Length generalisation: train at <=16K, test at 32K.

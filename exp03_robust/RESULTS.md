@@ -270,8 +270,17 @@ layers), then runs the base-stage evaluation. Weight drift measured with `exp03_
   exists for this model, and copying Qwen's q/k produces a fluent model that cannot retrieve: on suite seed 1 it
   answers "The answer is not provided in the text." (or a variant) on 600 of 600 cases, needle included (43 distinct
   outputs, all refusals); unrepaired Jet gives 600 distinct outputs and 0.86 needle at 32K.
-- **The 8B model keeps Llama's attention layers to within 0.98-0.99 cosine**, so its restore run is the informative one.
-  Pending (job 1096981).
+- **The 8B model keeps Llama's attention layers to within 0.98-0.99 cosine**, and the copy still hurts: at 16K (n = 100)
+  needle 0.67, 16 random 0.07, 16 similar 0.03, held-out 0.04 against 1.00 / 0.25 / 0.11 / 0.33 unrepaired; at 32K
+  (n = 56-60, job 1096981 stopped after 350 cases of suite seed 2) needle 0.72, 16 random 0.04, 16 similar 0.00,
+  held-out 0.00 against 1.00 / 0.25 / 0.09 / 0.17. Outputs are codes, not refusals (526 distinct outputs in 545): the
+  model retrieves the wrong fact. The retained layers have adapted to the Mamba-2 layers between them; the source's
+  projections no longer fit. Jobs 1096972/1096973 (Jet RULER stage; Jet full-attention-only variant) were cancelled as
+  unnecessary: the drift numbers settle the Jet case.
+- **Verdict.** QK-Restore with the source as reference fails at both scales. Their own Table 1 shows the same method
+  with the correct reference recovering only part of the loss on Jet-Nemotron-2B (NIAH-Single-2 at 32K: 57.8 -> 64.6
+  against 95.6 before SFT). The repair lies in the training, not in which parameters are touched (the trained q/k-only
+  adapter, item 8, recovers most of the deficit). Paper: Section 4.3, prose only.
 
 ## Notes
 - The n = 50 suites include `heldout_many` as a sixth task (it is in the task registry), so pooled held-out numbers above
