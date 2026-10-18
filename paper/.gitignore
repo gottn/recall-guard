@@ -9,3 +9,4 @@ main.fdb_latexmk
 build.log
 preview-*.png
 fig/*.png
+arxiv-submission.tar.gz
