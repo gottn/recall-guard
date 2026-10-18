@@ -252,6 +252,27 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 Repair with the v2 mix (multi-hop included), Jet seeds 1-3 and Qwen2.5 seeds 1-2, then the same evaluations plus the
 unmerged-adapter and chat-template checks. Items 5, 6, 7 are decided by those.
 
+## Training-free baseline (item 31): the source's q/k projections copied into the hybrid (QK-Restore with the source as reference)
+Attention Amnesia (arXiv 2606.11052) repairs fine-tuning damage by restoring the query and key projections from the
+pre-fine-tuning checkpoint. A converted hybrid has no such checkpoint; the nearest candidate is the source transformer.
+`STAGE=restore` copies the source's q_proj/k_proj weight and bias into the hybrid's parameters of the same name and shape
+(jobs 1096972 Jet, four softmax layers; 1096973 Jet, full-attention layers 14 and 19 only; 1096981 8B, 16 attention
+layers), then runs the base-stage evaluation. Weight drift measured with `exp03_robust/drift.py` (float64):
+
+| pair | q_proj cos (min-max over layers) | k_proj cos | v_proj cos | o_proj cos | MLP up_proj cos | embeddings cos |
+|---|---|---|---|---|---|---|
+| Jet-Nemotron-2B vs Qwen2.5-1.5B, layers 14/19/20/21 | -0.005 to 0.001 | -0.005 to 0.009 | -0.001 to 0.003 | -0.001 to 0.001 | 0.708 | 0.882 |
+| Mamba-in-the-Llama 8B vs Llama-3.1-8B-Instruct, 16 odd layers | 0.978 to 0.986 | 0.989 to 0.994 | 0.967 to 0.993 | 0.972 to 0.986 | 0.977 | 0.972 |
+
+- **Jet-Nemotron-2B's softmax-attention layers are not Qwen's.** Cosine is zero against the same-index Qwen layer, against
+  every other Qwen layer (best match 0.009) and under any head pairing (max 0.084). The MLPs (0.71) and embeddings
+  (0.88) do descend from Qwen; the attention layers were trained anew in the conversion. So no reference checkpoint
+  exists for this model, and copying Qwen's q/k produces a fluent model that cannot retrieve: on suite seed 1 it
+  answers "The answer is not provided in the text." (or a variant) on 600 of 600 cases, needle included (43 distinct
+  outputs, all refusals); unrepaired Jet gives 600 distinct outputs and 0.86 needle at 32K.
+- **The 8B model keeps Llama's attention layers to within 0.98-0.99 cosine**, so its restore run is the informative one.
+  Pending (job 1096981).
+
 ## Notes
 - The n = 50 suites include `heldout_many` as a sixth task (it is in the task registry), so pooled held-out numbers above
   come from 100 fresh cases, not the 25-case exp02 file.
