@@ -74,6 +74,11 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 (Llama-Instruct base), 1091449 (MIL repair seed 1, TRAIN_LENGTHS="8192 16384", tag -le16k: trains below 32K, so its 32K numbers
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
+## Preprint
+`paper/main.tex` (+ refs.bib, fig/make_figures.py). Build: `cd paper && make figures && make`. Style: short declarative sentences, numbers in tables.
+Status 2026-10-18: compiled 8 pages; awaiting the author's review of the author block, affiliation and the AI-assistance acknowledgement
+before arXiv submission (cs.CL, cross-list cs.LG). Submission is the author's action.
+
 ## Next
 1. (done at 8B) Length generalisation: train at <=16K, test at 32K.
 2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
