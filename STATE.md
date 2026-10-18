@@ -76,7 +76,7 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 
 ## Preprint
 `paper/main.tex` (+ refs.bib, fig/make_figures.py). Build: `cd paper && make figures && make`. Style: short declarative sentences, numbers in tables.
-Status 2026-10-18: compiled 10 pages, review fixes applied, `make arxiv` bundle at `paper/arxiv-submission.tar.gz`;
+Status 2026-10-18 (late): two cold reads applied (52 items, incl. the 8B UUID/multi-answer reframing: repaired at 16K, not at 32K), compiled 12 pages, `make arxiv` bundle at `paper/arxiv-submission.tar.gz`;
 awaiting the author's veto on the title and the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
 Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
 Training-free baseline done (2026-10-18, exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
