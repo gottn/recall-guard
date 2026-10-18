@@ -61,6 +61,11 @@ def cmd_generate(a: argparse.Namespace) -> None:
     print(f"wrote {len(cases)} cases to {out} in {prov['wall_s']:.1f}s", file=sys.stderr)
 
 
+def add_restore_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("--restore-qk", default="", help="hf id of the conversion source: copy its q/k projections into the matching layers (training-free baseline)")
+    p.add_argument("--restore-pattern", default="", help="regex on parameter names to restore (default: self_attn q/k weight and bias)")
+
+
 def cmd_run(a: argparse.Namespace) -> None:
     from recall_guard.backends import hf
 
@@ -76,14 +81,14 @@ def cmd_run(a: argparse.Namespace) -> None:
     todo = tuple(c for c in cases if c.id not in done)
     print(f"{a.model}: {len(todo)} cases to run ({len(done)} already in {out})", file=sys.stderr)
     t0 = time.perf_counter()
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, a.adapter_mode)
+    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, a.adapter_mode, restore_from=a.restore_qk, restore_pattern=a.restore_pattern)
     print(f"  loaded in {time.perf_counter() - t0:.0f}s, {hf.peak_memory_gib():.1f} GiB", file=sys.stderr)
     prefill = "" if a.allow_think else hf.no_think_prefill(tok)
     print(f"  prefill after Answer: {prefill!r}; chat={a.chat}; adapter_mode={a.adapter_mode}", file=sys.stderr)
     with out.open("a") as f:
         for i, case in enumerate(sorted(todo, key=lambda c: c.ref_tokens), 1):
             text, wall_s, n_tok = hf.complete(tok, model, case.prompt, prefill, a.max_new_tokens, a.chat)
-            tag = (f"+{Path(a.adapter).name}" if a.adapter else "") + ("+unmerged" if a.adapter_mode == "attach" else "") + ("+chat" if a.chat else "")
+            tag = ("+qk-restore" if a.restore_qk else "") + (f"+{Path(a.adapter).name}" if a.adapter else "") + ("+unmerged" if a.adapter_mode == "attach" else "") + ("+chat" if a.chat else "")
             r = to_result(case, a.model + tag, text, wall_s, n_tok)
             f.write(json.dumps(asdict(r)) + "\n")
             f.flush()
@@ -106,9 +111,9 @@ def cmd_train(a: argparse.Namespace) -> None:
 def cmd_bench(a: argparse.Namespace) -> None:
     from recall_guard.backends import hf, mc
 
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter)
+    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, restore_from=a.restore_qk, restore_pattern=a.restore_pattern)
     out = {b: mc.accuracy(tok, model, mc.load_items(b, a.n, a.seed)) for b in mc.BENCHES}
-    out["model"] = a.model + (f"+{Path(a.adapter).name}" if a.adapter else "")
+    out["model"] = a.model + ("+qk-restore" if a.restore_qk else "") + (f"+{Path(a.adapter).name}" if a.adapter else "")
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))
     print(json.dumps(out), file=sys.stderr)
@@ -132,11 +137,11 @@ def cmd_ppl(a: argparse.Namespace) -> None:
     """Bits per byte on windows of long natural text (a file), one window per --windows, at --window-tokens each."""
     from recall_guard.backends import hf
 
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter)
+    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, restore_from=a.restore_qk, restore_pattern=a.restore_pattern)
     text = Path(a.text).read_text()
     step = len(text) // a.windows
     vals = [hf.bits_per_byte(tok, model, text[i * step :], a.window_tokens) for i in range(a.windows)]
-    out = {"model": a.model + (f"+{Path(a.adapter).name}" if a.adapter else ""), "window_tokens": a.window_tokens, "windows": a.windows,
+    out = {"model": a.model + ("+qk-restore" if a.restore_qk else "") + (f"+{Path(a.adapter).name}" if a.adapter else ""), "window_tokens": a.window_tokens, "windows": a.windows,
            "bpb_mean": sum(vals) / len(vals), "bpb_values": vals, "text": a.text}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))
@@ -184,6 +189,7 @@ def main(argv: list[str] | None = None) -> None:
     r.add_argument("--allow-think", action="store_true", help="do not prefill the empty <think> block")
     r.add_argument("--adapter", default="", help="adapter directory (adapter.pt + adapter_config.json)")
     r.add_argument("--adapter-mode", choices=("merge", "attach"), default="merge")
+    add_restore_args(r)
     r.add_argument("--chat", action="store_true", help="wrap the prompt in the model chat template")
     r.add_argument("--tasks", nargs="*", default=())
     r.add_argument("--lengths", type=int, nargs="*", default=())
@@ -208,6 +214,7 @@ def main(argv: list[str] | None = None) -> None:
     b = sub.add_parser("bench")
     b.add_argument("--model", required=True)
     b.add_argument("--adapter", default="")
+    add_restore_args(b)
     b.add_argument("--attn", default="sdpa")
     b.add_argument("--trust-remote-code", action="store_true")
     b.add_argument("--n", type=int, default=500)
@@ -221,6 +228,7 @@ def main(argv: list[str] | None = None) -> None:
     pp = sub.add_parser("ppl")
     pp.add_argument("--model", required=True)
     pp.add_argument("--adapter", default="")
+    add_restore_args(pp)
     pp.add_argument("--attn", default="sdpa")
     pp.add_argument("--trust-remote-code", action="store_true")
     pp.add_argument("--text", required=True, help="path to a long plain-text file")

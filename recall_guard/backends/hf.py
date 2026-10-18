@@ -2,6 +2,7 @@
 Greedy decoding, one prompt at a time (prompts up to 32K tokens; batching would only add padding)."""
 
 import math
+import sys
 import time
 
 import torch
@@ -14,7 +15,8 @@ DTYPE_KWARG = "dtype" if int(transformers.__version__.split(".")[0]) >= 5 else "
 
 
 def load(
-    model_id: str, attn: str, trust_remote_code: bool, adapter: str = "", adapter_mode: str = "merge"
+    model_id: str, attn: str, trust_remote_code: bool, adapter: str = "", adapter_mode: str = "merge",
+    restore_from: str = "", restore_pattern: str = "",
 ) -> tuple[AutoTokenizer, AutoModelForCausalLM]:
     """Base model, or base + adapter: merged into the weights (default) or attached unmerged (a check that merging is exact).
     Families registered in loaders.py (converted hybrids AutoModel cannot build) go through their own loader."""
@@ -28,6 +30,12 @@ def load(
         model = AutoModelForCausalLM.from_pretrained(
             model_id, attn_implementation=attn, trust_remote_code=trust_remote_code, device_map=device, **kwargs
         )
+    if restore_from:  # training-free baseline, applied before any adapter
+        from recall_guard.backends import restore
+
+        names = restore.restore(model, restore_from, restore_pattern or restore.PATTERN)
+        layers = sorted({int(x) for n in names for x in n.split(".") if x.isdigit()})
+        print(f"  restored {len(names)} q/k tensors from {restore_from} in layers {layers}", file=sys.stderr)
     if adapter:  # the adapter names modules by path, which is the same structure whichever loader built the model
         from recall_guard.backends import lora
 
