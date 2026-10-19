@@ -80,6 +80,9 @@ are the length-generalisation test, item 3). LoLCATs loader is suspect (probably
 that is outside of the services we provide"; no specifics; reconsidered on appeal only with a DOI or journal page of a
 published version. The launch post is on hold. Options: TMLR (rolling, OpenReview, fits a measurement paper), a workshop,
 or ACL Rolling Review; a Zenodo DOI for the PDF gives a citable, dated record meanwhile but does not satisfy arXiv's appeal.
+Published without arXiv (2026-10-19): release v1.0 carries the PDF
+(https://github.com/gottn/recall-guard/releases/download/v1.0/recall-guard-paper.pdf), README links it and has a BibTeX
+block; the launch plan in ~/Documents/Personal/recall-guard-launch/linkedin.md is rewritten for this (no arXiv mention).
 `paper/main.tex` (+ refs.bib, fig/make_figures.py, fig/make_tables.py which writes tab/*.tex, the five tables). Build:
 `cd paper && make figures && make tables && make && make arxiv` (the arxiv target also test-compiles the bundle). Style: short
 declarative sentences, numbers in tables. LaTeX trap: `\input` of table rows before `\bottomrule` fails (Misplaced \noalign),
