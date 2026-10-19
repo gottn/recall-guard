@@ -98,6 +98,11 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_niah_multiquery | 0.36 | 0.08 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_niah_multivalue | 0.48 | 0.22 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_niah_single_1 | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multikey_1 | 0.00 |  |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multikey_2 | 0.00 |  |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multikey_3 | 0.00 |  |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multiquery | 0.00 |  |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multivalue | 0.00 |  |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multikey_1 | 1.00 | 1.00 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multikey_2 | 1.00 | 1.00 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multikey_3 | 0.98 | 0.96 |
@@ -301,6 +306,11 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_niah_multivalue | 32768 | 50 | 0.22 | 0.00 | 0.00 | 3.7 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_niah_single_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 3.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_niah_single_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multikey_1 | 16384 | 46 | 0.00 | 0.00 | 0.00 | 3.6 |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multikey_2 | 16384 | 26 | 0.00 | 0.00 | 0.00 | 3.1 |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multikey_3 | 16384 | 33 | 0.00 | 0.00 | 0.00 | 4.0 |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multiquery | 16384 | 15 | 0.00 | 0.00 | 0.00 | 3.6 |
+| jet-ai/Jet-Nemotron-2B+qk-restore | ruler_niah_multivalue | 16384 | 15 | 0.00 | 0.00 | 0.00 | 3.6 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multikey_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 3.1 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multikey_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 5.5 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multikey_2 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 2.8 |
