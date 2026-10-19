@@ -2,6 +2,8 @@
 name = "recall-guard"
 version = "0.1.0"
 description = "Recall-regression harness for long-context LLMs: finds the recall failures of hybrid (linear-attention) models that needle tests miss."
+readme = "README.md"
+license = {text = "MIT"}
 requires-python = ">=3.12"
 dependencies = []
 
