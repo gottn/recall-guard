@@ -4,6 +4,8 @@
   run       --suite suite.jsonl --model <id> --out results.jsonl [--adapter DIR] [--attn sdpa] [--trust-remote-code] [--limit N]
   train     --model <id> --out DIR [--n-docs 600] [--lengths 8192 12288 16384] [--lr 2e-4] [--rank 16] [--max-steps N]
   bench     --model <id> [--adapter DIR] [--n 500] --out bench.json
+  ppl       --model <id> [--adapter DIR] --text book.txt [--window-tokens 16384] [--windows 8] --out bpb.json
+  import-ruler --dir <RULER generator output> --out-dir DIR
   report    --results a.jsonl b.jsonl [--pair hybrid=full ...] [--out RESULTS.md]
 """
 

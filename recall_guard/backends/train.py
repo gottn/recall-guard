@@ -1,5 +1,5 @@
 """LoRA repair training: the only module that runs backward passes. Loss only on answer tokens (labels = -100
-elsewhere). Adapter saved with PEFT; `hf.load` merges it back for evaluation."""
+elsewhere). The adapter is the dependency-free one in `lora.py`; `hf.load` merges it back for evaluation."""
 
 import re
 import sys

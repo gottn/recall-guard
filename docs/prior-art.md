@@ -1,7 +1,7 @@
-# Prior art check (deep research, 2026-10-16)
+# Prior art check (2026-10-16)
 
-Verified by a 103-agent search-fetch-verify run (21 sources, 25 claims, 3-vote adversarial verification).
-Each line below survived at least 2 of 3 verifiers. Use this before any write-up.
+Each claim below was checked against its source (21 sources, 25 claims) before the write-up; the night-of additions
+were checked against arXiv search results only, as marked.
 
 ## Framing corrections to our own claims
 - **"Exact base" is wrong wording.** Qwen2.5-1.5B is Jet-Nemotron-2B's *initialisation checkpoint*: PostNAS froze the
