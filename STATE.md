@@ -75,6 +75,11 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
 ## Preprint
+
+**arXiv decision 2026-10-19: declined by moderation** (submission 8252423): "would benefit from additional review and revision
+that is outside of the services we provide"; no specifics; reconsidered on appeal only with a DOI or journal page of a
+published version. The launch post is on hold. Options: TMLR (rolling, OpenReview, fits a measurement paper), a workshop,
+or ACL Rolling Review; a Zenodo DOI for the PDF gives a citable, dated record meanwhile but does not satisfy arXiv's appeal.
 `paper/main.tex` (+ refs.bib, fig/make_figures.py, fig/make_tables.py which writes tab/*.tex, the five tables). Build:
 `cd paper && make figures && make tables && make && make arxiv` (the arxiv target also test-compiles the bundle). Style: short
 declarative sentences, numbers in tables. LaTeX trap: `\input` of table rows before `\bottomrule` fails (Misplaced \noalign),
