@@ -1,7 +1,7 @@
 """Explainer graphics for people outside the field, built from the committed raw results: three pictures of a document
 (one fact hidden, sixteen hidden, the same after repair) with the rate found as the headline. Writes
 docs/img/explainer-{light,dark}.png (16:9), docs/img/explainer-tall.png (4:5) and, with `--carousel OUT.pdf`, a seven-slide
-LinkedIn document. Run from the repo: .venv/bin/python paper/fig/make_explainer.py [--carousel ../recall-guard-launch/carousel.pdf]
+carousel (document post). Run from the repo: .venv/bin/python paper/fig/make_explainer.py [--carousel ../recall-guard-launch/carousel.pdf]
 Numbers are the 8B pair's (Mamba-in-the-Llama 8B vs Llama-3.1-8B-Instruct); the 2B pair's appear in the footnote."""
 
 import glob

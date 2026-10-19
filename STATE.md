@@ -74,44 +74,11 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 (Llama-Instruct base), 1091449 (MIL repair seed 1, TRAIN_LENGTHS="8192 16384", tag -le16k: trains below 32K, so its 32K numbers
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
-## Preprint
+## Paper
+`paper/main.tex` (+ refs.bib, fig/make_figures.py, fig/make_tables.py). Build: `cd paper && make figures && make tables && make`.
+Every figure and table is generated from `exp*/results/raw`. The PDF built from the tagged commit is attached to GitHub
+release v1.0 and linked from the README; the paper is published there.
 
-**arXiv decision 2026-10-19: declined by moderation** (submission 8252423): "would benefit from additional review and revision
-that is outside of the services we provide"; no specifics; reconsidered on appeal only with a DOI or journal page of a
-published version. The launch post is on hold. Options: TMLR (rolling, OpenReview, fits a measurement paper), a workshop,
-or ACL Rolling Review; a Zenodo DOI for the PDF gives a citable, dated record meanwhile but does not satisfy arXiv's appeal.
-Published without arXiv (2026-10-19): release v1.0 carries the PDF
-(https://github.com/gottn/recall-guard/releases/download/v1.0/recall-guard-paper.pdf), README links it and has a BibTeX
-block; the launch plan in ~/Documents/Personal/recall-guard-launch/linkedin.md is rewritten for this (no arXiv mention).
-`paper/main.tex` (+ refs.bib, fig/make_figures.py, fig/make_tables.py which writes tab/*.tex, the five tables). Build:
-`cd paper && make figures && make tables && make && make arxiv` (the arxiv target also test-compiles the bundle). Style: short
-declarative sentences, numbers in tables. LaTeX trap: `\input` of table rows before `\bottomrule` fails (Misplaced \noalign),
-so the generator writes whole tabular environments.
-Status 2026-10-19: third cold read applied (an Opus referee on the paper alone, a data cross-check of every number, then a
-3-lens verification workflow with two refuters per finding and a completeness critic). 16 pages with two appendix tables;
-abstract 1,916 characters (arXiv limit 1,920); title kept by the author. Goal set for that fix and met: no sentence claims
-more than the committed data support; every HIGH/MEDIUM item resolved by text, figure or table change and every LOW applied,
-new citations verified on arXiv; every number reproduces from a committed script (make_tables.py, ruler_budget.py); clean
-build; independent re-read before commit. Main claim changes: "capacity" is defined in Question 2 as the converted model as
-deployed; the inference is limited to the suite at both scales and RULER numeric at 8B, because at 2B the repaired hybrid
-stays below the identically trained control on RULER (0.81/0.49/0.19 vs 0.96/0.97/0.57), left unresolved; the 2B UUID
-failure is not a data-absence effect (the control improves 0.40 -> 0.57 on numeric-only data, the hybrid does not); the 2B
-multi-answer result at 32K is inconclusive because RULER ran with 64 new tokens and up to 0.36-0.40 of a 2B cell may be
-cut-off answers (exp03 RESULTS item 32; repaired 8B cells <= 0.04). Optional follow-up: rerun the 2B RULER multi-value and
-multi-query cells with 128 tokens (`ssh aau` was refused from the Mac on 2026-10-19: publickey/password).
-Submitted to arXiv 2026-10-19 (submission 8252423, status processing at 14:10 CET): primary cs.LG (the category the
-author's endorsement covers; the classifier recommended cs.CL, left as cross-list), CC BY 4.0, acknowledgement kept.
-Git tag v1.0-arxiv marks the submitted state. When the arXiv id arrives: add it to README.md, the LinkedIn first comment
-and the citation; post 1 goes out the morning the listing is live. Three empty drafts (8252420-22) remain on the arXiv
-account and expire 2026-11-02.
-Repo hygiene pass done 2026-10-19 before going public: README rewritten, MIT LICENSE added, the cluster login path and
-the token note scrubbed from tracked files (they remain in git history), the 9 MB exp02 suite untracked (it regenerates from
-heldout.prov.json), stale docstrings fixed.
-Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
-Repo made public and pushed 2026-10-19 (head 21b305f). Submission runbook (on the author's "submit"): arXiv new submission, primary cs.CL,
-cross-list cs.LG, licence CC BY 4.0 (author's choice), upload `paper/arxiv-submission.tar.gz` (main.tex, main.bbl,
-fig/*.pdf), title and abstract from main.tex, author Musaab Ahmed Mahjoub, Aalborg University, muahma@build.aau.dk;
-stop at the final submit button. A first cs.CL submission may require endorsement. Build: `cd paper && make figures && make && make arxiv`.
 Training-free baseline done (2026-10-18, exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
 < 0.01 to Qwen; 8B worse than unrepaired: 32K random 0.04, needle 0.72). Paper Section 4.3 carries it in prose. All
