@@ -1,5 +1,5 @@
 # Build the preprint: make  (needs latexmk); figures: make figures; table bodies: make tables (both need the repo .venv)
-.PHONY: all figures tables clean arxiv
+.PHONY: all figures tables readme clean arxiv
 all: main.pdf
 main.pdf: main.tex refs.bib fig/fig1_signature.pdf fig/fig2_repair.pdf fig/fig3_tradeoff.pdf tab/signature.tex tab/repair.tex tab/recipes.tex tab/collateral.tex tab/ruler.tex
 	latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex >/dev/null && echo built main.pdf
@@ -7,6 +7,8 @@ figures:
 	../.venv/bin/python fig/make_figures.py
 tables:
 	../.venv/bin/python fig/make_tables.py
+readme:
+	../.venv/bin/python fig/make_readme.py
 clean:
 	latexmk -C >/dev/null; rm -f main.bbl
 # the bundle must compile on its own: source, bibliography, figure PDFs and the generated table bodies
