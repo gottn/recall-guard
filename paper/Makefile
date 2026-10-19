@@ -9,6 +9,7 @@ tables:
 	../.venv/bin/python fig/make_tables.py
 readme:
 	../.venv/bin/python fig/make_readme.py
+	../.venv/bin/python fig/make_explainer.py
 clean:
 	latexmk -C >/dev/null; rm -f main.bbl
 # the bundle must compile on its own: source, bibliography, figure PDFs and the generated table bodies
