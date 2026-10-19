@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Experiment 3: robustness of exp01/exp02 (docs/robustness.md on branch paper, items 1, 2, 5, 6, 7).
+# Experiment 3: robustness of exp01/exp02 (docs/robustness.md, items 1, 2, 5, 6, 7).
 # Cluster:
 #   STAGE=base MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust            -> RUN
 #   RUN_IN=$RUN STAGE=base MODEL=Qwen/Qwen2.5-1.5B RG_ENV=modern infra/cluster/submit.sh robust
@@ -11,7 +11,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 case "${1:-report}" in
   report)
-    # the two 50-case suites alone (n = 100 per cell, the paper's numbers); the 25-case held-out and multi-hop files go to their own table
+    # the two 50-case suites alone (n = 100 per cell, the headline numbers); the 25-case held-out and multi-hop files go to their own table
     .venv/bin/python -m recall_guard.cli report --results exp03_robust/results/raw/suite-s*-*.jsonl --out exp03_robust/results/tables-suites.md
     .venv/bin/python -m recall_guard.cli report --results exp03_robust/results/raw/heldout-*.jsonl exp03_robust/results/raw/multihop25-*.jsonl --out exp03_robust/results/tables-extra.md
     .venv/bin/python -m recall_guard.cli report --results exp03_robust/results/raw/ruler-*.jsonl --out exp03_robust/results/tables-ruler.md

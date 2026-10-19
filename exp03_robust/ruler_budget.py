@@ -1,4 +1,4 @@
-"""Two audits of the scoring that the paper's Sections 3.2 and 3.3 cite (RESULTS.md item 32). Reads the committed raw
+"""Two audits of the scoring (RESULTS.md item 32). Reads the committed raw
 outputs only. Run on the Mac: .venv/bin/python exp03_robust/ruler_budget.py
 
 1. RULER multi-value and multi-query completions against the 64-new-token budget. The Qwen2.5 tokenizer encodes one

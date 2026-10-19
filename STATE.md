@@ -74,13 +74,10 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 (Llama-Instruct base), 1091449 (MIL repair seed 1, TRAIN_LENGTHS="8192 16384", tag -le16k: trains below 32K, so its 32K numbers
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
-## Paper
-The paper source, its figure and table scripts, and the prior-art and robustness notes live on branch `paper`
-(`git switch paper`); the main tree is the tool.
-
-Training-free baseline done (2026-10-18, exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
+## Training-free baseline
+Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
-< 0.01 to Qwen; 8B worse than unrepaired: 32K random 0.04, needle 0.72). Paper Section 4.3 carries it in prose. All
+< 0.01 to Qwen; 8B worse than unrepaired: 32K random 0.04, needle 0.72). All
 restore jobs finished or cancelled; nothing queued. Open follow-up: whether their restore (with a real pre-SFT checkpoint)
 and our adapter compose.
 
@@ -99,7 +96,7 @@ and our adapter compose.
 - Two cluster envs: `modern` (transformers main, Qwen3/3.5) and `jet` (transformers 4.53 + jet-ai fla fork).
 
 ## Prior art
-Read docs/prior-art.md (branch `paper`) before writing anything public. Key points: Qwen2.5-1.5B is Jet's initialisation checkpoint, not a weight-identical base (stage 2 trained the MLPs for 350B tokens); Jet-Long already shows an unpaired RULER drop at 32K (46.59); Lizard (50% softmax) reports parity to 32K, so the deficit depends on how few attention layers survive; no published post-hoc repair with transfer and no-damage numbers.
+Key points: Qwen2.5-1.5B is Jet's initialisation checkpoint, not a weight-identical base (stage 2 trained the MLPs for 350B tokens); Jet-Long already shows an unpaired RULER drop at 32K (46.59); Lizard (50% softmax) reports parity to 32K, so the deficit depends on how few attention layers survive; no published post-hoc repair with transfer and no-damage numbers.
 
 ## Traps
 - PEFT >= 0.21 refuses the image's torchao 0.13; torchao >= 0.16 needs torch 2.10 (image has 2.9). Use the own LoRA; never add peft/torchao.

@@ -1,7 +1,7 @@
 # Experiment 3 — robustness of exp01 and exp02 (complete: 2B, 8B, and the 8B recipe sweep)
 
 Run dir `~/runs/rg/robust/20261016-171229-9f67d4b`, commit `9f67d4b`, A100-SXM4-40GB. Reproduce: `exp03_robust/run_all.sh`.
-Items refer to docs/robustness.md (branch `paper`). Predictions there were written before these numbers.
+Items refer to docs/robustness.md. Predictions there were written before these numbers.
 
 ## Base-stage verdicts (2026-10-16 night)
 
@@ -97,7 +97,7 @@ Items refer to docs/robustness.md (branch `paper`). Predictions there were writt
     HellaSwag 0.520 to 0.520 / 0.518 (within SE), bits per byte 1.064 to 1.070 / 1.068 (+0.4-0.6%), the same small cost
     the hybrid pays.
 
-## Verdicts against docs/robustness.md (branch `paper`) (2B)
+## Verdicts against docs/robustness.md (2B)
 - Item 1 (power): headline gaps ≥ 3 SE at n = 100; three seeds agree. **Met.** Prediction 1 was wrong in direction.
 - Item 2 (RULER): RULER detects the failure. **No detection advantage**, as pre-registered. Prediction 2 confirmed.
 - Item 5 (coverage): multi-hop regression removed by the v2 mix. **Met**, with a new gap found (multi-answer questions).
@@ -284,11 +284,11 @@ layers), then runs the base-stage evaluation. Weight drift measured with `exp03_
 - **Verdict.** QK-Restore with the source as reference fails at both scales. Their own Table 1 shows the same method
   with the correct reference recovering only part of the loss on Jet-Nemotron-2B (NIAH-Single-2 at 32K: 57.8 -> 64.6
   against 95.6 before SFT). The repair lies in the training, not in which parameters are touched (the trained q/k-only
-  adapter, item 8, recovers most of the deficit). Paper: Section 4.3, prose only.
+  adapter, item 8, recovers most of the deficit).
 
 ## Scoring audits (item 32, 2026-10-19): the RULER generation budget and the first-line rule
 Reproduce: `.venv/bin/python exp03_robust/ruler_budget.py` (reads results/raw only; needs the Qwen2.5 tokenizer and the
-ungated mirror of the Llama-3.1 tokenizer). Prompted by the third cold read of the paper.
+ungated mirror of the Llama-3.1 tokenizer). Prompted by an independent re-check of the results.
 - RULER multi-value and multi-query ran with 64 new tokens. The models rarely stop earlier: 40-50 of 50 completions per
   2B cell and 48-50 per 8B cell reach the budget, mostly repetition loops and junk lists rather than long answers
   (Qwen2.5 encodes one digit per token, Llama three). Misses are classed as `wrong` (four or more distinct seven-digit
@@ -298,13 +298,13 @@ ungated mirror of the Llama-3.1 tokenizer). Prompted by the third cold read of t
   untrained 2B models (Jet 16K multi-query: 20 of 50), 0.36 for the repaired 2B models (Jet seed 1, 32K multi-value: 18),
   0.32 for the untrained 8B hybrid (32K multi-value: 16, junk lists that still end in a number) and 0.04 for the repaired
   8B hybrid (at most 2 of 50). A stricter class that only counts misses ending inside a number gives 0.18 / 0.22 / 0.26 /
-  0.04 in the same order. The paper states the budget and the loose bound in Section 3.3, calls the multi-answer rates lower bounds, and
-  draws no conclusion from the 2B multi-answer rates at 32K. A rerun with 128 tokens would settle the 2B cells.
+  0.04 in the same order. The multi-answer rates are therefore lower bounds, and no conclusion is drawn from the 2B
+  multi-answer rates at 32K. A rerun with 128 tokens would settle the 2B cells.
 - First-line `contains` against `exact` (the first code is the answer) over all 372 (model, adapter, task, length)
   cells of the exp03 suites at 16K and 32K: 4 cells differ, all at 8B. Llama-3.1-8B-Instruct multi-hop at 32K 0.49
   against 0.46 (62 of 100 first lines carry more than one code), Llama `updated` at 16K 0.87 against 0.82 and at 32K
-  0.74 against 0.72 (not reported in the paper), and the untrained hybrid's multi-hop at 16K 0.15 against 0.14.
-  Every hybrid cell and every Qwen2.5-1.5B cell is identical under both rules. Paper: Section 3.2.
+  0.74 against 0.72, and the untrained hybrid's multi-hop at 16K 0.15 against 0.14.
+  Every hybrid cell and every Qwen2.5-1.5B cell is identical under both rules.
 
 ## Notes
 - The n = 50 suites include `heldout_many` as a sixth task (it is in the task registry), so pooled held-out numbers above
