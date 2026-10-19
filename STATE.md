@@ -91,7 +91,11 @@ failure is not a data-absence effect (the control improves 0.40 -> 0.57 on numer
 multi-answer result at 32K is inconclusive because RULER ran with 64 new tokens and up to 0.36-0.40 of a 2B cell may be
 cut-off answers (exp03 RESULTS item 32; repaired 8B cells <= 0.04). Optional follow-up: rerun the 2B RULER multi-value and
 multi-query cells with 128 tokens (`ssh aau` was refused from the Mac on 2026-10-19: publickey/password).
-Awaiting the author's veto on the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
+Submitted to arXiv 2026-10-19 (submission 8252423, status processing at 14:10 CET): primary cs.LG (the category the
+author's endorsement covers; the classifier recommended cs.CL, left as cross-list), CC BY 4.0, acknowledgement kept.
+Git tag v1.0-arxiv marks the submitted state. When the arXiv id arrives: add it to README.md, the LinkedIn first comment
+and the citation; post 1 goes out the morning the listing is live. Three empty drafts (8252420-22) remain on the arXiv
+account and expire 2026-11-02.
 Repo hygiene pass done 2026-10-19 before going public: README rewritten, MIT LICENSE added, the cluster login path and
 the token note scrubbed from tracked files (they remain in git history), the 9 MB exp02 suite untracked (it regenerates from
 heldout.prov.json), stale docstrings fixed.
