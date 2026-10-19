@@ -15,12 +15,6 @@ state-space layers. Such models pass the single-needle test and still fail to re
 32K tokens. A LoRA adapter on under 1% of the weights, trained for 45 minutes on synthetic many-fact documents, brings
 recall back to the source model's level.
 
-Paper: *Multi-Key Recall in Converted Hybrid Language Models: A Training Deficit, Not a Capacity Limit*
-(Musaab Ahmed Mahjoub, Aalborg University, 2026),
-[PDF](https://github.com/gottn/recall-guard/releases/download/v1.0/recall-guard-paper.pdf). Its Sections 5 and 6 state
-the limits: UUID-style values and multi-answer questions are only partly repaired, and at 2B a gap to the identically
-trained control remains on RULER.
-
 ## Install
 
 ```
@@ -57,20 +51,7 @@ python -m recall_guard.cli run   --suite suite.jsonl --model jet-ai/Jet-Nemotron
 ## Results
 
 `exp01_step1/`, `exp02_repair/` and `exp03_robust/` each hold a `RESULTS.md` and every raw completion under
-`results/raw/`; `STATE.md` is the lab notebook. `exp*/run_all.sh report` regenerates the tables and
-`cd paper && make figures && make tables && make` rebuilds the paper from them.
-
-## Cite
-
-```bibtex
-@techreport{mahjoub2026recall,
-  title       = {Multi-Key Recall in Converted Hybrid Language Models: A Training Deficit, Not a Capacity Limit},
-  author      = {Mahjoub, Musaab Ahmed},
-  institution = {Aalborg University},
-  year        = {2026},
-  url         = {https://github.com/gottn/recall-guard}
-}
-```
+`results/raw/`; `STATE.md` is the lab notebook. `exp*/run_all.sh report` regenerates the tables from them.
 
 ## License
 
