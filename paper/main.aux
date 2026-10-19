@@ -1,0 +1,124 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{jamba2024,samba2024}
+\citation{mambainllama2024,lolcats2024,supra2024,radlads2025,jetnemotron2025}
+\citation{zoology2023,based2024,jelassi2024,waleffe2024,justreadtwice2024,stuffedmamba2024}
+\citation{kamradt2023}
+\citation{ruler2024}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Recall as a function of context length: 25 cases per point at 1K to 8K, 100 at 16K and 32K. Dashed lines: single needle. Solid lines: one of 16 random keys. Each converted hybrid is paired with the transformer it was converted from.}}{2}{figure.1}\protected@file@percent }
+\newlabel{fig:signature}{{1}{2}{Recall as a function of context length: 25 cases per point at 1K to 8K, 100 at 16K and 32K. Dashed lines: single needle. Solid lines: one of 16 random keys. Each converted hybrid is paired with the transformer it was converted from}{figure.1}{}}
+\citation{mambainllama2024,mamba2_2024}
+\citation{lolcats2024}
+\citation{supra2024}
+\citation{radlads2025}
+\citation{jetnemotron2025}
+\citation{lizard2025}
+\citation{lolcats2024}
+\citation{lola2025}
+\citation{zoology2023,based2024}
+\citation{waleffe2024}
+\citation{stuffedmamba2024}
+\citation{jelassi2024}
+\citation{justreadtwice2024}
+\citation{retrievalheads2024}
+\citation{bick2025}
+\citation{minimaxm2_2025}
+\citation{ruler2024}
+\citation{jetlong2026}
+\citation{attentionamnesia2026}
+\citation{hybridrecall2025}
+\citation{syntheticdatahurts2026}
+\citation{attentionamnesia2026}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related work}{3}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Converting transformers into hybrids.}{3}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Recall in fixed-state models.}{3}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Long-context evaluation.}{3}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Recall training and forgetting.}{3}{section*.4}\protected@file@percent }
+\citation{jetnemotron2025}
+\citation{mambainllama2024}
+\citation{llama3_2024}
+\citation{mamba2_2024}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Experimental setup}{4}{section.3}\protected@file@percent }
+\newlabel{sec:setup}{{3}{4}{Experimental setup}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Models}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Synthetic recall suite}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:suite}{{3.2}{4}{Synthetic recall suite}{subsection.3.2}{}}
+\citation{ruler2024}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}RULER}{5}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:ruler}{{3.3}{5}{RULER}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Repair procedure}{5}{subsection.3.4}\protected@file@percent }
+\newlabel{sec:repair-setup}{{3.4}{5}{Repair procedure}{subsection.3.4}{}}
+\citation{lora2021}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Controls and collateral measurements}{6}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{6}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{6}{Results}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Converted hybrids lose multi-key recall while passing the needle test}{6}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:results-signature}{{4.1}{6}{Converted hybrids lose multi-key recall while passing the needle test}{subsection.4.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Recall at 32K before repair. Suite columns use 100 cases per cell; RULER columns use 50. MK1--MK3: RULER multi-key variants 1--3; MV: multi-value, a lower bound under the 64-token generation limit, loose at 2B (Section~\ref {sec:ruler}). Parcels is the held-out fact template.}}{7}{table.1}\protected@file@percent }
+\newlabel{tab:signature}{{1}{7}{Recall at 32K before repair. Suite columns use 100 cases per cell; RULER columns use 50. MK1--MK3: RULER multi-key variants 1--3; MV: multi-value, a lower bound under the 64-token generation limit, loose at 2B (Section~\ref {sec:ruler}). Parcels is the held-out fact template}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}A small adapter restores recall}{7}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:results-repair}{{4.2}{7}{A small adapter restores recall}{subsection.4.2}{}}
+\citation{attentionamnesia2026}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Recall at 32K before and after repair, next to the untrained full-attention source, whose 2B values are in Table~\ref {tab:signature}; Table~\ref {tab:repair} gives the trained control at 2B. Repaired values are means over three training seeds of the heavy recipe at 2B and the gentle recipe at 8B. The 8B adapter was trained only on documents up to 16K tokens.}}{8}{figure.2}\protected@file@percent }
+\newlabel{fig:repair}{{2}{8}{Recall at 32K before and after repair, next to the untrained full-attention source, whose 2B values are in Table~\ref {tab:signature}; Table~\ref {tab:repair} gives the trained control at 2B. Repaired values are means over three training seeds of the heavy recipe at 2B and the gentle recipe at 8B. The 8B adapter was trained only on documents up to 16K tokens}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Recall at 32K after repair. Suite columns use 100 cases per cell and RULER columns 50; repaired values are means over three seeds. At 2B the control is the source model trained with the same recipe (mean over two seeds); at 8B the source was not retrained. MV is a lower bound under the 64-token generation limit, loose at 2B (Section~\ref {sec:ruler}). Parcels is the held-out fact template.}}{8}{table.2}\protected@file@percent }
+\newlabel{tab:repair}{{2}{8}{Recall at 32K after repair. Suite columns use 100 cases per cell and RULER columns 50; repaired values are means over three seeds. At 2B the control is the source model trained with the same recipe (mean over two seeds); at 8B the source was not retrained. MV is a lower bound under the 64-token generation limit, loose at 2B (Section~\ref {sec:ruler}). Parcels is the held-out fact template}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}A training-free baseline: copying the source's query and key projections}{9}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:restore}{{4.3}{9}{A training-free baseline: copying the source's query and key projections}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Analysis}{9}{section.5}\protected@file@percent }
+\newlabel{sec:analysis}{{5}{9}{Analysis}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}What the repair reaches beyond its training data}{9}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:coverage}{{5.1}{9}{What the repair reaches beyond its training data}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Collateral cost and the training dose}{10}{subsection.5.2}\protected@file@percent }
+\newlabel{sec:cost}{{5.2}{10}{Collateral cost and the training dose}{subsection.5.2}{}}
+\citation{lizard2025}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Training recipes at 8B: change in bits per byte on long natural text against multi-hop recall at 32K. Each grey or green point is one training run, the gentle recipe for three seeds; the orange point is the unrepaired model.}}{11}{figure.3}\protected@file@percent }
+\newlabel{fig:tradeoff}{{3}{11}{Training recipes at 8B: change in bits per byte on long natural text against multi-hop recall at 32K. Each grey or green point is one training run, the gentle recipe for three seeds; the orange point is the unrepaired model}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Training recipes at 8B. Documents: synthetic repair documents plus natural-text windows seen in training; the learning rate is constant. Recall at 32K uses 100 cases; RULER MK1 and MK3 at 32K use 50; bits per byte is measured on 16K windows of long natural text; HellaSwag accuracy is on 500 items (standard error 0.022). In the gentle row, recall and RULER are means over three seeds and bits per byte and HellaSwag are ranges. Percentage changes in the text are computed from unrounded values.}}{11}{table.3}\protected@file@percent }
+\newlabel{tab:recipes}{{3}{11}{Training recipes at 8B. Documents: synthetic repair documents plus natural-text windows seen in training; the learning rate is constant. Recall at 32K uses 100 cases; RULER MK1 and MK3 at 32K use 50; bits per byte is measured on 16K windows of long natural text; HellaSwag accuracy is on 500 items (standard error 0.022). In the gentle row, recall and RULER are means over three seeds and bits per byte and HellaSwag are ranges. Percentage changes in the text are computed from unrounded values}{table.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Limitations}{12}{section.6}\protected@file@percent }
+\newlabel{sec:limitations}{{6}{12}{Limitations}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{12}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{12}{section*.5}\protected@file@percent }
+\bibstyle{unsrtnat}
+\bibdata{refs}
+\bibcite{jamba2024}{{1}{2024}{{Lieber et~al.}}{{}}}
+\bibcite{samba2024}{{2}{2025}{{Ren et~al.}}{{}}}
+\bibcite{mambainllama2024}{{3}{2024}{{Wang et~al.}}{{Wang, Paliotta, May, Rush, and Dao}}}
+\bibcite{lolcats2024}{{4}{2025}{{Zhang et~al.}}{{}}}
+\bibcite{supra2024}{{5}{2024}{{Mercat et~al.}}{{}}}
+\bibcite{radlads2025}{{6}{2025}{{Goldstein et~al.}}{{}}}
+\bibcite{jetnemotron2025}{{7}{2025}{{Gu et~al.}}{{}}}
+\bibcite{zoology2023}{{8}{2024{}}{{Arora et~al.}}{{}}}
+\bibcite{based2024}{{9}{2024{}}{{Arora et~al.}}{{}}}
+\bibcite{jelassi2024}{{10}{2024}{{Jelassi et~al.}}{{Jelassi, Brandfonbrener, Kakade, and Malach}}}
+\bibcite{waleffe2024}{{11}{2024}{{Waleffe et~al.}}{{}}}
+\bibcite{justreadtwice2024}{{12}{2024{}}{{Arora et~al.}}{{}}}
+\bibcite{stuffedmamba2024}{{13}{2024}{{Chen et~al.}}{{}}}
+\bibcite{kamradt2023}{{14}{2023}{{Kamradt}}{{}}}
+\bibcite{ruler2024}{{15}{2024}{{Hsieh et~al.}}{{}}}
+\@writefile{toc}{\contentsline {paragraph}{Acknowledgements.}{13}{section*.6}\protected@file@percent }
+\bibcite{mamba2_2024}{{16}{2024}{{Dao and Gu}}{{}}}
+\bibcite{lizard2025}{{17}{2025}{{Nguyen et~al.}}{{}}}
+\bibcite{lola2025}{{18}{2025}{{McDermott et~al.}}{{}}}
+\bibcite{retrievalheads2024}{{19}{2024}{{Wu et~al.}}{{}}}
+\bibcite{bick2025}{{20}{2025}{{Bick et~al.}}{{Bick, Xing, and Gu}}}
+\bibcite{minimaxm2_2025}{{21}{2025}{{MiniMax}}{{}}}
+\bibcite{jetlong2026}{{22}{2026}{{Tang et~al.}}{{Tang, Wang, Gu, Han, and Cai}}}
+\bibcite{attentionamnesia2026}{{23}{2026}{{Zhou et~al.}}{{}}}
+\bibcite{hybridrecall2025}{{24}{2025}{{Lee et~al.}}{{Lee, Yu, Zhang, Ma, Kim, Yu, and Seo}}}
+\bibcite{syntheticdatahurts2026}{{25}{2026}{{Murtaza et~al.}}{{Murtaza, Nie, Soni, Wen, and Frydenlund}}}
+\bibcite{llama3_2024}{{26}{2024}{{Grattafiori et~al.}}{{}}}
+\bibcite{lora2021}{{27}{2022}{{Hu et~al.}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Collateral measurements}{15}{appendix.A}\protected@file@percent }
+\newlabel{app:cost}{{A}{15}{Collateral measurements}{appendix.A}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces ARC-Easy and HellaSwag accuracy (500 items each, standard error 0.022) and bits per byte on eight 16K windows of \emph  {Moby-Dick} (mean and standard error over windows) for every model and adapter in the paper. 2B adapters use the heavy recipe; the 8B rows name the recipe of Table~\ref {tab:recipes}.}}{15}{table.4}\protected@file@percent }
+\newlabel{tab:collateral}{{4}{15}{ARC-Easy and HellaSwag accuracy (500 items each, standard error 0.022) and bits per byte on eight 16K windows of \emph {Moby-Dick} (mean and standard error over windows) for every model and adapter in the paper. 2B adapters use the heavy recipe; the 8B rows name the recipe of Table~\ref {tab:recipes}}{table.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}RULER, all variants}{16}{appendix.B}\protected@file@percent }
+\newlabel{app:ruler}{{B}{16}{RULER, all variants}{appendix.B}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces RULER needle variants at 16K and 32K, 50 cases per cell, means over seeds where several exist. S1: single needle in a noise haystack; MK1--MK3: multi-key variants 1--3; MV: multi-value; MQ: multi-query. Multi-value and multi-query rates are lower bounds under the 64-token generation limit, loose at 2B and for the untrained 8B hybrid (Section~\ref {sec:ruler}).}}{16}{table.5}\protected@file@percent }
+\newlabel{tab:ruler-all}{{5}{16}{RULER needle variants at 16K and 32K, 50 cases per cell, means over seeds where several exist. S1: single needle in a noise haystack; MK1--MK3: multi-key variants 1--3; MV: multi-value; MQ: multi-query. Multi-value and multi-query rates are lower bounds under the 64-token generation limit, loose at 2B and for the untrained 8B hybrid (Section~\ref {sec:ruler})}{table.5}{}}
+\gdef \@abspage@last{16}

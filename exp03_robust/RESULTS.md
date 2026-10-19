@@ -1,7 +1,7 @@
 # Experiment 3 — robustness of exp01 and exp02 (complete: 2B, 8B, and the 8B recipe sweep)
 
 Run dir `~/runs/rg/robust/20261016-171229-9f67d4b`, commit `9f67d4b`, A100-SXM4-40GB. Reproduce: `exp03_robust/run_all.sh`.
-Items refer to docs/robustness.md. Predictions there were written before these numbers.
+Items refer to docs/robustness.md (branch `paper`). Predictions there were written before these numbers.
 
 ## Base-stage verdicts (2026-10-16 night)
 
@@ -97,7 +97,7 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     HellaSwag 0.520 to 0.520 / 0.518 (within SE), bits per byte 1.064 to 1.070 / 1.068 (+0.4-0.6%), the same small cost
     the hybrid pays.
 
-## Verdicts against docs/robustness.md (2B)
+## Verdicts against docs/robustness.md (branch `paper`) (2B)
 - Item 1 (power): headline gaps ≥ 3 SE at n = 100; three seeds agree. **Met.** Prediction 1 was wrong in direction.
 - Item 2 (RULER): RULER detects the failure. **No detection advantage**, as pre-registered. Prediction 2 confirmed.
 - Item 5 (coverage): multi-hop regression removed by the v2 mix. **Met**, with a new gap found (multi-answer questions).

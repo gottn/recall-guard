@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Experiment 3: robustness of exp01/exp02 (docs/robustness.md items 1, 2, 5, 6, 7).
+# Experiment 3: robustness of exp01/exp02 (docs/robustness.md on branch paper, items 1, 2, 5, 6, 7).
 # Cluster:
 #   STAGE=base MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust            -> RUN
 #   RUN_IN=$RUN STAGE=base MODEL=Qwen/Qwen2.5-1.5B RG_ENV=modern infra/cluster/submit.sh robust

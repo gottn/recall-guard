@@ -1,0 +1,153 @@
+\begin{thebibliography}{27}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Lieber et~al.(2024)]{jamba2024}
+Opher Lieber et~al.
+\newblock {Jamba: A Hybrid Transformer-Mamba Language Model}.
+\newblock \emph{arXiv preprint arXiv:2403.19887}, 2024.
+
+\bibitem[Ren et~al.(2025)]{samba2024}
+Liliang Ren et~al.
+\newblock {Samba: Simple Hybrid State Space Models for Efficient Unlimited Context Language Modeling}.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2025.
+\newblock arXiv:2406.07522.
+
+\bibitem[Wang et~al.(2024)Wang, Paliotta, May, Rush, and Dao]{mambainllama2024}
+Junxiong Wang, Daniele Paliotta, Avner May, Alexander~M. Rush, and Tri Dao.
+\newblock {The Mamba in the Llama: Distilling and Accelerating Hybrid Models}.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}, 2024.
+\newblock arXiv:2408.15237.
+
+\bibitem[Zhang et~al.(2025)]{lolcats2024}
+Michael Zhang et~al.
+\newblock {LoLCATs: On Low-Rank Linearizing of Large Language Models}.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2025.
+\newblock arXiv:2410.10254.
+
+\bibitem[Mercat et~al.(2024)]{supra2024}
+Jean Mercat et~al.
+\newblock {Linearizing Large Language Models}.
+\newblock \emph{arXiv preprint arXiv:2405.06640}, 2024.
+
+\bibitem[Goldstein et~al.(2025)]{radlads2025}
+Daniel Goldstein et~al.
+\newblock {RADLADS: Rapid Attention Distillation to Linear Attention Decoders at Scale}.
+\newblock \emph{arXiv preprint arXiv:2505.03005}, 2025.
+
+\bibitem[Gu et~al.(2025)]{jetnemotron2025}
+Yuxian Gu et~al.
+\newblock {Jet-Nemotron: Efficient Language Model with Post Neural Architecture Search}.
+\newblock \emph{arXiv preprint arXiv:2508.15884}, 2025.
+
+\bibitem[Arora et~al.(2024{\natexlab{a}})]{zoology2023}
+Simran Arora et~al.
+\newblock {Zoology: Measuring and Improving Recall in Efficient Language Models}.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2024{\natexlab{a}}.
+\newblock arXiv:2312.04927.
+
+\bibitem[Arora et~al.(2024{\natexlab{b}})]{based2024}
+Simran Arora et~al.
+\newblock {Simple Linear Attention Language Models Balance the Recall-Throughput Tradeoff}.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2024{\natexlab{b}}.
+\newblock arXiv:2402.18668.
+
+\bibitem[Jelassi et~al.(2024)Jelassi, Brandfonbrener, Kakade, and Malach]{jelassi2024}
+Samy Jelassi, David Brandfonbrener, Sham~M. Kakade, and Eran Malach.
+\newblock {Repeat After Me: Transformers are Better than State Space Models at Copying}.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2024.
+\newblock arXiv:2402.01032.
+
+\bibitem[Waleffe et~al.(2024)]{waleffe2024}
+Roger Waleffe et~al.
+\newblock {An Empirical Study of Mamba-based Language Models}.
+\newblock \emph{arXiv preprint arXiv:2406.07887}, 2024.
+
+\bibitem[Arora et~al.(2024{\natexlab{c}})]{justreadtwice2024}
+Simran Arora et~al.
+\newblock {Just Read Twice: Closing the Recall Gap for Recurrent Language Models}.
+\newblock \emph{arXiv preprint arXiv:2407.05483}, 2024{\natexlab{c}}.
+
+\bibitem[Chen et~al.(2024)]{stuffedmamba2024}
+Yingfa Chen et~al.
+\newblock {Stuffed Mamba: State Collapse and State Capacity of RNN-Based Long-Context Modeling}.
+\newblock \emph{arXiv preprint arXiv:2410.07145}, 2024.
+
+\bibitem[Kamradt(2023)]{kamradt2023}
+Gregory Kamradt.
+\newblock {Needle In A Haystack: Pressure Testing LLMs}.
+\newblock \url{https://github.com/gkamradt/LLMTest_NeedleInAHaystack}, 2023.
+
+\bibitem[Hsieh et~al.(2024)]{ruler2024}
+Cheng-Ping Hsieh et~al.
+\newblock {RULER: What's the Real Context Size of Your Long-Context Language Models?}
+\newblock In \emph{First Conference on Language Modeling (COLM)}, 2024.
+\newblock arXiv:2404.06654.
+
+\bibitem[Dao and Gu(2024)]{mamba2_2024}
+Tri Dao and Albert Gu.
+\newblock {Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality}.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2024.
+\newblock arXiv:2405.21060.
+
+\bibitem[Nguyen et~al.(2025)]{lizard2025}
+Chien~Van Nguyen et~al.
+\newblock {Lizard: An Efficient Linearization Framework for Large Language Models}.
+\newblock \emph{arXiv preprint arXiv:2507.09025}, 2025.
+
+\bibitem[McDermott et~al.(2025)]{lola2025}
+Luke McDermott et~al.
+\newblock {LoLA: Low-Rank Linear Attention With Sparse Caching}.
+\newblock \emph{arXiv preprint arXiv:2505.23666}, 2025.
+
+\bibitem[Wu et~al.(2024)]{retrievalheads2024}
+Wenhao Wu et~al.
+\newblock {Retrieval Head Mechanistically Explains Long-Context Factuality}.
+\newblock \emph{arXiv preprint arXiv:2404.15574}, 2024.
+
+\bibitem[Bick et~al.(2025)Bick, Xing, and Gu]{bick2025}
+Aviv Bick, Eric Xing, and Albert Gu.
+\newblock {Understanding the Skill Gap in Recurrent Language Models: The Role of the Gather-and-Aggregate Mechanism}.
+\newblock \emph{arXiv preprint arXiv:2504.18574}, 2025.
+
+\bibitem[{MiniMax}(2025)]{minimaxm2_2025}
+{MiniMax}.
+\newblock {Why did MiniMax-M2 end up as a full attention model?}
+\newblock \url{https://platform.minimax.io/docs/guides/text-m2-full-attention}, 2025.
+
+\bibitem[Tang et~al.(2026)Tang, Wang, Gu, Han, and Cai]{jetlong2026}
+Haozhan Tang, Zerui Wang, Yuxian Gu, Song Han, and Han Cai.
+\newblock {Jet-Long: Efficient Long-Context Extension with Dynamic Bifocal RoPE}.
+\newblock \emph{arXiv preprint arXiv:2607.07740}, 2026.
+
+\bibitem[Zhou et~al.(2026)]{attentionamnesia2026}
+Xinyu Zhou et~al.
+\newblock {Attention Amnesia in Hybrid LLMs: When CoT Fine-Tuning Breaks Long-Range Recall, and How to Fix It}.
+\newblock \emph{arXiv preprint arXiv:2606.11052}, 2026.
+
+\bibitem[Lee et~al.(2025)Lee, Yu, Zhang, Ma, Kim, Yu, and Seo]{hybridrecall2025}
+Hyunji Lee, Wenhao Yu, Hongming Zhang, Kaixin Ma, Jiyeon Kim, Dong Yu, and Minjoon Seo.
+\newblock {Understanding and Enhancing Mamba-Transformer Hybrids for Memory Recall and Language Modeling}.
+\newblock In \emph{Proceedings of the First BabyLM Workshop}, pages 380--398. Association for Computational Linguistics, 2025.
+\newblock arXiv:2510.26912.
+
+\bibitem[Murtaza et~al.(2026)Murtaza, Nie, Soni, Wen, and Frydenlund]{syntheticdatahurts2026}
+Syed~Shariyar Murtaza, Yifan Nie, Utkarsh Soni, Eugene Wen, and Arvid Frydenlund.
+\newblock {When Synthetic Data Hurts: On Catastrophic Forgetting in Skill Retrieval for LLM Agents}.
+\newblock \emph{arXiv preprint arXiv:2609.10750}, 2026.
+
+\bibitem[Grattafiori et~al.(2024)]{llama3_2024}
+Aaron Grattafiori et~al.
+\newblock {The Llama 3 Herd of Models}.
+\newblock \emph{arXiv preprint arXiv:2407.21783}, 2024.
+
+\bibitem[Hu et~al.(2022)]{lora2021}
+Edward~J. Hu et~al.
+\newblock {LoRA: Low-Rank Adaptation of Large Language Models}.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2022.
+\newblock arXiv:2106.09685.
+
+\end{thebibliography}
