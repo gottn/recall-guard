@@ -118,7 +118,7 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     | heldout_many (parcels) | 0.33 | 1.00 | 0.17 | 1.00 |
 
 15. **RULER at 16K, n = 50.** Hybrid vs Llama-3.1-8B-Instruct: single_1 1.00 / 1.00, multikey_1 0.72 / 1.00, multikey_2
-    0.40 / 1.00, multikey_3 (UUID) 0.10 / 0.98, multivalue 0.32 / 0.91, multiquery 0.14 / 1.00. At 32K the hybrid is at
+    0.40 / 1.00, multikey_3 (UUID) 0.10 / 0.98, multivalue 0.32 / 0.92, multiquery 0.14 / 1.00. At 32K the hybrid is at
     0.40 / 0.10 / 0.00 / 0.00 / 0.00 on the five multi-key variants with single_1 still 1.00 (Llama's 32K rows pending).
 16. **Reading.** This conversion keeps half its attention layers and still collapses from 4K, far earlier than Jet-Nemotron-2B
     with two of 28. Attention-layer count alone does not predict the deficit; Lizard's 50%-softmax conversion reported parity.
@@ -189,7 +189,7 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 
 26. **replay, full strength** (600 docs, lr 2e-4, every other example natural text): bits per byte **0.992** (below base),
     HellaSwag 0.574 / 0.746, ARC-Easy 0.822 / 0.782 (within noise); recall at 32K: random keys 0.99, similar 0.86,
-    multi-hop 0.36, held-out 0.92; RULER multikey_1 0.80, multikey_2 0.43, multivalue 0.00. Replay removes the damage
+    multi-hop 0.36, held-out 0.92; RULER multikey_1 0.70, multikey_2 0.50, multivalue 0.10. Replay removes the damage
     and halves the retrieval signal: the harder tasks are the ones that go. The two levers oppose each other; the next
     recipe (`-gentle2-replay25`: 800 examples, lr 5e-5, one in four natural) looks for the point that keeps both.
 
@@ -228,7 +228,7 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     | 3 | 0.99 | 0.99 | 0.98 | 0.98 | 0.98 | 0.90 | 0.68 | 1.083 | 0.584 |
 
     Base: 0.25 / 0.09 / 0.06 / 0.17; RULER 0.40 / 0.10 / 0.00; bpb 1.008; HellaSwag 0.600. Cost: bits per byte +5.5% to
-    +7.4%, HellaSwag within one SE, ARC-Easy unchanged. UUID keys (MK3 0.08 to 0.32) remain the unrepaired case.
+    +7.5% (unrounded 1.0834 / 1.0079), HellaSwag within one SE, ARC-Easy unchanged. UUID keys (MK3 0.08 to 0.32) remain the unrepaired case.
 30. **gentle + 25% replay** (800 examples, lr 5e-5, one in four natural): bits per byte **0.976** (below base), keys 1.00 /
     0.98, held-out 0.96, RULER MK1 0.82, MK2 0.72, MV 0.46, **multi-hop 0.30**. Across all three replay variants
     multi-hop lands at 0.30 to 0.36 while key recall stays near 1.00: natural-text replay specifically removes the
@@ -267,20 +267,42 @@ layers), then runs the base-stage evaluation. Weight drift measured with `exp03_
 - **Jet-Nemotron-2B's softmax-attention layers are not Qwen's.** Cosine is zero against the same-index Qwen layer, against
   every other Qwen layer (best match 0.009) and under any head pairing (max 0.084). The MLPs (0.71) and embeddings
   (0.88) do descend from Qwen; the attention layers were trained anew in the conversion. So no reference checkpoint
-  exists for this model, and copying Qwen's q/k produces a fluent model that cannot retrieve: on suite seed 1 it
-  answers "The answer is not provided in the text." (or a variant) on 600 of 600 cases, needle included (43 distinct
-  outputs, all refusals); unrepaired Jet gives 600 distinct outputs and 0.86 needle at 32K.
+  exists for this model, and copying Qwen's q/k produces a fluent model that cannot retrieve: over suite seeds 1 and 2
+  it answers "The answer is not provided in the text." (or a variant) on 1,113 of 1,200 cases, needle included, and
+  loops on the rest (50 and 43 distinct outputs per suite; corrected 2026-10-19 from "600 of 600" against the raw
+  files); no completion contains a planted code. Unrepaired Jet gives 600 distinct outputs and 0.86 needle at 32K.
 - **The 8B model keeps Llama's attention layers to within 0.98-0.99 cosine**, and the copy still hurts: at 16K (n = 100)
   needle 0.67, 16 random 0.07, 16 similar 0.03, held-out 0.04 against 1.00 / 0.25 / 0.11 / 0.33 unrepaired; at 32K
   (n = 56-60, job 1096981 stopped after 350 cases of suite seed 2) needle 0.72, 16 random 0.04, 16 similar 0.00,
   held-out 0.00 against 1.00 / 0.25 / 0.09 / 0.17. Outputs are codes, not refusals (526 distinct outputs in 545): the
   model retrieves the wrong fact. The retained layers have adapted to the Mamba-2 layers between them; the source's
   projections no longer fit. Jobs 1096972/1096973 (Jet RULER stage; Jet full-attention-only variant) were cancelled as
-  unnecessary: the drift numbers settle the Jet case.
+  unnecessary: the drift numbers settle the Jet case. The outputs job 1096972 had written before the cancellation
+  (held-out, multi-hop, and 135 of 300 RULER cases at 16K, all 0.00) are kept as `*-restore-jet-ai_Jet-Nemotron-2B.jsonl`.
 - **Verdict.** QK-Restore with the source as reference fails at both scales. Their own Table 1 shows the same method
   with the correct reference recovering only part of the loss on Jet-Nemotron-2B (NIAH-Single-2 at 32K: 57.8 -> 64.6
   against 95.6 before SFT). The repair lies in the training, not in which parameters are touched (the trained q/k-only
   adapter, item 8, recovers most of the deficit). Paper: Section 4.3, prose only.
+
+## Scoring audits (item 32, 2026-10-19): the RULER generation budget and the first-line rule
+Reproduce: `.venv/bin/python exp03_robust/ruler_budget.py` (reads results/raw only; needs the Qwen2.5 tokenizer and the
+ungated mirror of the Llama-3.1 tokenizer). Prompted by the third cold read of the paper.
+- RULER multi-value and multi-query ran with 64 new tokens. The models rarely stop earlier: 40-50 of 50 completions per
+  2B cell and 48-50 per 8B cell reach the budget, mostly repetition loops and junk lists rather than long answers
+  (Qwen2.5 encodes one digit per token, Llama three). Misses are classed as `wrong` (four or more distinct seven-digit
+  numbers), `loop` (a value repeated), `open` (reached the budget with fewer than four values, no repeat, and the last
+  value within 40 characters of the end, or ending inside a number: a possibly cut-off answer) or `other` (stopped early
+  or drifted into prose). The `open` share, the upper bound on answers cut short, reaches 0.40 of a cell for the
+  untrained 2B models (Jet 16K multi-query: 20 of 50), 0.36 for the repaired 2B models (Jet seed 1, 32K multi-value: 18),
+  0.32 for the untrained 8B hybrid (32K multi-value: 16, junk lists that still end in a number) and 0.04 for the repaired
+  8B hybrid (at most 2 of 50). A stricter class that only counts misses ending inside a number gives 0.18 / 0.22 / 0.26 /
+  0.04 in the same order. The paper states the budget and the loose bound in Section 3.3, calls the multi-answer rates lower bounds, and
+  draws no conclusion from the 2B multi-answer rates at 32K. A rerun with 128 tokens would settle the 2B cells.
+- First-line `contains` against `exact` (the first code is the answer) over all 372 (model, adapter, task, length)
+  cells of the exp03 suites at 16K and 32K: 4 cells differ, all at 8B. Llama-3.1-8B-Instruct multi-hop at 32K 0.49
+  against 0.46 (62 of 100 first lines carry more than one code), Llama `updated` at 16K 0.87 against 0.82 and at 32K
+  0.74 against 0.72 (not reported in the paper), and the untrained hybrid's multi-hop at 16K 0.15 against 0.14.
+  Every hybrid cell and every Qwen2.5-1.5B cell is identical under both rules. Paper: Section 3.2.
 
 ## Notes
 - The n = 50 suites include `heldout_many` as a sixth task (it is in the task registry), so pooled held-out numbers above

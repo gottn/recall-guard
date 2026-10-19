@@ -7,7 +7,7 @@ Reproduce: `exp02_repair/run_all.sh` (cluster commands in its header; `report` r
 
 **Yes: 42 minutes of LoRA on one A100 repairs it fully.** Jet-Nemotron-2B went from **0.16 to 0.92** on 16 random keys
 at 32K and from **0.20 to 0.88** on near-duplicate keys, matching the full-attention control trained the same way
-(0.91 and 0.90). The gain **transfers to a template never trained on** (parcels and pickup codes: 0.24 to 0.84 at
+(0.92 and 0.92). The gain **transfers to a template never trained on** (parcels and pickup codes: 0.24 to 0.84 at
 32K) and **ARC-Easy and HellaSwag do not move** (all deltas within one standard error of 0.022).
 
 Reading: the converted model's fixed-size state had the capacity for 16 keys at 32K all along. The conversion
@@ -40,13 +40,13 @@ of the base model (echoing the first assignment), not a memory property.
 | Jet before | heldout_many (parcels) | 1.00 | 1.00 | 0.96 | 0.96 | 0.96 | 0.24 |
 | Jet after | heldout_many (parcels) | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | **0.84** |
 | Qwen2.5-1.5B before | many_random | 0.96 | 0.92 | 0.88 | 0.92 | 0.96 | 0.72 |
-| Qwen2.5-1.5B after | many_random | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.91 |
+| Qwen2.5-1.5B after | many_random | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.92 |
 | Qwen2.5-1.5B before | many_similar | 0.96 | 0.88 | 0.92 | 0.96 | 0.76 | 0.68 |
-| Qwen2.5-1.5B after | many_similar | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.90 |
+| Qwen2.5-1.5B after | many_similar | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.92 |
 | Qwen2.5-1.5B before | updated | 0.64 | 0.48 | 0.56 | 0.32 | 0.36 | 0.44 |
 | Qwen2.5-1.5B after | updated | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
 | Qwen2.5-1.5B before | multihop | 0.28 | 0.16 | 0.08 | 0.08 | 0.20 | 0.16 |
-| Qwen2.5-1.5B after | multihop | 0.40 | 0.44 | 0.40 | 0.40 | 0.40 | 0.31 |
+| Qwen2.5-1.5B after | multihop | 0.40 | 0.44 | 0.40 | 0.40 | 0.40 | 0.28 |
 | Qwen2.5-1.5B before | heldout_many (parcels) | 0.96 | 1.00 | 1.00 | 0.92 | 0.92 | 0.88 |
 | Qwen2.5-1.5B after | heldout_many (parcels) | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.92 |
 
