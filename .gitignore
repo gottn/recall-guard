@@ -11,3 +11,4 @@ exp03_robust/results/raw/heldout.jsonl
 exp03_robust/results/raw/multihop25.jsonl
 exp03_robust/results/raw/adapter-*/
 exp02_repair/results/raw/heldout.jsonl
+.DS_Store
