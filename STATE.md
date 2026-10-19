@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-10-16
+Updated: 2026-10-19
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -15,7 +15,7 @@ Verdict rule: the tool earns its existence if a stressor separates the pairs at 
 
 ## Status (2026-10-18)
 - **Exp03 complete.** 8B recipe sweep done on A40s: gentle (300 docs, lr 5e-5) replicates over three seeds with full recall at 32K after <=16K training, RULER MK1 0.96-1.00, bpb +5.5-7.4%, benchmarks flat; gentle+25% replay gives bpb 0.976 (below base) at the price of multi-hop (0.30). Recommendation in exp03_robust/RESULTS.md. Nothing queued.
-- **Exp02 done, verdict yes**: 42 min of LoRA on one A100 lifts Jet-Nemotron-2B from 0.16 to 0.92 on 16 keys at 32K (control 0.91), transfers to the unseen parcel template (0.24 to 0.84), ARC/HellaSwag unchanged. Regression: multi-hop (untrained) collapses to ~0.03 via a one-hop shortcut. The exp01 overwrite advantage is downgraded (prompt-following). See exp02_repair/RESULTS.md.
+- **Exp02 done, verdict yes**: 42 min of LoRA on one A100 lifts Jet-Nemotron-2B from 0.16 to 0.92 on 16 keys at 32K (control 0.92), transfers to the unseen parcel template (0.24 to 0.84), ARC/HellaSwag unchanged. Regression: multi-hop (untrained) collapses to ~0.03 via a one-hop shortcut. The exp01 overwrite advantage is downgraded (prompt-following). See exp02_repair/RESULTS.md.
 - **Step 1 done, verdict yes for the matched pair**: Jet-Nemotron-2B keeps needle=1.00 to 32K but drops to 0.16–0.20 on 16 keys at 32K vs 0.68–0.72 for the Qwen2.5-1.5B it was converted from; gap opens at 16K. Qwen3.5-4B shows no key deficit, a 0.24–0.28 multi-hop deficit at 8–16K. Hybrids win on overwritten facts. See exp01_step1/RESULTS.md.
 - Earlier today:
 - Harness complete and gated (13 tests, purity grep): generate / run / report. Local CPU smoke on Qwen2.5-0.5B passed.
@@ -75,9 +75,23 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
 ## Preprint
-`paper/main.tex` (+ refs.bib, fig/make_figures.py). Build: `cd paper && make figures && make`. Style: short declarative sentences, numbers in tables.
-Status 2026-10-18 (late): two cold reads applied (52 items, incl. the 8B UUID/multi-answer reframing: repaired at 16K, not at 32K), compiled 12 pages, `make arxiv` bundle at `paper/arxiv-submission.tar.gz`;
-awaiting the author's veto on the title and the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
+`paper/main.tex` (+ refs.bib, fig/make_figures.py, fig/make_tables.py which writes tab/*.tex, the five tables). Build:
+`cd paper && make figures && make tables && make && make arxiv` (the arxiv target also test-compiles the bundle). Style: short
+declarative sentences, numbers in tables. LaTeX trap: `\input` of table rows before `\bottomrule` fails (Misplaced \noalign),
+so the generator writes whole tabular environments.
+Status 2026-10-19: third cold read applied (an Opus referee on the paper alone, a data cross-check of every number, then a
+3-lens verification workflow with two refuters per finding and a completeness critic). 16 pages with two appendix tables;
+abstract 1,916 characters (arXiv limit 1,920); title kept by the author. Goal set for that fix and met: no sentence claims
+more than the committed data support; every HIGH/MEDIUM item resolved by text, figure or table change and every LOW applied,
+new citations verified on arXiv; every number reproduces from a committed script (make_tables.py, ruler_budget.py); clean
+build; independent re-read before commit. Main claim changes: "capacity" is defined in Question 2 as the converted model as
+deployed; the inference is limited to the suite at both scales and RULER numeric at 8B, because at 2B the repaired hybrid
+stays below the identically trained control on RULER (0.81/0.49/0.19 vs 0.96/0.97/0.57), left unresolved; the 2B UUID
+failure is not a data-absence effect (the control improves 0.40 -> 0.57 on numeric-only data, the hybrid does not); the 2B
+multi-answer result at 32K is inconclusive because RULER ran with 64 new tokens and up to 0.36-0.40 of a 2B cell may be
+cut-off answers (exp03 RESULTS item 32; repaired 8B cells <= 0.04). Optional follow-up: rerun the 2B RULER multi-value and
+multi-query cells with 128 tokens (`ssh aau` was refused from the Mac on 2026-10-19: publickey/password).
+Awaiting the author's veto on the AI-assistance acknowledgement, then arXiv submission (cs.CL, cross-list cs.LG).
 Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
 Submission runbook (on the author's "submit"): make gottn/recall-guard public; arXiv new submission, primary cs.CL,
 cross-list cs.LG, licence CC BY 4.0 (author's choice), upload `paper/arxiv-submission.tar.gz` (main.tex, main.bbl,
