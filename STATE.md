@@ -96,7 +96,7 @@ Repo hygiene pass done 2026-10-19 before going public: README rewritten, MIT LIC
 the token note scrubbed from tracked files (they remain in git history), the 9 MB exp02 suite untracked (it regenerates from
 heldout.prov.json), stale docstrings fixed.
 Submission is the author's action. The paper links the GitHub repo, which must be made public before the paper goes live.
-Submission runbook (on the author's "submit"): make gottn/recall-guard public; arXiv new submission, primary cs.CL,
+Repo made public and pushed 2026-10-19 (head 21b305f). Submission runbook (on the author's "submit"): arXiv new submission, primary cs.CL,
 cross-list cs.LG, licence CC BY 4.0 (author's choice), upload `paper/arxiv-submission.tar.gz` (main.tex, main.bbl,
 fig/*.pdf), title and abstract from main.tex, author Musaab Ahmed Mahjoub, Aalborg University, muahma@build.aau.dk;
 stop at the final submit button. A first cs.CL submission may require endorsement. Build: `cd paper && make figures && make && make arxiv`.
