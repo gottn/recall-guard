@@ -18,7 +18,8 @@ it, every raw completion behind the paper, and the scripts that turn those compl
 figures.
 
 Paper: *Multi-Key Recall in Converted Hybrid Language Models: A Training Deficit, Not a Capacity Limit*
-(Musaab Ahmed Mahjoub, Aalborg University, 2026; arXiv submission pending). Source in `paper/`. The limits are in its
+(Musaab Ahmed Mahjoub, Aalborg University, 2026). [PDF](https://github.com/gottn/recall-guard/releases/download/v1.0/recall-guard-paper.pdf)
+(release v1.0); source in `paper/`. The limits are in its
 Sections 5 and 6: UUID-style values and multi-answer questions are only partly repaired, and at 2B a gap to the
 identically trained control remains on RULER.
 
@@ -52,6 +53,19 @@ identically trained control remains on RULER.
 Each experiment folder has a `RESULTS.md` that leads with the verdict, a `run_all.sh` whose header holds the cluster
 commands, and `results/raw/` with every completion as JSONL. Suites (the prompts) are not committed; they regenerate
 byte-identically from the recorded commit, seed and reference tokenizer (`*.prov.json`).
+
+## Cite
+
+```bibtex
+@techreport{mahjoub2026recall,
+  title  = {Multi-Key Recall in Converted Hybrid Language Models: A Training Deficit, Not a Capacity Limit},
+  author = {Mahjoub, Musaab Ahmed},
+  institution = {Aalborg University},
+  year   = {2026},
+  url    = {https://github.com/gottn/recall-guard},
+  note   = {Paper PDF: release v1.0 of the repository}
+}
+```
 
 ## Install and test
 
