@@ -44,15 +44,21 @@ def save(fig, name):
     fig.savefig(ROOT / f"paper/fig/{name}.png")  # preview only; the paper uses the pdf
 
 
+def signature_rate(model, task, length):
+    """1K-8K from the 25-case sweep (exp01); 16K and 32K from the two 50-case suites (exp03), the values Table 1 reports."""
+    if length >= 16384:
+        return rate(glob.glob(str(E3 / f"suite-s?-base-{model}.jsonl")), task, length)
+    return rate([str(E1 / f"{model}.jsonl")], task, length)
+
+
 def fig1():
     pairs = (("2B: Jet-Nemotron-2B vs Qwen2.5-1.5B", "jet-ai_Jet-Nemotron-2B", "Qwen_Qwen2.5-1.5B"),
              ("8B: Mamba-in-the-Llama vs Llama-3.1-8B-Instruct", "JunxiongWang_Llama3.1-Mamba2-8B-dpo", "meta-llama_Llama-3.1-8B-Instruct"))
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.8), sharey=True)
     for ax, (title, hyb, src) in zip(axes, pairs, strict=True):
         for model, color, label in ((src, BLUE, "full attention"), (hyb, ORANGE, "converted hybrid")):
-            f = [str(E1 / f"{model}.jsonl")]
-            keys = [rate(f, "many_random", ln) for ln in LENGTHS]
-            needle = [rate(f, "needle", ln) for ln in LENGTHS]
+            keys = [signature_rate(model, "many_random", ln) for ln in LENGTHS]
+            needle = [signature_rate(model, "needle", ln) for ln in LENGTHS]
             ax.plot(LENGTHS, keys, "-o", color=color, lw=1.6, ms=3.2, mec="white", mew=0.6)
             ax.plot(LENGTHS, needle, "--", color=color, lw=1.1)
             dy = -9  # below the end point: the curves arrive from above
@@ -74,7 +80,7 @@ def fig2():
     ruler = ("ruler_niah_multikey_1", "RULER MK1")
     specs = (
         ("2B, 32K", "jet-ai_Jet-Nemotron-2B", "Qwen_Qwen2.5-1.5B", "repair-seed{s}", (1, 2, 3)),
-        ("8B, 32K (trained at <=16K)", "JunxiongWang_Llama3.1-Mamba2-8B-dpo", "meta-llama_Llama-3.1-8B-Instruct", "repair-seed{s}-gentle", (1, 2, 3)),
+        ("8B, 32K (trained at 8K and 16K)", "JunxiongWang_Llama3.1-Mamba2-8B-dpo", "meta-llama_Llama-3.1-8B-Instruct", "repair-seed{s}-gentle", (1, 2, 3)),
     )
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9), sharey=True)
     for ax, (title, hyb, src, tag, seeds) in zip(axes, specs, strict=True):
@@ -92,7 +98,7 @@ def fig2():
         w = 0.27
         ax.bar([i - w for i in x], before, w, color=ORANGE, label="hybrid, before repair", linewidth=0)
         ax.bar(list(x), after, w, color=AQUA, label="hybrid, repaired (mean of 3 seeds)", linewidth=0)
-        ax.bar([i + w for i in x], full, w, color=BLUE, label="full-attention source", linewidth=0)
+        ax.bar([i + w for i in x], full, w, color=BLUE, label="full-attention source, untrained", linewidth=0)
         ax.set_xticks(list(x), labels, fontsize=7)
         ax.set_title(title)
         style(ax)
@@ -106,25 +112,27 @@ def fig2():
 def fig3():
     M = "JunxiongWang_Llama3.1-Mamba2-8B-dpo"
     base_bpb = json.load(open(E3 / f"bpb-base-{M}.json"))["bpb_mean"]
-    runs = (("heavy (2B dose)", "repair-seed1-le16k"), ("gentle s1", "repair-seed1-gentle"), ("gentle s2", "repair-seed2-gentle"),
-            ("gentle s3", "repair-seed3-gentle"), ("gentle + 25% replay", "repair-seed1-gentle2-replay25"),
-            ("gentle + 50% replay", "repair-seed1-gentle-replay"), ("50% replay, full lr", "repair-seed1-replay"), ("q/k only", "repair-seed1-qk"))
+    runs = (("unrepaired", "base"), ("heavy", "repair-seed1-le16k"), ("gentle s1", "repair-seed1-gentle"), ("gentle s2", "repair-seed2-gentle"),
+            ("gentle s3", "repair-seed3-gentle"), ("25% replay", "repair-seed1-gentle2-replay25"),
+            ("50% replay, lr $5{\\times}10^{-5}$", "repair-seed1-gentle-replay"), ("50% replay, lr $2{\\times}10^{-4}$", "repair-seed1-replay"),
+            ("query and key only", "repair-seed1-qk"))
     fig, ax = plt.subplots(figsize=(4.2, 3.0))
-    # leader lines for the three clustered replay points; direct offsets for the rest
-    placed = {"gentle + 25% replay": (-7.5, 0.52), "gentle + 50% replay": (-7.5, 0.16), "50% replay, full lr": (1.0, 0.50)}
-    offsets = {"heavy (2B dose)": (-6, -12), "gentle s1": (6, -12), "q/k only": (6, 2)}
+    # leader lines for the three clustered replay points; direct offsets for the rest (labels as in Table 3)
+    placed = {"25% replay": (-7.5, 0.52), "50% replay, lr $5{\\times}10^{-5}$": (-7.5, 0.16), "50% replay, lr $2{\\times}10^{-4}$": (1.0, 0.50)}
+    offsets = {"unrepaired": (6, -4), "heavy": (-6, -12), "gentle s1": (6, -12), "query and key only": (-6, -12)}
     for name, stage in runs:
         bpb = json.load(open(E3 / f"bpb-{stage}-{M}.json"))["bpb_mean"]
         hop = rate(glob.glob(str(E3 / f"suite-s?-{stage}-{M}.jsonl")), "multihop", 32768)
         dx = 100 * (bpb / base_bpb - 1)
-        color = AQUA if name.startswith("gentle s") else GRAY
+        color = AQUA if name.startswith("gentle s") else ORANGE if name == "unrepaired" else GRAY
         ax.scatter(dx, hop, s=30, color=color, zorder=3, linewidths=0)
         if name in placed:
             ax.annotate(name, (dx, hop), xytext=placed[name], textcoords="data", fontsize=6.5, color="#444441", ha="left", va="center",
                         arrowprops=dict(arrowstyle="-", color="#b4b2a9", lw=0.6, shrinkA=0, shrinkB=3))
         elif name in offsets:
             text = "gentle, 3 seeds" if name == "gentle s1" else name
-            ax.annotate(text, (dx, hop), fontsize=6.5, xytext=offsets[name], textcoords="offset points", color="#444441")
+            ax.annotate(text, (dx, hop), fontsize=6.5, xytext=offsets[name], textcoords="offset points", color="#444441",
+                        ha="right" if offsets[name][0] < 0 else "left")
     ax.axvline(0, color="#c3c2b7", lw=0.8)
     ax.set_xlabel("long-text bits per byte, change from unrepaired (%)")
     ax.set_ylabel("multi-hop recall at 32K")
