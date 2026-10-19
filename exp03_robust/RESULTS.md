@@ -48,10 +48,11 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 ## Repair stage, Jet seeds 1 and 2 complete (v2 mix with multi-hop; seed 3 and the controls pending)
 
 5. **Repair replicates across training seeds and the multi-hop regression is gone (items 1, 5).** At 32K, n = 100:
-   many_random 1.00 / 0.97, many_similar 1.00 / 0.97, held-out parcels 0.98 / 0.95, needle 1.00 / 1.00, updated 1.00 / 1.00,
-   and multi-hop 0.88 / 0.88 (base 0.11; the exp02 v1 mix had driven it to 0.03).
+   many_random 1.00 / 0.98, many_similar 1.00 / 0.98, held-out parcels 0.98 / 0.96, needle 1.00 / 1.00, updated 1.00 / 1.00,
+   and multi-hop 0.89 / 0.88 (base 0.11; the exp02 v1 mix had driven it to 0.02). (Seed-2 values corrected against the
+   raw files on 2026-10-19; the interim numbers came from a partial pull.)
 6. **Transfer to RULER is real for numeric values and absent for UUIDs (item 2, after repair, seed 1).** multikey_1 at 32K
-   0.56 to 0.90 (source model 0.94); multikey_2 0.26 to 0.53 (0.72); multivalue at 16K 0.24 to 0.68 (0.74); multiquery
+   0.56 to 0.84 (source model 0.94); multikey_2 0.26 to 0.48 (0.72); multivalue at 16K 0.24 to 0.68 (0.74); multiquery
    at 16K 0.08 to 0.62 (0.64); multikey_3 with UUID keys and values unchanged (0.16 to 0.18). The repair data only
    contained numeric values, so the model learned numeric retrieval: coverage of the training mix sets the boundary.
 7. **Damage (item 6):** ARC-Easy 0.764 to 0.776 / 0.770, HellaSwag 0.508 to 0.492 / 0.510 (SE 0.022, unchanged); bits per
@@ -72,8 +73,8 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 ## Control stage complete (Qwen2.5-1.5B, two training seeds): what is repair and what is familiarity
 
 10. **On our suites the control also climbs to the ceiling**, so the hybrid's post-repair level (1.00) equals the
-    control's (1.00): at 32K, pooled n = 200, many_random 0.90 to 1.00, many_similar 0.75 to 0.96, updated 0.34 to 1.00,
-    multi-hop 0.14 to 0.99, held-out 0.94 to 0.99. The hybrid's only remaining shortfall after repair is multi-hop
+    control's (1.00): at 32K, pooled n = 200, many_random 0.90 to 1.00, many_similar 0.75 to 0.97 (193/200), updated 0.34 to 1.00,
+    multi-hop 0.14 to 0.99, held-out 0.94 to 1.00 (199/200); rates rounded half up. The hybrid's only remaining shortfall after repair is multi-hop
     (0.86 vs 0.99).
 11. **On RULER the control was already at the ceiling for numeric multi-key, so the hybrid's gains there are repair,
     not familiarity.** Pooled over seeds (control n = 100, hybrid n = 150) at 32K:
@@ -168,7 +169,7 @@ Items refer to docs/robustness.md. Predictions there were written before these n
 22. **Damage at 8B is real and larger than at 2B.** ARC-Easy 0.848 -> 0.836 (acc_norm 0.804 -> 0.776), HellaSwag
     0.600 -> 0.566 (acc_norm 0.778 -> 0.728, about 2 SE), bits per byte on long text 1.008 -> 1.156 (**+15%**, every
     window worse). The same recipe that cost 0.4% at 2B costs 15% of long-text modelling at 8B. Training loss reached
-    0.000, so this is over-fitting of a larger model to 11M synthetic tokens; a lighter recipe (fewer documents, lower
+    0.000, so this is over-fitting of a larger model to about 7.4M synthetic tokens (600 documents at 8K and 16K); a lighter recipe (fewer documents, lower
     learning rate, or natural text mixed in) is the obvious next run (item 8) and is submitted as `-gentle`.
 23. The unmerged-adapter and chat-template checks did not run at 8B (the unmerged check crashed on a layer reading
     `.weight` off the wrapper; fixed in 3787674). Merge exactness stands from the 2B check.
@@ -193,9 +194,10 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     and halves the retrieval signal: the harder tasks are the ones that go. The two levers oppose each other; the next
     recipe (`-gentle2-replay25`: 800 examples, lr 5e-5, one in four natural) looks for the point that keeps both.
 
-27. **qk-only** (600 docs, lr 2e-4, LoRA on q_proj / k_proj of the 16 attention layers only, 1.1M parameters): recall
+27. **qk-only** (600 docs, lr 2e-4, LoRA on q_proj / k_proj of the 16 attention layers only; the job log said 1.1M
+    parameters, but rank 16 on those 32 projections is about 3.4M, so the log figure is unverified): recall
     at 32K random 1.00, similar 0.89, multi-hop 0.90, held-out 0.92; RULER multikey_1 0.72, multikey_2 0.36, multivalue
-    0.14; bits per byte **1.026** (+1.8%), HellaSwag 0.606 / 0.772 and ARC-Easy 0.848 / 0.784 (unchanged). The routing
+    0.14; bits per byte **1.026** (+1.7% from the unrounded 1.0255 / 1.0079), HellaSwag 0.606 / 0.772 and ARC-Easy 0.848 / 0.784 (unchanged). The routing
     projections alone carry most of the repair on our tasks at almost no cost, consistent with Attention Amnesia's
     W_Q / W_K explanation, but they transfer least to RULER's templates.
 
@@ -212,7 +214,7 @@ Items refer to docs/robustness.md. Predictions there were written before these n
     | gentle + replay (50%) | 0.99 | 0.77 | 0.30 | 0.85 | 0.64 | 0.54 | 0.08 | 0.978 (-3.0%) | 0.582 | 0.826 |
     | replay (600 docs, lr 2e-4) | 0.99 | 0.86 | 0.36 | 0.92 | 0.70 | 0.50 | 0.10 | 0.992 (-1.5%) | 0.574 | 0.822 |
     | gentle2-replay25 (25% replay) | 1.00 | 0.98 | 0.30 | 0.96 | 0.82 | 0.72 | 0.46 | 0.976 (-3.1%) | 0.578 | 0.834 |
-    | qk-only (600 docs, lr 2e-4) | 1.00 | 0.89 | 0.90 | 0.92 | 0.72 | 0.36 | 0.14 | 1.026 (+1.8%) | **0.606** | 0.848 |
+    | qk-only (600 docs, lr 2e-4) | 1.00 | 0.89 | 0.90 | 0.92 | 0.72 | 0.36 | 0.14 | 1.026 (+1.7%) | **0.606** | 0.848 |
 
 29. **Key conclusions from the 8B campaign**:
     - **Triplicate 8B replication**: Across three independent seeds, the Gentle recipe restores 32K dense recall to parity with full attention (0.987–0.997) with negligible benchmark shift (ARC 0.843 vs 0.848 base; HellaSwag 0.588 vs 0.600 base) and a repeatable +6.2% perplexity cost.

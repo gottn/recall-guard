@@ -14,9 +14,9 @@ Reading: the converted model's fixed-size state had the capacity for 16 keys at 
 left its linear-attention layers untrained for long-range multi-key retrieval, and 0.75% of the parameters
 (every linear projection outside the MLPs) learned it from 11M synthetic tokens.
 
-**One regression.** Multi-hop, which the repair data never asked, fell from about 0.20 to about 0.03. The repaired
+**One regression.** Multi-hop, which the repair data never asked, fell from 0.17 to 0.02 pooled over the six lengths. The repaired
 model answers 124 of 150 multi-hop questions with the person's name, the one-hop value next to the locker key.
-That is a learned shortcut, not lost capacity (the control's multi-hop rose from 0.16 to 0.31 on the same data),
+That is a learned shortcut, not lost capacity (the control's multi-hop rose from 0.16 to 0.39 on the same data),
 and it means repair data must cover the question types of the workload.
 
 **Correction to exp01.** The "hybrids beat full attention on overwritten facts" surprise is downgraded: after training,
