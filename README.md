@@ -19,7 +19,7 @@ recall back to the source model's level.
 
 ```
 uv venv --python 3.12 .venv && VIRTUAL_ENV=.venv uv pip install -e '.[dev]'
-./check.sh
+git config core.hooksPath .githooks && ./check.sh
 ```
 
 Running models needs `uv pip install -e '.[run]'`; the converted hybrids need the environments pinned in

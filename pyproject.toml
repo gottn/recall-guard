@@ -8,8 +8,15 @@ requires-python = ">=3.12"
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["ruff", "pytest", "transformers>=4.45", "tokenizers"]
+dev = ["ruff", "pytest", "torch", "transformers>=4.45", "tokenizers"]
 run = ["torch", "transformers", "accelerate"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["recall_guard", "recall_guard.backends"]  # explicit: infra/ and exp*/ would otherwise be discovered
 
 [tool.ruff]
 line-length = 110
