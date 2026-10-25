@@ -7,6 +7,7 @@
   ppl       --model <id> [--adapter DIR] --text book.txt [--window-tokens 16384] [--windows 8] --out bpb.json
   import-ruler --dir <RULER generator output> --out-dir DIR
   report    --results a.jsonl b.jsonl [--pair hybrid=full ...] [--out RESULTS.md]
+  check     --baseline a.jsonl --candidate b.jsonl [--alpha 0.05] [--out check.md]   exits 1 on a recall regression
 """
 
 import argparse
@@ -18,10 +19,13 @@ from dataclasses import asdict
 from pathlib import Path
 
 from recall_guard.aggregate import (
+    delta_markdown,
+    deltas,
     gap_markdown,
     gaps,
     markdown,
     pivot_markdown,
+    regressions,
     rows,
     separation_markdown,
     separations,
@@ -169,6 +173,27 @@ def cmd_report(a: argparse.Namespace) -> None:
         print(text)
 
 
+def load_results(path: str) -> tuple[Result, ...]:
+    if not Path(path).exists():
+        sys.exit(f"recall-guard: no such file: {path}")
+    return tuple(Result(**d) for d in read_jsonl(Path(path)))
+
+
+def cmd_check(a: argparse.Namespace) -> None:
+    """CI gate: pair the two runs on case id, exact one-sided McNemar per (task, length) and pooled, exit 1 on a drop."""
+    baseline, candidate = load_results(a.baseline), load_results(a.candidate)
+    table = deltas(baseline, candidate)
+    failing = regressions(table, a.alpha)
+    names = tuple(sorted({r.model for r in baseline})), tuple(sorted({r.model for r in candidate}))
+    verdict = "FAIL: recall regression in " + ", ".join(f"{d.task}@{d.length_bucket}" if d.length_bucket else "all cases pooled" for d in failing) if failing else "PASS: no recall regression"
+    text = f"baseline {names[0]} vs candidate {names[1]}: {table[0].n} shared cases, alpha {a.alpha}\n\n{delta_markdown(table, failing)}\n\n{verdict}"
+    print(text)
+    if a.out:
+        Path(a.out).write_text(text + "\n")
+    if failing:
+        sys.exit(1)
+
+
 def main(argv: list[str] | None = None) -> None:
     p = argparse.ArgumentParser(prog="recall-guard", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -243,6 +268,12 @@ def main(argv: list[str] | None = None) -> None:
     t.add_argument("--pair", action="append", default=[], help="hybrid=full model id pair (repeatable)")
     t.add_argument("--out", default="")
     t.set_defaults(fn=cmd_report)
+    c = sub.add_parser("check", help="CI gate: exit 1 when the candidate run recalls less than the baseline run on the same suite")
+    c.add_argument("--baseline", required=True)
+    c.add_argument("--candidate", required=True)
+    c.add_argument("--alpha", type=float, default=0.05, help="family-wise false-alarm rate: pooled test at alpha, each cell at alpha / cells")
+    c.add_argument("--out", default="")
+    c.set_defaults(fn=cmd_check)
     a = p.parse_args(argv)
     a.fn(a)
 

@@ -1,6 +1,7 @@
 """Results -> table rows -> markdown. Pure; the CLI writes the strings."""
 
 from dataclasses import dataclass
+from math import comb
 
 from recall_guard.types import Result
 
@@ -122,3 +123,58 @@ def separation_markdown(table: tuple[Separation, ...]) -> str:
     head = "| hybrid | full | task | first length with gap | full - hybrid | needle gap |\n|---|---|---|---:|---:|---:|"
     body = (f"| {s.hybrid} | {s.full} | {s.task} | {s.length_bucket} | {s.gap:+.2f} | {s.needle_gap:+.2f} |" for s in table)
     return "\n".join((head, *body)) if table else head + "\n| (none) | | | | | |"
+
+
+@dataclass(frozen=True)
+class Delta:
+    """Paired comparison of two runs on shared case ids: one cell per (task, length); task "all" (length 0) pools every pair."""
+
+    task: str
+    length_bucket: int
+    n: int
+    baseline_rate: float
+    candidate_rate: float
+    lost: int  # baseline recalled, candidate did not
+    gained: int
+    p_regress: float  # one-sided exact McNemar: chance that at least `lost` of the discordant pairs go against the candidate
+
+
+def binomial_tail_half(k: int, n: int) -> float:
+    """P(X >= k) for X ~ Binomial(n, 1/2); with k = lost and n = lost + gained this is the exact one-sided McNemar p."""
+    return sum(comb(n, i) for i in range(k, n + 1)) / 2**n
+
+
+def deltas(baseline: tuple[Result, ...], candidate: tuple[Result, ...]) -> tuple[Delta, ...]:
+    base = {r.case_id: r for r in baseline}
+    cand = {r.case_id: r for r in candidate}
+    if len(base) < len(baseline) or len(cand) < len(candidate):
+        raise ValueError("duplicate case ids: pass one run of one model per file")
+    pairs = tuple((base[i], cand[i]) for i in sorted(set(base) & set(cand)))
+    if not pairs:
+        raise ValueError("no shared case ids: both runs must come from the same suite")
+
+    def cell(task: str, length: int, ps: tuple[tuple[Result, Result], ...]) -> Delta:
+        lost = sum(b.contains and not c.contains for b, c in ps)
+        gained = sum(c.contains and not b.contains for b, c in ps)
+        n = len(ps)
+        return Delta(task, length, n, sum(b.contains for b, _ in ps) / n, sum(c.contains for _, c in ps) / n, lost, gained,
+                     binomial_tail_half(lost, lost + gained))
+
+    keys = sorted({(b.task, b.length_bucket) for b, _ in pairs})
+    return (cell("all", 0, pairs), *(cell(t, ln, tuple(p for p in pairs if (p[0].task, p[0].length_bucket) == (t, ln))) for t, ln in keys))
+
+
+def regressions(table: tuple[Delta, ...], alpha: float = 0.05) -> tuple[Delta, ...]:
+    """The CI verdict: the pooled row fails at alpha, a (task, length) cell at alpha split over the cells (Bonferroni)."""
+    cells = sum(d.task != "all" for d in table)
+    return tuple(d for d in table if d.p_regress < (alpha if d.task == "all" else alpha / cells))
+
+
+def delta_markdown(table: tuple[Delta, ...], failing: tuple[Delta, ...] = ()) -> str:
+    head = "| task | ref tokens | n | baseline | candidate | lost | gained | p | |\n|---|---:|---:|---:|---:|---:|---:|---:|---|"
+    body = (
+        f"| {d.task} | {d.length_bucket or ''} | {d.n} | {d.baseline_rate:.2f} | {d.candidate_rate:.2f} | {d.lost} | {d.gained} "
+        f"| {d.p_regress:.3g} | {'FAIL' if d in failing else ''} |"
+        for d in table
+    )
+    return "\n".join((head, *body))

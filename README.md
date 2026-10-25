@@ -32,11 +32,18 @@ python -m recall_guard.cli generate --out suite.jsonl --tokenizer Qwen/Qwen2.5-1
 python -m recall_guard.cli run --suite suite.jsonl --model Qwen/Qwen2.5-1.5B --out qwen.jsonl
 python -m recall_guard.cli run --suite suite.jsonl --model jet-ai/Jet-Nemotron-2B --trust-remote-code --out jet.jsonl
 python -m recall_guard.cli report --results qwen.jsonl jet.jsonl --pair jet-ai/Jet-Nemotron-2B=Qwen/Qwen2.5-1.5B
+python -m recall_guard.cli check --baseline qwen.jsonl --candidate jet.jsonl
 ```
 
 Tasks: `needle`, `many_random`, `many_similar`, `updated`, `multihop`, `heldout_many`, at 1K to 32K tokens, sized
 under one reference tokenizer so every model sees byte-identical prompts. A case is recalled when the planted six-digit
 code appears on the first line of the completion.
+
+`check` is the CI gate: it pairs the two runs on case id, applies the exact one-sided McNemar test to every
+(task, length) cell and to all cases pooled, and exits 1 when the candidate recalls less (alpha 0.05, split over the
+cells). On the runs above it fails `many_random` and `many_similar` at 32K and leaves `needle` alone. A cell trips
+once about ten cases are lost and none gained, so use `--cases 50` or more to catch a 0.2 drop in a single cell; the
+pooled row catches smaller drops spread across the suite.
 
 Repair:
 

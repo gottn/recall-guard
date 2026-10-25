@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-10-19
+Updated: 2026-10-25
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -13,7 +13,15 @@ Compare hybrid vs full-attention pairs on five tasks × six context lengths:
 Pairs: Qwen3.5-4B (hybrid) vs Qwen3-4B; Jet-Nemotron-2B (hybrid, Qwen2.5 MLPs) vs Qwen2.5-1.5B.
 Verdict rule: the tool earns its existence if a stressor separates the pairs at a length where `needle` does not. **Met** (2026-10-16): see exp01_step1/RESULTS.md.
 
-## Status (2026-10-18)
+## Status (2026-10-25)
+- **CI gate done (2026-10-25):** `check --baseline a.jsonl --candidate b.jsonl` (pure part: `deltas`/`regressions` in
+  recall_guard/aggregate.py). Pairs on case id, exact one-sided McNemar per (task, length) cell and on all cases pooled,
+  Bonferroni over the cells, exit 1 on a drop (alpha 0.05). Measured on stored runs: exp01 Qwen2.5-1.5B -> Jet fails
+  many_random@32K (15 lost / 1 gained, p 2.6e-4) and many_similar@32K (12 / 0, p 2.4e-4), needle has 0 discordant pairs,
+  and the pooled row passes (87 / 95: Jet's `updated` gains offset the losses, so both tests are needed); Llama-3.1-8B ->
+  MIL fails pooled (249 / 12) and 10 cells; exp03 (n=50) Jet base -> repaired seed 1 passes (0 / 257), the reverse fails
+  8 cells, repaired seed 1 -> seed 2 passes (14 / 6, p 0.058). Power: a cell flags at >=10 lost with none gained, so at
+  n=25 the 16K Jet cell (7 / 1, p 0.035) and the Qwen3.5 multi-hop deficit (8 / 1, p 0.020) are missed; use --cases 50.
 - **Exp03 complete.** 8B recipe sweep done on A40s: gentle (300 docs, lr 5e-5) replicates over three seeds with full recall at 32K after <=16K training, RULER MK1 0.96-1.00, bpb +5.5-7.4%, benchmarks flat; gentle+25% replay gives bpb 0.976 (below base) at the price of multi-hop (0.30). Recommendation in exp03_robust/RESULTS.md. Nothing queued.
 - **Exp02 done, verdict yes**: 42 min of LoRA on one A100 lifts Jet-Nemotron-2B from 0.16 to 0.92 on 16 keys at 32K (control 0.92), transfers to the unseen parcel template (0.24 to 0.84), ARC/HellaSwag unchanged. Regression: multi-hop (untrained) collapses to ~0.03 via a one-hop shortcut. The exp01 overwrite advantage is downgraded (prompt-following). See exp02_repair/RESULTS.md.
 - **Step 1 done, verdict yes for the matched pair**: Jet-Nemotron-2B keeps needle=1.00 to 32K but drops to 0.16–0.20 on 16 keys at 32K vs 0.68–0.72 for the Qwen2.5-1.5B it was converted from; gap opens at 16K. Qwen3.5-4B shows no key deficit, a 0.24–0.28 multi-hop deficit at 8–16K. Hybrids win on overwritten facts. See exp01_step1/RESULTS.md.
@@ -82,13 +90,12 @@ restore jobs finished or cancelled; nothing queued. Open follow-up: whether thei
 and our adapter compose.
 
 ## Next
-1. (done at 8B) Length generalisation: train at <=16K, test at 32K.
-2. Repair data with multi-hop included; confirm the multi-hop regression disappears.
-3. Capacity frontier after repair: 32/64/128 keys at 32K.
-3b. (done) 8B recipe sweep; optional follow-up: `gentle + qk` variant, and replay at 10%.
-4. Scale to a matched 8B pair (LoLCATs or Mamba-in-the-Llama vs Llama-3-8B).
-5. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore and the adapter compose.
-6. Still owed from exp01: n=100 with seeds at 16K (the 16K gap was template-dependent: parcels held 0.96).
+1. Real-document QA test: does the repaired model's recall hold on natural long documents, not synthetic key lists?
+2. Capacity frontier after repair: 32/64/128 keys at 32K.
+3. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore (with a real pre-SFT checkpoint) and the adapter compose.
+4. Adapter variants: recurrent-only, `gentle + qk`, replay at 10%.
+5. Optional: rerun the 2B RULER multi-value/multi-query cells with 128 new tokens (the 64-token results are loose lower bounds).
+Done since this list was written: length generalisation at 8B, multi-hop in the training mix at 2B, the 8B pair, n=100 at 16K, the CI gate.
 
 ## Decisions
 - Completion-style prompts, no chat template, greedy decoding, 16 new tokens, for every model.
