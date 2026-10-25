@@ -93,7 +93,9 @@ results/tables.md and results/gates.md (the `check` verdicts). Cases generated a
 git-ignored in exp04_realdocs/results/cases/, synced to aau:~/data/rg/ruler-qa (md5 verified). **Submitted 2026-10-25 16:17** at
 734dbf3 into `~/runs/rg/realdocs/20261025-161716-734dbf3` (A40, prioritized): 1121123 Jet base, 1121124 Qwen2.5 base, 1121125 Jet
 repair seed 1, 1121126 Qwen2.5 repair seed 1 (control), 1121127 Llama-3.1-8B-Instruct, 1121128 MIL base, 1121129 MIL gentle seed 1,
-1121130 MIL qk seed 1. Pull: `rsync -a --exclude 'slurm-*' aau:~/runs/rg/realdocs/20261025-161716-734dbf3/ exp04_realdocs/results/raw/`
+1121130 MIL qk seed 1. The partition was saturated (600 pending); the eight jobs were trimmed in place with scontrol
+(2B: 4 h, 32 GB; 8B: 6 h, 48 GB; MinMemoryNode takes megabytes), after which the first started at once on an A40 whose node had
+only 48 GB of RAM free, and the 8B estimates moved from none to 2026-10-26 01:14-15:32. Pull: `rsync -a --exclude 'slurm-*' aau:~/runs/rg/realdocs/20261025-161716-734dbf3/ exp04_realdocs/results/raw/`
 then `exp04_realdocs/run_all.sh report`.
 
 ## Training-free baseline
