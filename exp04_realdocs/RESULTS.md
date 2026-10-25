@@ -51,7 +51,9 @@ add real-document QA to the training mix. P3 false: the adapter costs short-cont
 the one to ship.
 
 ## Results
-Run dir `~/runs/rg/realdocs/20261025-161716-734dbf3`, jobs 1121123-1121130 at 734dbf3. Every number: `run_all.sh report`
+Run dir `~/runs/rg/realdocs/20261025-161716-734dbf3`, jobs 1121123-1121130 at 734dbf3. Seed replication of the two headline
+cells submitted 2026-10-25 evening into the same run dir at 95766ca: 1121466 / 1121467 Jet + exp03 adapters seed 2 / 3,
+1121468 / 1121469 Mamba-in-the-Llama + gentle seed 2 / 3 (pending at the time of writing). Every number: `run_all.sh report`
 (results/tables.md, results/gates.md); n = 100 per cell; "a / b" is cases lost / gained by the candidate, p the one-sided exact
 McNemar p of `check`.
 
