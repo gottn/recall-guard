@@ -47,5 +47,5 @@ add real-document QA to the training mix. P3 false: the adapter costs short-cont
 the one to ship.
 
 ## Results
-Pending: generate the cases (RULER-PROVENANCE.md), sync to the cluster, submit the eight jobs (`run_all.sh` header),
-pull, `run_all.sh report`.
+Pending. Eight jobs submitted 2026-10-25 at 734dbf3 (1121123-1121130, run dir
+`~/runs/rg/realdocs/20261025-161716-734dbf3`, see STATE.md); then pull and `run_all.sh report`.
