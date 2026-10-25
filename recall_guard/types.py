@@ -34,7 +34,7 @@ class Case:
     answer: str
     distractors: tuple[str, ...]
     ref_tokens: int
-    rule: str = "code"  # "code": six-digit code on the first visible line; "contains": every "|"-part anywhere (RULER)
+    rule: str = "code"  # "code": six-digit code on the first visible line; "contains": every "|"-part anywhere (RULER needles); "any": one part, case-insensitive (RULER QA)
 
 
 @dataclass(frozen=True)

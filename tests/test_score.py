@@ -20,3 +20,9 @@ def test_contains_rule_requires_every_part_anywhere():
     assert score("1234567|7654321", (), "The numbers are 1234567 and 7654321.", "contains") == (True, False, False)
     assert score("1234567|7654321", ("9999999",), "Only 1234567 and 9999999.", "contains") == (False, False, True)
     assert score("abc-uuid", (), "\n\nThe uuid is abc-uuid.", "contains") == (True, False, False)
+
+
+def test_any_rule_accepts_one_alternative_answer_case_insensitively():
+    assert score("Denver Broncos|Broncos", ("Panthers",), " The denver broncos won.", "any") == (True, False, False)
+    assert score("Denver Broncos|Broncos", ("Panthers",), " The Panthers.", "any") == (False, False, False)
+    assert score("1994", (), "<think>1994</think> 1995", "any") == (False, False, False)

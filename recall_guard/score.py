@@ -28,7 +28,11 @@ MULTI = "|"
 def score(answer: str, distractors: tuple[str, ...], output: str, rule: str = "code") -> tuple[bool, bool, bool]:
     """(contains, exact, stale). rule "code": answer among six-digit codes on the first visible line (think blocks stripped).
     rule "contains": every "|"-separated part of the answer appears anywhere in the output (RULER's string_match_all); answer is the first code; a distractor
-    appears while the answer does not."""
+    appears while the answer does not.
+    rule "any": some "|"-separated part appears anywhere, case-insensitive (RULER's string_match_part, its QA tasks); never exact or stale."""
+    if rule == "any":
+        text = strip_think(output).lower()
+        return any(p.lower() in text for p in answer.split(MULTI)), False, False
     if rule == "contains" or MULTI in answer:
         text = strip_think(output)
         hit = all(p in text for p in answer.split(MULTI))
