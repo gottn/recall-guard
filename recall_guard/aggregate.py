@@ -148,7 +148,7 @@ def deltas(baseline: tuple[Result, ...], candidate: tuple[Result, ...]) -> tuple
     base = {r.case_id: r for r in baseline}
     cand = {r.case_id: r for r in candidate}
     if len(base) < len(baseline) or len(cand) < len(candidate):
-        raise ValueError("duplicate case ids: pass one run of one model per file")
+        raise ValueError("duplicate case ids: each side is one run of one model (files may split it by length or task)")
     pairs = tuple((base[i], cand[i]) for i in sorted(set(base) & set(cand)))
     if not pairs:
         raise ValueError("no shared case ids: both runs must come from the same suite")
