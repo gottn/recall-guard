@@ -82,6 +82,15 @@ from 8K. Comparator meta-llama/Llama-3.1-8B-Instruct (job 1091250) done: 0.96-1.
 (Llama-Instruct base), 1091449 (MIL repair seed 1, TRAIN_LENGTHS="8192 16384", tag -le16k: trains below 32K, so its 32K numbers
 are the length-generalisation test, item 3). LoLCATs loader is suspect (probably expects Meta-Llama-3-8B; licence not accepted).
 
+## Experiment 4 (exp04_realdocs) — recall on real documents
+Pre-registered 2026-10-25 (exp04_realdocs/RESULTS.md, predictions P1-P3): RULER qa_1 (SQuAD, one gold paragraph among
+same-article distractors) and qa_2 (HotpotQA, two gold paragraphs) over real Wikipedia text at 4K/16K/32K, n=100, the same
+100 questions at every length; 2B and 8B pairs, base and the exp03 seed-1 adapters (the adapter on the source is the
+control). Scoring rule `any` = RULER string_match_part. Cases are generated on the Mac with NVIDIA's qa.py (recipe in
+exp04_realdocs/RULER-PROVENANCE.md) and live in aau:~/data/rg/ruler-qa, not in git. One job per model/adapter on an A40:
+`infra/slurm/realdocs.sbatch` via submit.sh; the eight commands are in exp04_realdocs/run_all.sh, which also writes
+results/tables.md and results/gates.md (the `check` verdicts). Status: cases being generated; nothing submitted yet.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
@@ -90,7 +99,7 @@ restore jobs finished or cancelled; nothing queued. Open follow-up: whether thei
 and our adapter compose.
 
 ## Next
-1. Real-document QA test: does the repaired model's recall hold on natural long documents, not synthetic key lists?
+1. Exp04 real-document QA: generate, sync, submit the eight jobs, pull, `exp04_realdocs/run_all.sh report`, fill RESULTS.md.
 2. Capacity frontier after repair: 32/64/128 keys at 32K.
 3. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore (with a real pre-SFT checkpoint) and the adapter compose.
 4. Adapter variants: recurrent-only, `gentle + qk`, replay at 10%.
