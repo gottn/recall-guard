@@ -89,7 +89,9 @@ same-article distractors) and qa_2 (HotpotQA, two gold paragraphs) over real Wik
 control). Scoring rule `any` = RULER string_match_part. Cases are generated on the Mac with NVIDIA's qa.py (recipe in
 exp04_realdocs/RULER-PROVENANCE.md) and live in aau:~/data/rg/ruler-qa, not in git. One job per model/adapter on an A40:
 `infra/slurm/realdocs.sbatch` via submit.sh; the eight commands are in exp04_realdocs/run_all.sh, which also writes
-results/tables.md and results/gates.md (the `check` verdicts). Status: cases being generated; nothing submitted yet.
+results/tables.md and results/gates.md (the `check` verdicts). Status 2026-10-25: 600 cases generated and audited
+(RULER-PROVENANCE.md), git-ignored in exp04_realdocs/results/cases/. Once the VPN is on: `rsync -a exp04_realdocs/results/cases/
+aau:~/data/rg/ruler-qa/`, then the eight submit commands; nothing submitted yet.
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
