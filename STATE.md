@@ -97,6 +97,10 @@ repair seed 1, 1121126 Qwen2.5 repair seed 1 (control), 1121127 Llama-3.1-8B-Ins
 (2B: 4 h, 32 GB; 8B: 6 h, 48 GB; MinMemoryNode takes megabytes), after which the first started at once on an A40 whose node had
 only 48 GB of RAM free, and the 8B estimates moved from none to 2026-10-26 01:14-15:32. Pull: `rsync -a --exclude 'slurm-*' aau:~/runs/rg/realdocs/20261025-161716-734dbf3/ exp04_realdocs/results/raw/`
 then `exp04_realdocs/run_all.sh report`.
+**Interim (2B base pair, 2026-10-25 17:10, n=100 per cell):** P1 holds on qa_1: equal at 4K (0.69 vs 0.70), Jet 0.12 vs Qwen 0.36
+at 32K (26 lost / 2 gained, p 1.5e-6); qa_2 gap 0.11 at 16K (p 0.049, under the corrected threshold) and 0.05 at 32K; pooled FAIL
+(110 / 65, p 4e-4). Both models degrade with length (Qwen qa_1 0.69 -> 0.36), the hybrid-specific part is the extra drop. Each 2B
+job took ~35 min on an A40 (Jet 5 s per 32K prompt).
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
