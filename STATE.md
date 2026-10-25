@@ -104,6 +104,10 @@ job took ~35 min on an A40 (Jet 5 s per 32K prompt).
 **2B stage complete (17:50):** P2 holds on qa_1 (Jet 0.12 -> 0.26 at 32K, 2 lost / 16 gained, p 7e-4; no cell lost; control adapter
 flat 0.36 -> 0.38), P3 holds narrowly (4K -0.03/-0.04, within 1 SE; pooled 23 / 16, p 0.17). See exp04_realdocs/RESULTS.md. 8B jobs
 1121127-1121130 running/queued.
+**Exp04 complete (2026-10-25 20:30).** 8B: Llama 0.92 / 0.82 / 0.83 vs MIL 0.86 / 0.65 / 0.19 on qa_1 at 4K / 16K / 32K (P1, gap
+0.64 at 32K, larger than predicted); MIL trails on qa_2 already at 4K (0.51 vs 0.67). Gentle adapter: qa_1 at 32K 0.19 -> 0.56
+(3 lost / 40 gained; 58% of the gap, as at 2B), qa_2 unchanged, 4K cost 0.05 (P3 narrowly fails); qk-only: 0.35 at 32K, moves
+qa_2 by +0.07-0.08 everywhere, no 4K cost. All 24 files in exp04_realdocs/results/raw; verdict and limits in RESULTS.md.
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
@@ -113,7 +117,8 @@ restore jobs finished or cancelled; nothing queued. Open follow-up: whether thei
 and our adapter compose.
 
 ## Next
-1. Exp04 real-document QA: generate, sync, submit the eight jobs, pull, `exp04_realdocs/run_all.sh report`, fill RESULTS.md.
+1. (done 2026-10-25) Exp04 real-document QA. Follow-ups in exp04_realdocs/RESULTS.md: real-document QA in the training mix;
+   more adapter seeds on the two headline cells; a `gentle + qk` recipe (they repair different things).
 2. Capacity frontier after repair: 32/64/128 keys at 32K.
 3. Step 2, reshaped by Attention Amnesia (arXiv 2606.11052, which already shows CoT SFT breaks hybrid recall and fixes it by restoring W_Q/W_K): test ordinary (non-CoT) SFT, whether our repair survives it, and whether QK-Restore (with a real pre-SFT checkpoint) and the adapter compose.
 4. Adapter variants: recurrent-only, `gentle + qk`, replay at 10%.

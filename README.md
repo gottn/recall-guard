@@ -57,8 +57,11 @@ python -m recall_guard.cli run   --suite suite.jsonl --model jet-ai/Jet-Nemotron
 
 ## Results
 
-`exp01_step1/`, `exp02_repair/` and `exp03_robust/` each hold a `RESULTS.md` and every raw completion under
-`results/raw/`; `STATE.md` is the lab notebook. `exp*/run_all.sh report` regenerates the tables from them.
+`exp01_step1/`, `exp02_repair/`, `exp03_robust/` and `exp04_realdocs/` each hold a `RESULTS.md` and every raw completion
+under `results/raw/`; `STATE.md` is the lab notebook. `exp*/run_all.sh report` regenerates the tables from them.
+`exp04_realdocs/` repeats the test on real Wikipedia QA (RULER qa_1 and qa_2, 100 questions per cell): the hybrids match
+their sources at 4K and lose 0.24 (2B) and 0.64 (8B) of single-document recall at 32K; the adapter recovers 58% of that gap
+at both scales with no cell regressing.
 
 ## License
 
