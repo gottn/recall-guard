@@ -1,7 +1,9 @@
 # Experiment 4: recall on real documents
 
-**Verdict: pending.** Predictions below were written on 2026-10-25 before any model ran; the Results section is filled in
-only from `results/raw` by `run_all.sh report`.
+**Verdict, 2B stage (2026-10-25): the deficit is real on real documents (Jet 0.12 vs Qwen 0.36 on single-document QA at 32K,
+equal at 4K), and the adapter trained only on synthetic key lists repairs about half of it (0.26) with no cell lost and no
+measurable damage at 4K; two-hop QA is near floor for both models at 32K. 8B stage pending.** Predictions below were written
+on 2026-10-25 before any model ran; the Results section is filled in only from `results/raw` by `run_all.sh report`.
 
 ## Question
 Every number so far comes from synthetic documents: filler text with planted six-digit codes, for the deficit (exp01,
@@ -47,5 +49,34 @@ add real-document QA to the training mix. P3 false: the adapter costs short-cont
 the one to ship.
 
 ## Results
-Pending. Eight jobs submitted 2026-10-25 at 734dbf3 (1121123-1121130, run dir
-`~/runs/rg/realdocs/20261025-161716-734dbf3`, see STATE.md); then pull and `run_all.sh report`.
+Run dir `~/runs/rg/realdocs/20261025-161716-734dbf3`, jobs 1121123-1121130 at 734dbf3. Every number: `run_all.sh report`
+(results/tables.md, results/gates.md); n = 100 per cell; "a / b" is cases lost / gained by the candidate, p the one-sided exact
+McNemar p of `check`.
+
+### 2B pair (complete 2026-10-25, ~35 min per job on an A40)
+
+| task | model | 4K | 16K | 32K |
+|---|---|---:|---:|---:|
+| qa_1 | Qwen2.5-1.5B | 0.69 | 0.45 | 0.36 |
+| qa_1 | Qwen2.5-1.5B + control adapter | 0.70 | 0.50 | 0.38 |
+| qa_1 | Jet-Nemotron-2B | 0.70 | 0.39 | 0.12 |
+| qa_1 | Jet-Nemotron-2B + adapter | 0.67 | 0.42 | 0.26 |
+| qa_2 | Qwen2.5-1.5B | 0.50 | 0.39 | 0.32 |
+| qa_2 | Qwen2.5-1.5B + control adapter | 0.44 | 0.34 | 0.38 |
+| qa_2 | Jet-Nemotron-2B | 0.50 | 0.28 | 0.27 |
+| qa_2 | Jet-Nemotron-2B + adapter | 0.46 | 0.33 | 0.28 |
+
+- **P1 holds on qa_1.** Source -> hybrid fails the gate pooled (110 / 65, p 4e-4) and on qa_1 at 32K (0.36 vs 0.12; 26 / 2,
+  p 1.5e-6); the two are equal at 4K (0.69 vs 0.70). The gap, 0.24, is inside the predicted 0.10-0.30. On qa_2 the gap is 0.11
+  at 16K (24 / 13, p 0.049, under the corrected threshold) and 0.05 at 32K (13 / 8): both models are near floor there.
+- **P2 holds on qa_1.** Hybrid -> repaired passes the gate everywhere (no cell lost) and lifts qa_1 at 32K from 0.12 to 0.26
+  (2 / 16, p 7e-4 for the gain), closing 0.14 of the 0.24 gap (58%). The control adapter leaves the source unchanged (qa_1 at
+  32K 0.36 -> 0.38, 11 / 13), so the lift is repair, not format familiarity. qa_2 is unchanged (0.27 -> 0.28).
+- **P3 holds, narrowly.** At 4K the repaired hybrid is 0.03 and 0.04 below its base (qa_1 14 / 11, p 0.35; qa_2 9 / 5, p 0.21;
+  both tasks pooled 23 / 16, p 0.17), within 1 SE (0.05); the control shows the same direction on qa_2 (0.50 -> 0.44, 8 / 2,
+  p 0.055). A cost of a few points at short length cannot be excluded at n = 100.
+- Context: both models lose recall with length on real QA (source qa_1 0.69 -> 0.36); the hybrid-specific part is the extra
+  drop, and the adapter recovers about half of it on real documents against all of it on synthetic keys (exp03).
+
+### 8B pair
+Pending: jobs 1121127-1121130.

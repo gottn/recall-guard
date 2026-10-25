@@ -1,0 +1,2 @@
+734dbf37f1e47f78325e72ec2f7653d9ad9749ed
+data(exp04): 600 RULER QA cases, 4K-32K — reference answer in every qa_1 prompt, 95-98% of qa_2

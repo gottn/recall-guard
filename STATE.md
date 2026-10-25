@@ -101,6 +101,9 @@ then `exp04_realdocs/run_all.sh report`.
 at 32K (26 lost / 2 gained, p 1.5e-6); qa_2 gap 0.11 at 16K (p 0.049, under the corrected threshold) and 0.05 at 32K; pooled FAIL
 (110 / 65, p 4e-4). Both models degrade with length (Qwen qa_1 0.69 -> 0.36), the hybrid-specific part is the extra drop. Each 2B
 job took ~35 min on an A40 (Jet 5 s per 32K prompt).
+**2B stage complete (17:50):** P2 holds on qa_1 (Jet 0.12 -> 0.26 at 32K, 2 lost / 16 gained, p 7e-4; no cell lost; control adapter
+flat 0.36 -> 0.38), P3 holds narrowly (4K -0.03/-0.04, within 1 SE; pooled 23 / 16, p 0.17). See exp04_realdocs/RESULTS.md. 8B jobs
+1121127-1121130 running/queued.
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
