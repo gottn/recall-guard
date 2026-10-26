@@ -109,6 +109,19 @@ flat 0.36 -> 0.38), P3 holds narrowly (4K -0.03/-0.04, within 1 SE; pooled 23 / 
 (3 lost / 40 gained; 58% of the gap, as at 2B), qa_2 unchanged, 4K cost 0.05 (P3 narrowly fails); qk-only: 0.35 at 32K, moves
 qa_2 by +0.07-0.08 everywhere, no 4K cost. All 24 files in exp04_realdocs/results/raw; verdict and limits in RESULTS.md.
 
+## Experiment 5 (exp05_realmix) — real-document QA in the repair mix
+Pre-registered 2026-10-26 (exp05_realmix/RESULTS.md, P1-P4) at c2c15b2 before any run. Generator `recall_guard/real_data.py`
+(pure; RULER's qa framing with `Document i:` blocks, loss on the answers; SQuAD v2 train + HotpotQA train; every exp04
+evaluation paragraph and question banned by exact string: on the 600 exp04 prompts all 1,304 qa_1 and 26,141 qa_2 strings
+are found in the dev pools and removed; documents land within 1% of 8K-32K). Trainer: `train --real-dir ~/data/rg/realqa
+--exclude-dir ~/data/rg/ruler-qa` alternates real and synthetic documents, each stream with its own seed and length cycle
+(the synthetic half equals the first half of the exp03 stream). Recipes unchanged (Jet 600 docs / lr 2e-4 / 8-32K; MIL
+gentle 300 docs / lr 5e-5 / 8-16K), `TRAIN_TAG=-realmix`; commands in exp05_realmix/run_all.sh. Data: SQuAD train from
+rajpurkar.github.io; RULER's HotpotQA host (curtis.ml.cmu.edu) did not answer on 2026-10-26, so the train split comes from
+the HuggingFace parquet mirror converted by exp05_realmix/hotpot_from_parquet.py (90,447 questions, 566 MB, sha256
+a07f9457cc4a...; the same conversion of the dev split reproduces every exp04 paragraph byte for byte). Status: nothing
+submitted yet; the cluster needs a fresh `ssh aau` login and the commits must be on GitHub before submit.sh can pull.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
