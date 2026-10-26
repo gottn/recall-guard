@@ -1,6 +1,7 @@
 """LoRA repair training: the only module that runs backward passes. Loss only on answer tokens (labels = -100
 elsewhere). The adapter is the dependency-free one in `lora.py`; `hf.load` merges it back for evaluation."""
 
+import json
 import re
 import sys
 import time
@@ -13,6 +14,7 @@ from transformers import AutoTokenizer
 
 from recall_guard.backends import hf, lora
 from recall_guard.filler import filler_sentences
+from recall_guard.real_data import Pool, disjoint, eval_strings, hotpot_pool, real_segments, squad_pool
 from recall_guard.train_data import Segment, training_segments
 
 LOSS_CHUNK = 1024  # labelled positions per logits chunk: a replay window labels every token (16K x 128K logits = 8 GiB at once)
@@ -35,6 +37,8 @@ class TrainConfig:
     weight_decay: float = 0.0  # on the adapter only: decays A/B toward zero, i.e. toward the base model
     replay_text: str = ""  # path to natural long text; when set, every other example is a window of it with full LM loss
     replay_frac: float = 0.5
+    real_dir: str = ""  # SQuAD v2 train + HotpotQA train JSON; when set, every other example is a real-document QA (real_data.py)
+    exclude_dir: str = ""  # evaluation case JSONL: its paragraphs and questions never enter the real pools
 
 
 def tokenize_segments(tok: AutoTokenizer, segs: tuple[Segment, ...]) -> tuple[torch.Tensor, torch.Tensor]:
@@ -77,6 +81,19 @@ def replay_example(text: str, tok: AutoTokenizer, window_tokens: int, seed: int)
     return ids, ids.clone()
 
 
+def load_real_pools(real_dir: str, exclude_dir: str) -> tuple[Pool, ...]:
+    """The two train-split pools minus every paragraph and question of the evaluation cases, with the counts logged."""
+    prompts = [json.loads(line)["prompt"] for f in sorted(Path(exclude_dir).glob("*.jsonl")) for line in f.read_text().splitlines() if line]
+    banned = eval_strings(prompts)
+    raw = (squad_pool(json.loads((Path(real_dir) / "train-v2.0.json").read_text())),
+           hotpot_pool(json.loads((Path(real_dir) / "hotpot_train_v1.1.json").read_text())))
+    out = tuple(disjoint(p, banned) for p in raw)
+    for a, b in zip(raw, out, strict=True):
+        print(f"  real pool {a.name}: {len(b.paragraphs):,} of {len(a.paragraphs):,} paragraphs and {sum(len(g.qas) for g in b.groups):,} of "
+              f"{sum(len(g.qas) for g in a.groups):,} questions remain after banning {len(banned):,} strings from {len(prompts)} evaluation prompts", file=sys.stderr)
+    return out
+
+
 def answer_loss(model: torch.nn.Module, ids: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """Cross-entropy on answer positions only, applying lm_head just there: full-sequence logits at 16K x 152K
     vocab in float32 are 9.3 GiB, which is what OOMed the first smoke."""
@@ -114,6 +131,9 @@ def train(cfg: TrainConfig) -> dict:
         print(f"  checkpointed {checkpoint_custom_layers(model)} non-transformers layers", file=sys.stderr)
     opt = torch.optim.AdamW(params, lr=cfg.lr, weight_decay=cfg.weight_decay)
     replay = Path(cfg.replay_text).read_text() if cfg.replay_text else ""
+    if cfg.real_dir and not cfg.exclude_dir:
+        raise ValueError("--real-dir needs --exclude-dir (the evaluation cases to keep out of training)")
+    pools = load_real_pools(cfg.real_dir, cfg.exclude_dir) if cfg.real_dir else ()
     def count(text: str) -> int:
         return len(tok(text, add_special_tokens=False).input_ids)
 
@@ -122,12 +142,15 @@ def train(cfg: TrainConfig) -> dict:
     t0, tokens, losses, step = time.perf_counter(), 0, [], 0
     n = min(cfg.n_docs, cfg.max_steps * cfg.grad_accum) if cfg.max_steps else cfg.n_docs
     for i in range(n):
-        length = cfg.lengths[i % len(cfg.lengths)]
+        j = i // 2 if pools else i  # real and synthetic alternate, each stream keeping its own count: kinds, lengths and pools cycle as before
+        length = cfg.lengths[j % len(cfg.lengths)]
         period = round(1 / cfg.replay_frac) if cfg.replay_frac > 0 else 0  # 0.5 -> every 2nd example, 0.25 -> every 4th
         if replay and period and i % period == period - 1:
             ids, labels = replay_example(replay, tok, length, cfg.seed * 100_000 + i)
+        elif pools and i % 2:
+            ids, labels = tokenize_segments(tok, real_segments(pools[j // 2 % len(pools)], cfg.seed * 100_000 + j, length, count))
         else:
-            ids, labels = tokenize_segments(tok, training_segments(cfg.seed * 100_000 + i, length, count, tps))
+            ids, labels = tokenize_segments(tok, training_segments(cfg.seed * 100_000 + j, length, count, tps))
         loss = answer_loss(model, ids.to(device), labels.to(device))
         (loss / cfg.grad_accum).backward()
         losses.append(loss.item())

@@ -3,6 +3,7 @@
   generate  --out suite.jsonl --tokenizer Qwen/Qwen2.5-1.5B [--seed 0] [--cases 25] [--lengths ...] [--tasks ...]
   run       --suite suite.jsonl --model <id> --out results.jsonl [--adapter DIR] [--attn sdpa] [--trust-remote-code] [--limit N]
   train     --model <id> --out DIR [--n-docs 600] [--lengths 8192 12288 16384] [--lr 2e-4] [--rank 16] [--max-steps N]
+            [--real-dir DIR --exclude-dir DIR]   every other document real (SQuAD / HotpotQA train), evaluation cases banned
   bench     --model <id> [--adapter DIR] [--n 500] --out bench.json
   ppl       --model <id> [--adapter DIR] --text book.txt [--window-tokens 16384] [--windows 8] --out bpb.json
   import-ruler --dir <RULER generator output> --out-dir DIR
@@ -107,7 +108,7 @@ def cmd_train(a: argparse.Namespace) -> None:
     from recall_guard.backends.train import TrainConfig, train
 
     cfg = TrainConfig(a.model, a.out, a.n_docs, tuple(a.lengths), a.seed, a.lr, a.rank, a.alpha, a.grad_accum, a.max_steps, a.trust_remote_code,
-                      a.targets, a.weight_decay, a.replay_text, a.replay_frac)
+                      a.targets, a.weight_decay, a.replay_text, a.replay_frac, a.real_dir, a.exclude_dir)
     stats = train(cfg)
     Path(a.out).mkdir(parents=True, exist_ok=True)
     (Path(a.out) / "train_stats.json").write_text(json.dumps({**stats, "config": asdict(cfg)}, indent=1))
@@ -239,6 +240,8 @@ def main(argv: list[str] | None = None) -> None:
     tr.add_argument("--weight-decay", type=float, default=0.0)
     tr.add_argument("--replay-text", default="", help="natural long text; every other example is a window with full LM loss")
     tr.add_argument("--replay-frac", type=float, default=0.5)
+    tr.add_argument("--real-dir", default="", help="SQuAD v2 train + HotpotQA train JSON: every other example is a real-document QA")
+    tr.add_argument("--exclude-dir", default="", help="evaluation case JSONL whose paragraphs and questions are banned from --real-dir")
     tr.set_defaults(fn=cmd_train)
     b = sub.add_parser("bench")
     b.add_argument("--model", required=True)
