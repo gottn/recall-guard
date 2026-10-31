@@ -39,7 +39,8 @@ class Pool:
 
 
 def pool(name: str, groups: tuple[Group, ...]) -> Pool:
-    return Pool(name, groups, tuple(sorted({p for g in groups for p in g.paragraphs})))
+    """Groups without a question are not asked but keep their paragraphs in the distractor pool."""
+    return Pool(name, tuple(g for g in groups if g.qas), tuple(sorted({p for g in groups for p in g.paragraphs})))
 
 
 def squad_pool(data: dict) -> Pool:
@@ -72,9 +73,9 @@ def eval_strings(prompts: Iterable[str]) -> frozenset[str]:
 
 def disjoint(src: Pool, banned: frozenset[str]) -> Pool:
     """The pool without the banned paragraphs and without any question that is banned or whose gold paragraph is."""
-    groups = (Group(tuple(p for p in g.paragraphs if p not in banned),
-                    tuple(q for q in g.qas if q.question not in banned and banned.isdisjoint(q.gold))) for g in src.groups)
-    return pool(src.name, tuple(g for g in groups if g.qas))
+    return pool(src.name, tuple(
+        Group(tuple(p for p in g.paragraphs if p not in banned),
+              tuple(q for q in g.qas if q.question not in banned and banned.isdisjoint(q.gold))) for g in src.groups))
 
 
 def block(i: int, paragraph: str) -> str:
