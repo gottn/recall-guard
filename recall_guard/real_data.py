@@ -73,9 +73,9 @@ def eval_strings(prompts: Iterable[str]) -> frozenset[str]:
 
 def disjoint(src: Pool, banned: frozenset[str]) -> Pool:
     """The pool without the banned paragraphs and without any question that is banned or whose gold paragraph is."""
-    return pool(src.name, tuple(
-        Group(tuple(p for p in g.paragraphs if p not in banned),
-              tuple(q for q in g.qas if q.question not in banned and banned.isdisjoint(q.gold))) for g in src.groups))
+    groups = (Group(tuple(p for p in g.paragraphs if p not in banned),
+                    tuple(q for q in g.qas if q.question not in banned and banned.isdisjoint(q.gold))) for g in src.groups)
+    return Pool(src.name, tuple(g for g in groups if g.qas), tuple(p for p in src.paragraphs if p not in banned))
 
 
 def block(i: int, paragraph: str) -> str:

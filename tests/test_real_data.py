@@ -68,3 +68,9 @@ def test_eval_strings_remove_paragraphs_and_questions_from_training():
     assert all(banned.isdisjoint(g.paragraphs) for g in clean.groups)
     assert len(clean.paragraphs) == len(sq.paragraphs) - n_docs
     assert disjoint(sq, frozenset()) == sq
+    data = squad_data(articles=2)
+    data["data"][1]["paragraphs"][0]["qas"] = []  # an article without a question is a distractor source only
+    data["data"][1]["paragraphs"] = data["data"][1]["paragraphs"][:1]
+    sq = squad_pool(data)
+    assert len(sq.groups) == 1 and len(sq.paragraphs) == 5 and disjoint(sq, frozenset()) == sq
+    assert len(disjoint(sq, frozenset({sq.paragraphs[0]})).paragraphs) == 4
