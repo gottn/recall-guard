@@ -122,7 +122,10 @@ the HuggingFace parquet mirror converted by exp05_realmix/hotpot_from_parquet.py
 a07f9457cc4a...; the same conversion of the dev split reproduces every exp04 paragraph byte for byte). **Submitted 2026-11-01 18:32** at 8b5abb6 (after fix 8b5abb6: `disjoint` keeps the paragraphs of questionless groups):
 training + damage checks in `~/runs/rg/robust/20261101-183230-8b5abb6` (A40, prioritized): 1136480 Jet realmix seed 1
 (32G, 8 h), 1136481 MIL realmix seed 1 (56G, 12 h); real QA on the exp04 cases in `~/runs/rg/realdocs/20261101-183233-8b5abb6`:
-1136482 Jet (afterany 1136480), 1136483 MIL (afterany 1136481). Both training jobs started within a minute. Pull:
+1136482 Jet (afterany 1136480), 1136483 MIL (afterany 1136481). Both training jobs started within a minute. Jet trains at
+~770 tok/s on the A40 (about 4 h for 11.5M tokens, close to the 8 h limit with the evaluations), so 1136505 (afterany
+1136480, same run dir, STAGE=repair) is a finisher: it skips training once the adapter exists and resumes only the
+evaluations the first job did not write. MIL trains at ~1,220 tok/s (about 50 min). Pull:
 `rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<R>/ exp05_realmix/results/raw/damage/` and
 `rsync -a --exclude 'slurm-*' aau:<Q>/ exp05_realmix/results/raw/qa/`, then `exp05_realmix/run_all.sh report`.
 Traps met on the way: macOS rsync is openrsync (no `--info=progress2`; a failed rsync behind a pipe looks like success, use
