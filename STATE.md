@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-10-25
+Updated: 2026-11-01
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -119,8 +119,15 @@ are found in the dev pools and removed; documents land within 1% of 8K-32K). Tra
 gentle 300 docs / lr 5e-5 / 8-16K), `TRAIN_TAG=-realmix`; commands in exp05_realmix/run_all.sh. Data: SQuAD train from
 rajpurkar.github.io; RULER's HotpotQA host (curtis.ml.cmu.edu) did not answer on 2026-10-26, so the train split comes from
 the HuggingFace parquet mirror converted by exp05_realmix/hotpot_from_parquet.py (90,447 questions, 566 MB, sha256
-a07f9457cc4a...; the same conversion of the dev split reproduces every exp04 paragraph byte for byte). Status: nothing
-submitted yet; the cluster needs a fresh `ssh aau` login and the commits must be on GitHub before submit.sh can pull.
+a07f9457cc4a...; the same conversion of the dev split reproduces every exp04 paragraph byte for byte). **Submitted 2026-11-01 18:32** at 8b5abb6 (after fix 8b5abb6: `disjoint` keeps the paragraphs of questionless groups):
+training + damage checks in `~/runs/rg/robust/20261101-183230-8b5abb6` (A40, prioritized): 1136480 Jet realmix seed 1
+(32G, 8 h), 1136481 MIL realmix seed 1 (56G, 12 h); real QA on the exp04 cases in `~/runs/rg/realdocs/20261101-183233-8b5abb6`:
+1136482 Jet (afterany 1136480), 1136483 MIL (afterany 1136481). Both training jobs started within a minute. Pull:
+`rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<R>/ exp05_realmix/results/raw/damage/` and
+`rsync -a --exclude 'slurm-*' aau:<Q>/ exp05_realmix/results/raw/qa/`, then `exp05_realmix/run_all.sh report`.
+Traps met on the way: macOS rsync is openrsync (no `--info=progress2`; a failed rsync behind a pipe looks like success, use
+scp and verify the sha256); the app quit truncated the first 566 MB upload at 483 MB; after the VPN connects the Mac's resolver
+can keep a stale negative entry for ai-fe02.srv.aau.dk (`sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder`).
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
