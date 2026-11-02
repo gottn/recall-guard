@@ -52,6 +52,12 @@ python -m recall_guard.cli train --model jet-ai/Jet-Nemotron-2B --trust-remote-c
 python -m recall_guard.cli run   --suite suite.jsonl --model jet-ai/Jet-Nemotron-2B --trust-remote-code --adapter adapter/ --out jet-repaired.jsonl
 ```
 
+The damage check runs `check` from the base model to the adapter on each synthetic suite, the held-out template,
+multi-hop, and real-document QA (RULER qa_1 and qa_2 over Wikipedia at 4K, 16K and 32K, 100 questions per cell, cases
+from `import-ruler`; on the cluster `infra/slurm/robust.sbatch`, then `infra/slurm/realdocs.sbatch` with the same
+adapter). The real-document cell is required: a synthetic Jet-Nemotron-2B adapter (exp03 seed 2) passed every synthetic
+gate while its single-document QA at 4K fell from 0.70 to 0.37 (`exp03_robust/results/gates.md`).
+
 `bench` (ARC-Easy, HellaSwag), `ppl` (bits per byte on long text) and `import-ruler` (RULER cases) are documented in
 `python -m recall_guard.cli -h`.
 

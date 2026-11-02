@@ -3,6 +3,7 @@
 #   STAGE=base   : our suites (seed 1, seed 2; n=50 at 16K/32K) + RULER suites + held-out + bench + long-text bpb, no adapter
 #   STAGE=repair : train v2 mix (random/similar/updated/multihop) with TRAIN_SEED, then the same evaluations with the adapter,
 #                  plus the alternative-explanation checks on suite seed 1 at 32K (unmerged adapter; chat template)
+#   The damage check also needs real-document QA on the same adapter: realdocs.sbatch with ADAPTER= (README).
 # Submit only via infra/cluster/submit.sh:
 #   STAGE=base   MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust              -> RUN
 #   RUN_IN=$RUN STAGE=repair TRAIN_SEED=1 MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet infra/cluster/submit.sh robust --time=08:00:00
