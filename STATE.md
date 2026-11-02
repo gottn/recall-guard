@@ -143,6 +143,20 @@ gates run per file (s1 / s2 reuse case ids), no RULER gate (the generator repeat
 Jet's bench (+-0.006 between two runs). Next (exp05 RESULTS.md): budget not split (600 synthetic + 600 real at 2B), 32K documents
 in the 8B recipe, seeds 2-3, qk-only + real QA.
 
+## Experiment 6 (exp06_budget) — the full synthetic dose plus the real half
+Pre-registered 2026-11-02 at 2ea0d22 before any run (exp06_budget/RESULTS.md, outcomes A-D): exp05's recipe with both halves
+doubled, Jet 1,200 documents (600 synthetic + 600 real), MIL gentle 600 (300 + 300), tag `-budget`. The trainer seeds each
+stream by j = i // 2, so the first 600 / 300 documents are exp05's and exp06 is exp05 continued for as many steps again; the
+synthetic half is exactly the exp03 seed-1 stream. A (Jet multi-hop): dose = >= 0.84 in every multi-hop cell with stale in
+exp03's range, prior = suite <= 0.65 at 16K and 32K. B (RULER multi-value / multi-query, the five cells exp05 lost): dose =
+within 0.06 of the synthetic adapter, prior = still >= 0.10 below. C: real QA holds. D: bench within 0.02, bpb not above exp05.
+**Submitted 2026-11-02 14:58** at 8b5abb6 (the cluster pulls origin/main; exp05 ran at the same commit): training + damage
+checks in `~/runs/rg/robust/20261102-145806-8b5abb6` (A40, 12 h): 1138457 Jet (32G), 1138458 MIL (56G), both started at
+once; real QA in `~/runs/rg/realdocs/20261102-145814-8b5abb6`: 1138459 Jet (afterany 1138457), 1138460 MIL (afterany
+1138458). Expected at exp05's rates: Jet ~7.5 h (4.3 h training), MIL ~8.3 h (1.4 h). Pull:
+`rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<R>/ exp06_budget/results/raw/damage/` and
+`rsync -a --exclude 'slurm-*' aau:<Q>/ exp06_budget/results/raw/qa/`, then `exp06_budget/run_all.sh report`.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
