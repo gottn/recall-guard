@@ -193,6 +193,48 @@ Recall at 16K / 32K, synthetic adapter against realmix adapter:
   multihop25 share their 16K and 32K ids with the suites.
 - Prompts were sized with the Qwen2.5 tokenizer, as in exp04; the training documents with each model's own tokenizer.
 
+## Post-hoc reading (2026-11-02, after the verdict; not pre-registered)
+Written from the committed tables plus two things the verdict did not use: the exp03 synthetic adapters' seeds 2 and 3 on real
+QA (pulled into exp04's run dir by another session, untracked, unreported) and the raw multi-hop outputs.
+
+1. **The 8B single-document gain depends on the synthetic seed; the 2B gain does not.** McNemar realmix vs each exp03 synthetic
+   seed on qa_1 (lost / gained, exact one-sided p), n = 100 per cell:
+
+   | model | length | vs seed 1 | vs seed 2 | vs seed 3 |
+   |---|---|---|---|---|
+   | Jet-Nemotron-2B | 16K | 3 / 36, < 1e-4 | 1 / 50, < 1e-4 | 4 / 28, < 1e-4 |
+   | Jet-Nemotron-2B | 32K | 5 / 23, 5e-4 | 2 / 35, < 1e-4 | 4 / 26, < 1e-4 |
+   | Mamba-in-the-Llama 8B | 16K | 8 / 12, 0.25 | 5 / 17, 0.009 | 8 / 16, 0.08 |
+   | Mamba-in-the-Llama 8B | 32K | 4 / 20, 8e-4 | 10 / 18, 0.09 | 4 / 20, 8e-4 |
+
+   The gentle seeds score 0.56 / 0.64 / 0.56 at 32K (0.76 / 0.68 / 0.72 at 16K), so the 8B realmix gain is 0.08 to 0.16 by seed.
+   Pooled over both lengths realmix beats every seed (12 / 32 p 0.002, 15 / 35 p 0.003, 12 / 36 p 4e-4); per cell three of six
+   comparisons pass. P1 at 8B is likely, not established, until realmix seeds 2 and 3 run. At 2B every cell passes against every
+   seed (pooled p <= 1e-9).
+2. **Every Jet multi-hop failure is stale.** Suite s1 49 / 49, s2 41 / 41, multihop25 52 / 52 wrong answers return a distractor
+   code from the chain (never garbage), then keep generating "Question: ... Answer:" pairs; the exp03 synthetic seed 1 had stale
+   0.03 / 0.11. Retrieval survived, the second hop did not. The exp03 three-seed floor on multihop25 is 0.84 at every length, so
+   the loss is outside seed noise. Two readings fit: the halved synthetic dose, or a single-span answer prior learned from SQuAD,
+   which also fits the multi-value / multi-query losses and the UUID multikey_3 gains (Jet 0.58 -> 0.88 at 16K). exp06 (full
+   synthetic dose plus the real half) separates them: "dose" = multihop back to >= 0.84; "prior" = failures stay stale at full dose.
+3. **The 8B two-hop deficit is flat from 4K, so it is not recall.** qa_2 realmix vs Llama 0.54 / 0.47 / 0.40 vs 0.67 / 0.64 / 0.57:
+   deficit 0.13 / 0.17 / 0.17 at 4K / 16K / 32K, where the base's was 0.16 / 0.30 / 0.22. The adapters removed the length-dependent
+   part; what remains is present at 4K, i.e. composition lost in distillation. P2 targeted the wrong quantity; two-hop is not a
+   repair target for this tool. At 2B realmix two-hop is at or above Qwen at every length (0.54 / 0.46 / 0.36 vs 0.50 / 0.39 / 0.32).
+4. **Single-document QA as length curves, not per cent of the gap.** 8B realmix vs Llama 0.91 / 0.80 / 0.72 vs 0.92 / 0.82 / 0.83:
+   matched through 16K, -0.11 at 32K, the one length outside the gentle recipe (8192 / 16384). 2B realmix vs Qwen 0.79 / 0.75 / 0.44
+   vs 0.69 / 0.45 / 0.36: above the source everywhere, but Jet's 16K -> 32K drop is 0.31 against Qwen's 0.09, so the 2B still has
+   a 32K problem the source comparison hides. The per-cent-of-gap figures in Results are the wrong yardstick; the within-model
+   drop is the right one.
+5. **A synthetic adapter can pass every gate and lose real QA.** exp03 Jet seed 2 keeps multihop >= 0.88 at every length in exp03,
+   yet scores qa_1 0.37 / 0.26 / 0.11 at 4K / 16K / 32K against base 0.70 / 0.39 / 0.12 (qa_2 0.20 / 0.17 / 0.15 vs 0.50 / 0.28 /
+   0.27): a 0.33 loss at 4K that no synthetic suite, RULER cell or bench caught. Synthetic-only repair leaves real QA to the seed
+   lottery, and the standard damage check has no real-document cell. Not verified here: that run's commit marker. A real-QA 4K
+   cell in the standard gate is in progress (session started 2026-11-02).
+
+What this changes in Next: item 1 is now a two-outcome test (dose vs prior), running as exp06; item 2 is the single lever for the
+8B qa_1 residual at 32K; two-hop (P2-type predictions) is dropped as a repair target.
+
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to
    keep qa_1 at 0.44 without losing chained-key multi-hop; then the 8B recipe at 300 synthetic + 300 real.
