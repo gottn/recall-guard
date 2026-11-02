@@ -1,0 +1,37 @@
+{
+ "docs": 300,
+ "steps": 75,
+ "tokens": 3676252,
+ "wall_s": 2564.775010302197,
+ "final_loss": 0.3035963753609394,
+ "targets": [
+  "in_proj",
+  "k_proj",
+  "o_proj",
+  "out_proj",
+  "q_proj",
+  "v_proj"
+ ],
+ "config": {
+  "model_id": "JunxiongWang/Llama3.1-Mamba2-8B-dpo",
+  "out_dir": "/home/id.aau.dk/pr04wm/runs/rg/robust/20261101-183230-8b5abb6/adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix",
+  "n_docs": 300,
+  "lengths": [
+   8192,
+   16384
+  ],
+  "seed": 1,
+  "lr": 5e-05,
+  "rank": 16,
+  "alpha": 32,
+  "grad_accum": 4,
+  "max_steps": 0,
+  "trust_remote_code": false,
+  "targets": "",
+  "weight_decay": 0.0,
+  "replay_text": "",
+  "replay_frac": 0.5,
+  "real_dir": "/home/id.aau.dk/pr04wm/data/rg/realqa",
+  "exclude_dir": "/home/id.aau.dk/pr04wm/data/rg/ruler-qa"
+ }
+}

@@ -13,3 +13,6 @@ exp03_robust/results/raw/adapter-*/
 exp02_repair/results/raw/heldout.jsonl
 .DS_Store
 exp04_realdocs/results/cases/
+exp05_realmix/results/raw/damage/suite-s?.jsonl
+exp05_realmix/results/raw/damage/heldout.jsonl
+exp05_realmix/results/raw/damage/multihop25.jsonl
