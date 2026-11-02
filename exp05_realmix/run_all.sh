@@ -39,11 +39,11 @@ case "${1:-report}" in
       gate "real QA: synthetic -> realmix ($H)"  $E4/ruler-*-$SYN-$H.jsonl  -- $QA/ruler-*-repair-seed1-realmix-$H.jsonl
       gate "real QA: realmix -> synthetic ($H), FAIL cells are realmix gains"  $QA/ruler-*-repair-seed1-realmix-$H.jsonl -- $E4/ruler-*-$SYN-$H.jsonl
       gate "real QA: source -> realmix ($H), the remaining deficit"  $E4/ruler-*-base-$SRC.jsonl -- $QA/ruler-*-repair-seed1-realmix-$H.jsonl
-      gate "suites: base -> realmix ($H)"  $E3/suite-s*-base-$H.jsonl $E3/heldout-base-$H.jsonl $E3/multihop25-base-$H.jsonl \
-        -- $DMG/suite-s*-repair-seed1-realmix-$H.jsonl $DMG/heldout-repair-seed1-realmix-$H.jsonl $DMG/multihop25-repair-seed1-realmix-$H.jsonl
-      gate "suites: synthetic -> realmix ($H)"  $E3/suite-s*-$SYN-$H.jsonl $E3/heldout-$SYN-$H.jsonl $E3/multihop25-$SYN-$H.jsonl \
-        -- $DMG/suite-s*-repair-seed1-realmix-$H.jsonl $DMG/heldout-repair-seed1-realmix-$H.jsonl $DMG/multihop25-repair-seed1-realmix-$H.jsonl
-      gate "RULER needles: synthetic -> realmix ($H)"  $E3/ruler-*-$SYN-$H.jsonl -- $DMG/ruler-*-repair-seed1-realmix-$H.jsonl
+      for S in suite-s1 suite-s2 heldout multihop25; do  # one gate per file: s1/s2 reuse case ids, heldout/multihop25 share their 16K/32K ids with the suites
+        gate "$S: base -> realmix ($H)"       $E3/$S-base-$H.jsonl -- $DMG/$S-repair-seed1-realmix-$H.jsonl
+        gate "$S: synthetic -> realmix ($H)"  $E3/$S-$SYN-$H.jsonl -- $DMG/$S-repair-seed1-realmix-$H.jsonl
+      done
+      # no RULER gate: the generator repeats 10 (16K) and 4 (32K) case ids per file, exp03 too, and check refuses them; P4(b) reads tables-ruler.md
     done
     for f in $E3/bench-base-{$JET,$MIL}.json $E3/bench-repair-seed1-$JET.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
              $E3/bpb-base-{$JET,$MIL}.json $E3/bpb-repair-seed1-$JET.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
