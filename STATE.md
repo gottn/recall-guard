@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-11-01
+Updated: 2026-11-02
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -131,6 +131,17 @@ evaluations the first job did not write. MIL trains at ~1,220 tok/s (about 50 mi
 Traps met on the way: macOS rsync is openrsync (no `--info=progress2`; a failed rsync behind a pipe looks like success, use
 scp and verify the sha256); the app quit truncated the first 566 MB upload at 483 MB; after the VPN connects the Mac's resolver
 can keep a stale negative entry for ai-fe02.srv.aau.dk (`sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder`).
+**Done 2026-11-02**: all five jobs COMPLETED (1136480 5 h 22 min, 1136481 7 h 32 min, 1136482 30 min, 1136483 62 min,
+1136505 19 min with nothing left to evaluate); run dirs pulled into exp05_realmix/results/raw/{damage,qa} (41 files); verdict in
+exp05_realmix/RESULTS.md. One seed per model: qa_1 at 32K 0.12 -> 0.44 at 2B (synthetic adapter 0.26, Qwen source 0.36) and
+0.19 -> 0.72 at 8B (gentle 0.56, Llama 0.83); no 4K cell lost and the gentle 4K cost reversed (qa_1 0.86 -> 0.91); 8B qa_2
+0.34 -> 0.47 at 16K but 0.35 -> 0.40 at 32K (deficit to Llama 0.13-0.17 remains); 2B qa_2 +0.08 to +0.13. Cost of the halved
+synthetic dose: Jet chained-key multi-hop 0.97 / 0.89 -> 0.65 / 0.45, RULER multi-value / multi-query -0.12 to -0.20 in three
+cells per model (UUID keys improve); everything else >= 0.96, ARC / HellaSwag within 0.02 (acc), bpb Jet 1.086 = synthetic, 8B
+1.056 < gentle 1.065. Measured training: Jet 2 h 09 min at 1,480 tok/s, 8B 43 min at 1,430 tok/s on an A40. Report quirks: suite
+gates run per file (s1 / s2 reuse case ids), no RULER gate (the generator repeats ids; `check` refuses them), the finisher re-ran
+Jet's bench (+-0.006 between two runs). Next (exp05 RESULTS.md): budget not split (600 synthetic + 600 real at 2B), 32K documents
+in the 8B recipe, seeds 2-3, qk-only + real QA.
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
