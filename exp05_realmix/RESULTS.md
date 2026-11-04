@@ -229,8 +229,10 @@ QA (pulled into exp04's run dir by another session, untracked, unreported) and t
 5. **A synthetic adapter can pass every gate and lose real QA.** exp03 Jet seed 2 keeps multihop >= 0.88 at every length in exp03,
    yet scores qa_1 0.37 / 0.26 / 0.11 at 4K / 16K / 32K against base 0.70 / 0.39 / 0.12 (qa_2 0.20 / 0.17 / 0.15 vs 0.50 / 0.28 /
    0.27): a 0.33 loss at 4K that no synthetic suite, RULER cell or bench caught. Synthetic-only repair leaves real QA to the seed
-   lottery, and the standard damage check has no real-document cell. Not verified here: that run's commit marker. A real-QA 4K
-   cell in the standard gate is in progress (session started 2026-11-02).
+   lottery, and the standard damage check had no real-document cell. Verified since: the run matches seed 1 (case ids, prompt
+   token counts, 100 rows per cell; markers 95766ca vs 734dbf3 with no code change between), and 4abb5e8 added the cell to the
+   gate: `exp03_robust/results/gates.md` fails seed 2 (qa_1@4K 41 lost / 8 gained, p 9.8e-7) and passes Jet seeds 1 and 3 and
+   the three 8B gentle seeds; realmix passes the same gate here.
 
 What this changes in Next: item 1 is now a two-outcome test (dose vs prior), running as exp06; item 2 is the single lever for the
 8B qa_1 residual at 32K; two-hop (P2-type predictions) is dropped as a repair target.
