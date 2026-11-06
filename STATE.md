@@ -179,6 +179,17 @@ far 24.3 GB at 16K: an out-of-memory failure moves it to an A100), 1152404 Jet (
 had 497 jobs pending; both training jobs waited on Priority. Pull: the two rsync lines at the top of exp07_len32k/run_all.sh,
 then `exp07_len32k/run_all.sh report`.
 
+## Experiment 8 (exp08_wsp_gate) — a training-free weight edit through the gate
+Pre-registered 2026-11-06 at ee4eb55 before any full run (exp08_wsp_gate/RESULTS.md): `Qwen/Qwen3.5-0.8B` vs
+`RikiyaT/Qwen3.5-0.8B-weight-space-programming` ("Sparks of Weight-Space Programming": one MLP-output direction removed from 64
+`down_proj` columns in layers 15 and 19; edit_check.py: both tensors match the card's sha256, 130,188 weights differ). Rule: `check`
+base -> edited per file (suite-s1, suite-s2, heldout, multihop25, step1, real QA), any FAIL = recall lost; P1 all pass, P2 bench
+within 0.02, bpb within 0.005. Smokes 1152408-09 (T4) load both clean at 1.4 GiB. **Submitted 2026-11-06 10:56** at 26d25e8
+(origin/main), A40, env `modern`, no training: robust STAGE=base in `~/runs/rg/robust/20261106-105622-26d25e8`: 1152442 base,
+1152443 edited (32G, 4 h); real QA in `~/runs/rg/realdocs/20261106-105625-26d25e8`: 1152444, 1152445 (2 h); the exp01 suite in
+`~/runs/rg/step1/20261016-121320-8beb29d` (commit markers 20261106-105628 / -105630): 1152446, 1152447 (2 h). Pull: the three
+rsync lines at the top of exp08_wsp_gate/run_all.sh, then `exp08_wsp_gate/run_all.sh report`.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
