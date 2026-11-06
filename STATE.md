@@ -166,6 +166,20 @@ qa_2@4K 0.64 vs Llama 0.67); D holds (bpb 1.053); but synthetic recall drops at 
 (many_similar 0.85, multi-hop 0.89; synthetic -> budget flags many_similar@32K). No recipe recommended. Next (RESULTS.md):
 32K documents in the 8B recipe; 1,200 synthetic-only documents at 2B to split real half from total training on RULER.
 
+## Seeds 2 and 3 of the realmix and budget adapters (exp05 + exp06)
+**Submitted 2026-11-06** at 26d25e8 (the cluster pulls origin/main; the code differs from the seed-1 runs at 8b5abb6 only by
+d6523cd, `disjoint` keeping the 55 paragraphs of questionless SQuAD groups in the distractor pool, 0.3 %, and a comment in
+robust.sbatch). Same run dirs as seed 1, so the seeds share seed 1's case files; each real-QA job runs afterany its training job.
+Realmix, exp05 dirs R5 `~/runs/rg/robust/20261101-183230-8b5abb6` and Q5 `~/runs/rg/realdocs/20261101-183233-8b5abb6`:
+Jet seed 2 1152548 -> real QA 1152549, MIL seed 2 1152550 -> 1152551, Jet seed 3 1152556 -> 1152557, MIL seed 3 1152558 -> 1152559.
+Budget, exp06 dirs R6 `~/runs/rg/robust/20261102-145806-8b5abb6` and Q6 `~/runs/rg/realdocs/20261102-145814-8b5abb6`:
+Jet seed 2 1152552 -> 1152553, MIL seed 2 1152554 -> 1152555, Jet seed 3 1152560 -> 1152561, MIL seed 3 1152562 -> 1152563.
+Recipes unchanged (Jet realmix 600 documents, 32G, 10 h; MIL realmix 300, lr 5e-5, 8K/16K, 56G, 12 h; Jet budget 1,200, 12 h;
+MIL budget 600, 56G, 12 h). Queue: behind exp07 (no start estimate) and exp08 (2026-11-07 23:55). Pull with the exp05 / exp06
+rsync commands into their `results/raw/damage` and `results/raw/qa` (new names `*-repair-seed{2,3}-{realmix,budget}-*`), then
+widen each `run_all.sh report` from `seed1` to `seed[123]`. Purpose: seed spread on the headline cells (qa_1 at 32K at both
+scales, 8B qa_2 at 16K) and on the damage trade-off (Jet multi-hop, RULER multi-value / multi-query) for the paper plan on `paper`.
+
 ## Experiment 7 (exp07_len32k) — 32K documents at 8B, and the 2B synthetic-only control
 Pre-registered 2026-11-06 at f73a85c before any run (exp07_len32k/RESULTS.md). Arm 1: MIL budget recipe (300 synthetic + 300
 real, lr 5e-5) at 8K / 16K / 32K, tag `-budget32k`; outcome "length" = every 32K synthetic cell back near gentle (>= 0.95, the
