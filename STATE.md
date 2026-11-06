@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-11-02
+Updated: 2026-11-06
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -156,6 +156,15 @@ once; real QA in `~/runs/rg/realdocs/20261102-145814-8b5abb6`: 1138459 Jet (afte
 1138458). Expected at exp05's rates: Jet ~7.5 h (4.3 h training), MIL ~8.3 h (1.4 h). Pull:
 `rsync -a --exclude 'adapter-*' --exclude 'slurm-*' aau:<R>/ exp06_budget/results/raw/damage/` and
 `rsync -a --exclude 'slurm-*' aau:<Q>/ exp06_budget/results/raw/qa/`, then `exp06_budget/run_all.sh report`.
+**Done 2026-11-06** (pulled after the VPN came back; all four COMPLETED: Jet 8 h 55 min, so 1,200 documents need the 12 h
+limit; MIL 6 h 58 min; real QA 47 / 48 min). 36 files in exp06_budget/results/raw (md5 checked against the cluster; generated
+case files byte-identical to exp05's, not pulled); verdict in exp06_budget/RESULTS.md. Jet: A mixed, mostly dose
+(multi-hop 0.65 / 0.45 -> 0.84 / 0.87 at 16K / 32K, 59% / 95% of the exp05 loss; the 25-case file 0.68 at 2K); B prior
+(multi-value / multi-query at 16K 0.48 / 0.42, still 0.20 below the synthetic adapter); C holds (qa_1@32K 0.45); D fails on
+bpb (1.0901 vs 1.0861). MIL: B mixed (16K cells back to 0.94 / 0.86, multi-value 32K 0.56); C holds and gains (qa_1@32K 0.79,
+qa_2@4K 0.64 vs Llama 0.67); D holds (bpb 1.053); but synthetic recall drops at 32K, outside the 8K-16K training lengths
+(many_similar 0.85, multi-hop 0.89; synthetic -> budget flags many_similar@32K). No recipe recommended. Next (RESULTS.md):
+32K documents in the 8B recipe; 1,200 synthetic-only documents at 2B to split real half from total training on RULER.
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
