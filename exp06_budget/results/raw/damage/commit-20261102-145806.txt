@@ -1,0 +1,2 @@
+8b5abb6a118a9b57cfde4ce63b1c5a402005ad15
+fix(data): disjoint keeps the paragraphs of questionless groups, so the pool drop equals the ban

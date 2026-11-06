@@ -1,0 +1,41 @@
+{
+ "docs": 1200,
+ "steps": 300,
+ "tokens": 22995526,
+ "wall_s": 14548.199751840904,
+ "final_loss": 0.22375052944653362,
+ "targets": [
+  "a_proj",
+  "b_proj",
+  "g_proj",
+  "k_proj",
+  "o_proj",
+  "q_proj",
+  "v_proj",
+  "w1",
+  "w2"
+ ],
+ "config": {
+  "model_id": "jet-ai/Jet-Nemotron-2B",
+  "out_dir": "/home/id.aau.dk/pr04wm/runs/rg/robust/20261102-145806-8b5abb6/adapter-jet-ai_Jet-Nemotron-2B-seed1-budget",
+  "n_docs": 1200,
+  "lengths": [
+   8192,
+   16384,
+   32768
+  ],
+  "seed": 1,
+  "lr": 0.0002,
+  "rank": 16,
+  "alpha": 32,
+  "grad_accum": 4,
+  "max_steps": 0,
+  "trust_remote_code": true,
+  "targets": "",
+  "weight_decay": 0.0,
+  "replay_text": "",
+  "replay_frac": 0.5,
+  "real_dir": "/home/id.aau.dk/pr04wm/data/rg/realqa",
+  "exclude_dir": "/home/id.aau.dk/pr04wm/data/rg/ruler-qa"
+ }
+}
