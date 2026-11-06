@@ -166,6 +166,19 @@ qa_2@4K 0.64 vs Llama 0.67); D holds (bpb 1.053); but synthetic recall drops at 
 (many_similar 0.85, multi-hop 0.89; synthetic -> budget flags many_similar@32K). No recipe recommended. Next (RESULTS.md):
 32K documents in the 8B recipe; 1,200 synthetic-only documents at 2B to split real half from total training on RULER.
 
+## Experiment 7 (exp07_len32k) — 32K documents at 8B, and the 2B synthetic-only control
+Pre-registered 2026-11-06 at f73a85c before any run (exp07_len32k/RESULTS.md). Arm 1: MIL budget recipe (300 synthetic + 300
+real, lr 5e-5) at 8K / 16K / 32K, tag `-budget32k`; outcome "length" = every 32K synthetic cell back near gentle (>= 0.95, the
+25-case file >= 0.92, RULER multi-value >= 0.74), "not length" = many_similar and multi-hop at 32K both <= 0.90; C real QA
+against exp06 budget (qa_1@32K >= 0.75), D bench within 0.02, bpb <= 1.058. Arm 2: Jet 1,200 synthetic documents alone (the
+exp03 seed-1 stream continued, exp06's 300 steps), tag `-syn1200`; "real half" = RULER multi-value / multi-query at 16K >=
+0.62 / 0.56, "training" = <= 0.58 / 0.52. **Submitted 2026-11-06 10:33** at 50ade98 (origin/main, includes d6523cd): training +
+damage checks in `~/runs/rg/robust/20261106-103327-50ade98` (A40, 12 h): 1152402 MIL (56G; first 8B run trained at 32K, peak so
+far 24.3 GB at 16K: an out-of-memory failure moves it to an A100), 1152404 Jet (32G); real QA in
+`~/runs/rg/realdocs/20261106-103336-50ade98`: 1152405 MIL (afterany 1152402), 1152406 Jet (afterany 1152404). The partition
+had 497 jobs pending; both training jobs waited on Priority. Pull: the two rsync lines at the top of exp07_len32k/run_all.sh,
+then `exp07_len32k/run_all.sh report`.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
