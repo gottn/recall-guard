@@ -1,0 +1,15 @@
+{
+ "arc_easy": {
+  "n": 500,
+  "acc": 0.65,
+  "acc_norm": 0.582,
+  "se": 0.022360679774997897
+ },
+ "hellaswag": {
+  "n": 500,
+  "acc": 0.412,
+  "acc_norm": 0.5,
+  "se": 0.022360679774997897
+ },
+ "model": "RikiyaT/Qwen3.5-0.8B-weight-space-programming"
+}
