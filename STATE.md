@@ -219,6 +219,16 @@ within 0.02, bpb within 0.005. Smokes 1152408-09 (T4) load both clean at 1.4 GiB
 `~/runs/rg/step1/20261016-121320-8beb29d` (commit markers 20261106-105628 / -105630): 1152446, 1152447 (2 h). Pull: the three
 rsync lines at the top of exp08_wsp_gate/run_all.sh, then `exp08_wsp_gate/run_all.sh report`.
 
+## Experiment 11 (exp11_ruler_cap) — 2B RULER multi-answer without the 64-token cap
+Pre-registered 2026-11-07 at b6c263a before any run (exp11_ruler_cap/RESULTS.md). The 64-token cap cuts off 142 stored 2B
+multi-value / multi-query misses, mostly the synthetic adapters'. That biased exp05 P4(b), exp06 B and exp07 arm 2 against
+the synthetic arm (the 8B misses are never cut off). The re-score decodes the same 200 cases (`~/data/rg/ruler-mvmq`) at 192
+tokens for Jet base and its ten adapters. Outcome on the synthetic - realmix multi-value gap at 16K (0.08 at 64 tokens):
+cost >= 0.15, no cost <= 0.08. **Submitted 2026-11-07** at 3e4d01f, no code change (`step1.sbatch` with JOB_ARGS), A40, 2 h each,
+run dirs `~/runs/rg/rescore/20261107-ruler192/<variant>`: base 1155277, synthetic seeds 1-3 1155278-80, realmix 1155281-83,
+budget 1155284-86, syn1200 1155287. Pull: the rsync line at the top of exp11_ruler_cap/run_all.sh, then `run_all.sh report`.
+After it: dated notes in exp05 / exp06 / exp07 RESULTS.md (and exp08's multi-value: 19 of 21 lost cases were the cap).
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
