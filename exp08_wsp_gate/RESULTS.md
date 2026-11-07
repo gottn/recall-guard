@@ -1,7 +1,13 @@
 # Experiment 8: does a training-free weight edit change long-context recall?
 
-**Verdict: pending.** The gate rule and the prediction below were written on 2026-11-06 before any full run; the
-Results section is filled in only from `results/raw` by `run_all.sh report`.
+**Verdict (2026-11-07): the edit loses recall, so the gate blocks it.** Two of the six primary checks fail on the pooled
+row: the exp01 suite drops 0.80 -> 0.77 (32 lost / 10 gained, p 0.0005) and suite seed 1 drops 0.75 -> 0.73 (23 / 12,
+p 0.045). No single cell fails, and P1 is refuted. RULER, read descriptively outside the gate, shows a larger failure. On
+the single needle in a haystack of one repeated passage, the edited model repeats the haystack in 100 of 100 cases ("The
+grass is green. The sky is blue. ..."), where the base answers all 100. Multi-value falls 0.40 -> 0.18 at 16K and 0.36 ->
+0.16 at 32K. P2 holds (ARC-Easy -0.004, HellaSwag +0.014, bits per byte +0.002). The comparison is valid: 725 of 3,450
+completions differ. The gate rule and the prediction below were written on 2026-11-06 before any full run; the Results
+section is filled in only from `results/raw` by `run_all.sh report`.
 
 ## Question
 "Sparks of Weight-Space Programming" (Takehi, Teoh, Zhang, Khattab, MIT CSAIL blog, 2026-11-02,
@@ -64,4 +70,63 @@ Qwen3.5 is the model class this repo studies: 18 linear-attention layers and 6 f
   The gate would flag them; MATH-500 and IFEval cannot see them.
 
 ## Results
-(Filled in from `results/raw` by `run_all.sh report` after the runs.)
+Run dirs `~/runs/rg/robust/20261106-105622-26d25e8`, `~/runs/rg/realdocs/20261106-105625-26d25e8` and the exp01 suite's
+`~/runs/rg/step1/20261016-121320-8beb29d`, at 26d25e8 on A40s, all COMPLETED: robust 1152442 base / 1152443 edited (1 h 07 min
+/ 1 h 01 min), real QA 1152444 / 1152445 (13 min each), step1 1152446 / 1152447 (9 min each). Every number: `run_all.sh
+report` (results/tables-*.md, gates.md, and the printed identical-completion count, bench and bits per byte); "a / b" is
+cases lost / gained by the edited model in `check`.
+
+### Primary checks (base -> edited)
+
+| check | cases | base | edited | lost / gained | p, pooled | verdict |
+|---|---:|---:|---:|---:|---:|---|
+| suite-s1 | 600 | 0.75 | 0.73 | 23 / 12 | 0.045 | **FAIL**, pooled |
+| suite-s2 | 600 | 0.73 | 0.71 | 21 / 12 | 0.081 | pass |
+| heldout | 150 | 0.97 | 0.93 | 6 / 1 | 0.063 | pass |
+| multihop25 | 150 | 0.45 | 0.41 | 10 / 4 | 0.090 | pass |
+| step1 (exp01 suite) | 750 | 0.80 | 0.77 | 32 / 10 | 0.0005 | **FAIL**, pooled |
+| real QA | 600 | 0.56 | 0.55 | 30 / 20 | 0.10 | pass |
+
+- **Losses outnumber gains in all six checks** (122 / 59 in total), but no cell clears its corrected threshold. The largest
+  cells: many_similar at 16K (s1 4 / 2, s2 5 / 0) and 32K (s1 5 / 3), held-out at 16K (3 / 0, 3 / 1), multi-hop at 32K
+  (s1 3 / 0) and 8K (step1 4 / 1), and updated at 2K and 4K (step1 3 / 0 each). Every lost suite or step1 case still
+  answers with a number, a wrong code, so the loss is retrieval, not format. The 4K cells all pass: held-out 1 / 0,
+  multihop25 3 / 0, qa_1 3 / 3, qa_2 6 / 1, and in step1 many_random 1 / 0, many_similar 0 / 1, multi-hop 1 / 2, needle
+  0 / 0, updated 3 / 0. Four of 72 cells could not fail, because the base recalls fewer cases than a failing cell needs: multi-hop at 8K
+  in multihop25 (6 / 25), and at 4K, 8K and 32K in step1 (7-9 / 25).
+- **The reverse checks find no gain** in any file (edited -> base passes six of six).
+
+### RULER needles (n = 50 per cell, descriptive: no gate, because the files repeat case ids)
+
+| variant, 16K / 32K | base | edited |
+|---|---|---|
+| single needle, noise haystack | 1.00 / 1.00 | **0.00 / 0.00** |
+| multi-value | 0.40 / 0.36 | **0.18 / 0.16** |
+| multikey_1 / multikey_2 | 1.00 / 1.00, 1.00 / 0.94 | 0.98 / 1.00, 0.96 / 0.94 |
+| multikey_3 (UUIDs) | 0.20 / 0.36 | 0.28 / 0.40 |
+| multi-query | 0.00 / 0.00 | 0.00 / 0.00 |
+
+- All 100 edited answers on the single needle open with the haystack's first sentence. The haystack repeats one
+  five-sentence passage, and the edited model continues it instead of answering. Multi-value loses 11 and 10 cases and
+  gains none. The exp01 suite's needle, whose filler is varied sentences, stays at 1.00 at every length for both models.
+
+### Cost and validity
+- ARC-Easy 0.654 -> 0.650, HellaSwag 0.398 -> 0.412, bits per byte 1.2760 -> 1.2783: P2 holds.
+- 2,725 of 3,450 completions are identical (79%); the edit reaches the forward pass.
+
+### Reading
+- The refutation reading named RULER multi-value and the hardest copy cells. Multi-value halves, and the pooled losses
+  lean to many_similar and multi-hop. The clearest damage lies where the gate's own suites cannot look. In a haystack made
+  of one repeated passage, the edit meant to stop thinking loops produces a copy loop, with thinking off.
+- `check` blocks the edit on two pooled rows. The strongest evidence, 100 lost and 0 gained on the single needle, sits in
+  the RULER files, which `check` refuses.
+
+## Failures and limits
+- One greedy run per model; n = 25-100 per cell. The suite-s1 failure is marginal (p 0.045), and s2 passes (p 0.081).
+- RULER reads are descriptive: 50 rows per cell, with some case ids repeated within a file.
+- The protocol closes the think block, so this does not test the edit in the regime it was made for.
+- Only the two edited tensors were byte-compared (Method).
+
+## Next
+1. Make RULER gateable: make repeated case ids unique at import (`import-ruler`), so that `check` covers the needle
+   variants. It would have flagged the single needle here.
