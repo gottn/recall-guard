@@ -3,7 +3,8 @@
   generate  --out suite.jsonl --tokenizer Qwen/Qwen2.5-1.5B [--seed 0] [--cases 25] [--lengths ...] [--tasks ...]
             [--cells p5:1 filler:4 ...]   RULER-style needles over controlled haystacks instead of --tasks (haystack.py)
   run       --suite suite.jsonl --model <id> --out results.jsonl [--adapter DIR] [--attn sdpa] [--trust-remote-code] [--limit N]
-            [--restore-from <id> --restore-pattern RE --restore-scale A --restore-phase all|prompt|answer]   (also bench, ppl)
+            [--restore-from <id> --restore-pattern RE --restore-scale A --restore-phase all|prompt|answer]   (also bench, ppl, loops)
+  loops     --model <id> --out loops.jsonl [--per-level 20] [--max-new-tokens 16384] [--batch 50]   MATH-500 thinking loops
   train     --model <id> --out DIR [--n-docs 600] [--lengths 8192 12288 16384] [--lr 2e-4] [--rank 16] [--max-steps N]
             [--real-dir DIR --exclude-dir DIR]   every other document real (SQuAD / HotpotQA train), evaluation cases banned
   bench     --model <id> [--adapter DIR] [--n 500] --out bench.json
@@ -21,7 +22,7 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 
-from recall_guard import haystack
+from recall_guard import haystack, loops
 from recall_guard.aggregate import (
     delta_markdown,
     deltas,
@@ -158,6 +159,38 @@ def cmd_bench(a: argparse.Namespace) -> None:
     print(json.dumps(out), file=sys.stderr)
 
 
+def cmd_loops(a: argparse.Namespace) -> None:
+    """MATH-500 with thinking on, sampled with the post's settings; one scored record per problem (resumes by id)."""
+    from datasets import load_dataset
+
+    from recall_guard.backends import hf
+
+    out = Path(a.out)
+    done = {d["id"] for d in read_jsonl(out)}
+    rows = tuple(r for r in loops.subset(tuple(load_dataset(loops.DATASET, split="test")), a.per_level) if r["unique_id"] not in done)
+    tok, model = load_model(a)
+    eos = model.generation_config.eos_token_id  # Qwen3.5-0.8B: <|endoftext|> only, while a chat turn ends with <|im_end|>
+    stop = tuple(sorted({tok.eos_token_id, *(eos if isinstance(eos, list) else [eos])} - {None}))
+    prompts = [hf.chat_wrap(tok, r["problem"] + loops.SUFFIX, thinking=True) for r in rows]
+    order = sorted(range(len(rows)), key=lambda i: len(tok(prompts[i]).input_ids))  # similar lengths, little padding
+    name = a.model + restore_tag(a)
+    print(f"{name}: {len(rows)} problems to run ({len(done)} already in {out}), stop ids {stop}", file=sys.stderr)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    for b in range(0, len(order), a.batch):
+        idx = order[b : b + a.batch]
+        t0 = time.perf_counter()
+        gens = hf.sample(tok, model, [prompts[i] for i in idx], a.max_new_tokens, a.seed + b, stop, **loops.SAMPLING)
+        wall_s = (time.perf_counter() - t0) / len(idx)
+        recs = []
+        for i, g in zip(idx, gens, strict=True):
+            at = loops.finished_at(g, stop)
+            recs.append(loops.record(rows[i], tok.decode(g[: at or len(g)], skip_special_tokens=True), at, len(g), name, wall_s))
+        with out.open("a") as f:
+            f.writelines(json.dumps(r) + "\n" for r in recs)
+        print(f"  batch at {b}: {sum(not r['finished'] for r in recs)} of {len(recs)} hit {a.max_new_tokens} tokens, "
+              f"{wall_s * len(idx):.0f}s, peak {hf.peak_memory_gib():.1f} GiB", file=sys.stderr)
+
+
 def cmd_import_ruler(a: argparse.Namespace) -> None:
     """RULER generator output (<dir>/<length>/<task>/validation.jsonl) -> one Case JSONL per length."""
     from recall_guard.ruler import to_case
@@ -286,6 +319,17 @@ def main(argv: list[str] | None = None) -> None:
     b.add_argument("--seed", type=int, default=0)
     b.add_argument("--out", required=True)
     b.set_defaults(fn=cmd_bench)
+    lp = sub.add_parser("loops", help="MATH-500, thinking on, the post's sampling: which answers hit the token limit")
+    lp.add_argument("--model", required=True)
+    lp.add_argument("--out", required=True)
+    add_restore_args(lp)
+    lp.add_argument("--attn", default="sdpa")
+    lp.add_argument("--trust-remote-code", action="store_true")
+    lp.add_argument("--per-level", type=int, default=20)
+    lp.add_argument("--max-new-tokens", type=int, default=16384)
+    lp.add_argument("--batch", type=int, default=50)
+    lp.add_argument("--seed", type=int, default=0)
+    lp.set_defaults(fn=cmd_loops)
     ir = sub.add_parser("import-ruler")
     ir.add_argument("--dir", required=True)
     ir.add_argument("--out-dir", required=True)

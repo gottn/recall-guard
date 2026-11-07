@@ -7,7 +7,15 @@ import time
 
 import torch
 import transformers
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    LogitsProcessor,
+    LogitsProcessorList,
+    TemperatureLogitsWarper,
+    TopKLogitsWarper,
+    TopPLogitsWarper,
+)
 
 from recall_guard.backends import loaders
 
@@ -58,9 +66,39 @@ def no_think_prefill(tok: AutoTokenizer) -> str:
     return "<think>\n\n</think>\n\n" if "<think>" in tok.get_vocab() else ""
 
 
-def chat_wrap(tok: AutoTokenizer, prompt: str) -> str:
-    """Render the prompt as a single user turn with the model's chat template (an alternative-explanation check)."""
-    return tok.apply_chat_template([{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True)
+def chat_wrap(tok: AutoTokenizer, prompt: str, thinking: bool = False) -> str:
+    """Render the prompt as a single user turn with the model's chat template (an alternative-explanation check).
+    `thinking`: Qwen3.5-0.8B's template opens an empty think block unless `enable_thinking` is passed as true."""
+    return tok.apply_chat_template([{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True,
+                                   **({"enable_thinking": True} if thinking else {}))
+
+
+class PresencePenalty(LogitsProcessor):
+    """vLLM's presence penalty: every token generated so far loses `penalty` from its logit (the prompt does not count)."""
+
+    def __init__(self, penalty: float, prompt_tokens: int):
+        self.penalty, self.prompt_tokens = penalty, prompt_tokens
+
+    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
+        return scores - self.penalty * torch.zeros_like(scores).scatter_(1, input_ids[:, self.prompt_tokens :], 1.0)
+
+
+@torch.inference_mode()
+def sample(
+    tok: AutoTokenizer, model: AutoModelForCausalLM, prompts: list[str], max_new_tokens: int, seed: int,
+    stop: tuple[int, ...], temperature: float, top_p: float, top_k: int, presence_penalty: float,
+) -> list[list[int]]:
+    """Generated ids per prompt, one left-padded batch, sampled in vLLM's order: presence penalty, then temperature,
+    top-k, top-p. A row ends at any id in `stop` and is padded after it."""
+    tok.padding_side = "left"
+    enc = tok(prompts, return_tensors="pt", padding=True, add_special_tokens=False).to(model.device)
+    n = enc.input_ids.shape[1]
+    procs = LogitsProcessorList([PresencePenalty(presence_penalty, n), TemperatureLogitsWarper(temperature),
+                                 TopKLogitsWarper(top_k), TopPLogitsWarper(top_p)])
+    torch.manual_seed(seed)
+    out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=True, temperature=1.0, top_k=0, top_p=1.0,
+                         logits_processor=procs, eos_token_id=list(stop), pad_token_id=tok.pad_token_id)
+    return [row[n:].tolist() for row in out]
 
 
 def complete(
