@@ -1,0 +1,17 @@
+{
+ "model": "jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1-syn1200",
+ "window_tokens": 16384,
+ "windows": 8,
+ "bpb_mean": 1.0873067925236612,
+ "bpb_values": [
+  1.039701340363423,
+  1.0282162209664532,
+  1.0984446560594714,
+  1.0826971834856358,
+  1.0896787891253392,
+  1.0515759740228687,
+  1.1313440120599767,
+  1.176796164106121
+ ],
+ "text": "/home/id.aau.dk/pr04wm/data/rg/mobydick.txt"
+}

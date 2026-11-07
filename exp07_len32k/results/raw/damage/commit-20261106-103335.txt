@@ -1,0 +1,2 @@
+50ade98d6c307309ebfd32335eab2fc1bd4b5b35
+docs(exp05): post-hoc item 5 records the verified seed-2 run and the real-QA gate (4abb5e8)

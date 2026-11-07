@@ -1,0 +1,17 @@
+{
+ "model": "JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-budget32k",
+ "window_tokens": 16384,
+ "windows": 8,
+ "bpb_mean": 1.0687362253821409,
+ "bpb_values": [
+  1.0465033568918054,
+  0.9942585396066197,
+  1.0508864345563638,
+  1.0801816697807347,
+  1.067777753811259,
+  1.018948116449099,
+  1.121400751549686,
+  1.1699331804115585
+ ],
+ "text": "/home/id.aau.dk/pr04wm/data/rg/mobydick.txt"
+}
