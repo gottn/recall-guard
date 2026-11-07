@@ -1,0 +1,17 @@
+{
+ "model": "jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget",
+ "window_tokens": 16384,
+ "windows": 8,
+ "bpb_mean": 1.0888355018191667,
+ "bpb_values": [
+  1.04264112991168,
+  1.029010229996152,
+  1.1009456907676611,
+  1.083060502112,
+  1.0912154878354867,
+  1.0534586143415792,
+  1.133258060276028,
+  1.1770942993127471
+ ],
+ "text": "/home/id.aau.dk/pr04wm/data/rg/mobydick.txt"
+}
