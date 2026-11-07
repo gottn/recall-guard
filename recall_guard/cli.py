@@ -1,6 +1,7 @@
 """Thin shell: parse arguments, do the I/O, call pure functions.
 
   generate  --out suite.jsonl --tokenizer Qwen/Qwen2.5-1.5B [--seed 0] [--cases 25] [--lengths ...] [--tasks ...]
+            [--cells p5:1 filler:4 ...]   RULER-style needles over controlled haystacks instead of --tasks (haystack.py)
   run       --suite suite.jsonl --model <id> --out results.jsonl [--adapter DIR] [--attn sdpa] [--trust-remote-code] [--limit N]
             [--restore-from <id> --restore-pattern RE --restore-scale A --restore-phase all|prompt|answer]   (also bench, ppl)
   train     --model <id> --out DIR [--n-docs 600] [--lengths 8192 12288 16384] [--lr 2e-4] [--rank 16] [--max-steps N]
@@ -20,6 +21,7 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 
+from recall_guard import haystack
 from recall_guard.aggregate import (
     delta_markdown,
     deltas,
@@ -57,15 +59,23 @@ def cmd_generate(a: argparse.Namespace) -> None:
 
     tok = AutoTokenizer.from_pretrained(a.tokenizer)
     spec = SuiteSpec(tuple(a.tasks), tuple(a.lengths), a.cases)
+    cells = tuple((kind, int(k)) for kind, k in (c.split(":") for c in a.cells))
+    if any(kind not in haystack.KINDS for kind, _ in cells):
+        sys.exit(f"recall-guard: haystack kinds are {haystack.KINDS}, got {a.cells}")
     t0 = time.perf_counter()
-    cases = build_suite(spec, a.seed, lambda s: len(tok(s).input_ids))
+
+    def count(s: str) -> int:
+        return len(tok(s).input_ids)
+
+    cases = haystack.build_sweep(cells, spec.lengths, a.cases, a.seed, count) if cells else build_suite(spec, a.seed, count)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.with_name(f"{out.name}.{os.getpid()}.tmp")  # per-process temp, then rename: parallel jobs never collide
     with tmp.open("w") as f:
         f.writelines(json.dumps(asdict(c)) + "\n" for c in cases)
     tmp.replace(out)
-    prov = {"tokenizer": a.tokenizer, "seed": a.seed, "spec": asdict(spec), "cases": len(cases), "wall_s": time.perf_counter() - t0}
+    prov = {"tokenizer": a.tokenizer, "seed": a.seed, "spec": asdict(spec), "cells": a.cells, "cases": len(cases),
+            "wall_s": time.perf_counter() - t0}
     out.with_suffix(".prov.json").write_text(json.dumps(prov, indent=1))
     print(f"wrote {len(cases)} cases to {out} in {prov['wall_s']:.1f}s", file=sys.stderr)
 
@@ -229,6 +239,7 @@ def main(argv: list[str] | None = None) -> None:
     g.add_argument("--cases", type=int, default=25)
     g.add_argument("--lengths", type=int, nargs="+", default=list(LENGTHS))
     g.add_argument("--tasks", nargs="+", default=sorted(TASKS))
+    g.add_argument("--cells", nargs="*", default=[], help=f"kind:k cells of RULER-style needles instead of --tasks, kinds {haystack.KINDS}")
     g.set_defaults(fn=cmd_generate)
     r = sub.add_parser("run")
     r.add_argument("--suite", required=True)
