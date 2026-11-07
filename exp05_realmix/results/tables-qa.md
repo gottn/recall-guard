@@ -12,8 +12,12 @@
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | ruler_qa_2 | 0.54 | 0.47 | 0.40 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-gentle | ruler_qa_1 | 0.81 | 0.68 | 0.64 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-gentle | ruler_qa_2 | 0.49 | 0.45 | 0.38 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_1 | 0.85 | 0.83 | 0.78 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_2 | 0.61 | 0.50 | 0.53 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_1 | 0.79 | 0.72 | 0.56 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_2 | 0.51 | 0.37 | 0.36 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_1 | 0.88 | 0.80 | 0.78 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_2 | 0.57 | 0.53 | 0.50 |
 | Qwen/Qwen2.5-1.5B | ruler_qa_1 | 0.69 | 0.45 | 0.36 |
 | Qwen/Qwen2.5-1.5B | ruler_qa_2 | 0.50 | 0.39 | 0.32 |
 | Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1 | ruler_qa_1 | 0.70 | 0.50 | 0.38 |
@@ -26,8 +30,12 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1-realmix | ruler_qa_2 | 0.54 | 0.46 | 0.36 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_qa_1 | 0.37 | 0.26 | 0.11 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_qa_2 | 0.20 | 0.17 | 0.15 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_1 | 0.86 | 0.72 | 0.47 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_2 | 0.52 | 0.47 | 0.45 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_1 | 0.80 | 0.51 | 0.22 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_2 | 0.56 | 0.39 | 0.34 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_1 | 0.85 | 0.72 | 0.48 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_2 | 0.56 | 0.48 | 0.39 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_1 | 0.92 | 0.82 | 0.83 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_2 | 0.67 | 0.64 | 0.57 |
 
@@ -65,12 +73,24 @@
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-gentle | ruler_qa_2 | 4096 | 100 | 0.49 | 0.00 | 0.00 | 1.7 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-gentle | ruler_qa_2 | 16384 | 100 | 0.45 | 0.00 | 0.00 | 3.9 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-gentle | ruler_qa_2 | 32768 | 100 | 0.38 | 0.00 | 0.00 | 7.5 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_1 | 4096 | 100 | 0.85 | 0.00 | 0.00 | 3.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_1 | 16384 | 100 | 0.83 | 0.00 | 0.00 | 5.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_1 | 32768 | 100 | 0.78 | 0.00 | 0.00 | 8.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_2 | 4096 | 100 | 0.61 | 0.00 | 0.00 | 2.9 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_2 | 16384 | 100 | 0.50 | 0.00 | 0.00 | 5.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix | ruler_qa_2 | 32768 | 100 | 0.53 | 0.00 | 0.00 | 8.6 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_1 | 4096 | 100 | 0.79 | 0.00 | 0.00 | 3.2 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_1 | 16384 | 100 | 0.72 | 0.00 | 0.00 | 5.1 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_1 | 32768 | 100 | 0.56 | 0.00 | 0.00 | 8.8 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_2 | 4096 | 100 | 0.51 | 0.00 | 0.00 | 2.9 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_2 | 16384 | 100 | 0.37 | 0.00 | 0.00 | 5.2 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-gentle | ruler_qa_2 | 32768 | 100 | 0.36 | 0.00 | 0.00 | 8.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_1 | 4096 | 100 | 0.88 | 0.00 | 0.00 | 3.0 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_1 | 16384 | 100 | 0.80 | 0.00 | 0.00 | 5.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_1 | 32768 | 100 | 0.78 | 0.00 | 0.00 | 8.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_2 | 4096 | 100 | 0.57 | 0.00 | 0.00 | 2.9 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_2 | 16384 | 100 | 0.53 | 0.00 | 0.00 | 5.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix | ruler_qa_2 | 32768 | 100 | 0.50 | 0.00 | 0.00 | 8.6 |
 | Qwen/Qwen2.5-1.5B | ruler_qa_1 | 4096 | 100 | 0.69 | 0.00 | 0.00 | 0.8 |
 | Qwen/Qwen2.5-1.5B | ruler_qa_1 | 16384 | 100 | 0.45 | 0.00 | 0.00 | 2.3 |
 | Qwen/Qwen2.5-1.5B | ruler_qa_1 | 32768 | 100 | 0.36 | 0.00 | 0.00 | 3.7 |
@@ -107,12 +127,24 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_qa_2 | 4096 | 100 | 0.20 | 0.00 | 0.00 | 1.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_qa_2 | 16384 | 100 | 0.17 | 0.00 | 0.00 | 3.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | ruler_qa_2 | 32768 | 100 | 0.15 | 0.00 | 0.00 | 4.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_1 | 4096 | 100 | 0.86 | 0.00 | 0.00 | 1.7 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_1 | 16384 | 100 | 0.72 | 0.00 | 0.00 | 2.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_1 | 32768 | 100 | 0.47 | 0.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_2 | 4096 | 100 | 0.52 | 0.00 | 0.00 | 1.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_2 | 16384 | 100 | 0.47 | 0.00 | 0.00 | 2.6 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix | ruler_qa_2 | 32768 | 100 | 0.45 | 0.00 | 0.00 | 4.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_1 | 4096 | 100 | 0.80 | 0.00 | 0.00 | 3.2 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_1 | 16384 | 100 | 0.51 | 0.00 | 0.00 | 3.7 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_1 | 32768 | 100 | 0.22 | 0.00 | 0.00 | 5.2 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_2 | 4096 | 100 | 0.56 | 0.00 | 0.00 | 3.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_2 | 16384 | 100 | 0.39 | 0.00 | 0.00 | 4.4 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | ruler_qa_2 | 32768 | 100 | 0.34 | 0.00 | 0.00 | 5.4 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_1 | 4096 | 100 | 0.85 | 0.00 | 0.00 | 3.1 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_1 | 16384 | 100 | 0.72 | 0.00 | 0.00 | 3.7 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_1 | 32768 | 100 | 0.48 | 0.00 | 0.00 | 5.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_2 | 4096 | 100 | 0.56 | 0.00 | 0.00 | 2.9 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_2 | 16384 | 100 | 0.48 | 0.00 | 0.00 | 4.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_2 | 32768 | 100 | 0.39 | 0.00 | 0.00 | 5.4 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_1 | 4096 | 100 | 0.92 | 0.00 | 0.00 | 2.2 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_1 | 16384 | 100 | 0.82 | 0.00 | 0.00 | 4.3 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_1 | 32768 | 100 | 0.83 | 0.00 | 0.00 | 9.1 |

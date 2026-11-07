@@ -406,3 +406,351 @@ baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mam
 
 PASS: no recall regression
 
+### real QA: base -> realmix seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.38 | 0.58 | 41 | 164 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.70 | 0.86 | 7 | 23 | 0.999 |  |
+| ruler_qa_1 | 16384 | 100 | 0.39 | 0.72 | 4 | 37 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.12 | 0.47 | 2 | 37 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.50 | 0.52 | 10 | 12 | 0.738 |  |
+| ruler_qa_2 | 16384 | 100 | 0.28 | 0.47 | 11 | 30 | 0.999 |  |
+| ruler_qa_2 | 32768 | 100 | 0.27 | 0.45 | 7 | 25 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> realmix seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.92 | 8 | 221 | 1 |  |
+| heldout_many | 16384 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| heldout_many | 32768 | 50 | 0.40 | 1.00 | 0 | 30 | 1 |  |
+| many_random | 16384 | 50 | 0.64 | 0.96 | 1 | 17 | 1 |  |
+| many_random | 32768 | 50 | 0.26 | 1.00 | 0 | 37 | 1 |  |
+| many_similar | 16384 | 50 | 0.76 | 1.00 | 0 | 12 | 1 |  |
+| many_similar | 32768 | 50 | 0.24 | 0.96 | 1 | 37 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.64 | 0 | 23 | 1 |  |
+| multihop | 32768 | 50 | 0.06 | 0.52 | 1 | 24 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.86 | 0.98 | 1 | 7 | 0.996 |  |
+| updated | 32768 | 50 | 0.60 | 0.92 | 4 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> realmix seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.91 | 5 | 216 | 1 |  |
+| heldout_many | 16384 | 50 | 0.92 | 0.98 | 0 | 3 | 1 |  |
+| heldout_many | 32768 | 50 | 0.50 | 1.00 | 0 | 25 | 1 |  |
+| many_random | 16384 | 50 | 0.50 | 0.98 | 0 | 24 | 1 |  |
+| many_random | 32768 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| many_similar | 16384 | 50 | 0.64 | 1.00 | 0 | 18 | 1 |  |
+| many_similar | 32768 | 50 | 0.20 | 0.94 | 2 | 39 | 1 |  |
+| multihop | 16384 | 50 | 0.22 | 0.62 | 1 | 21 | 1 |  |
+| multihop | 32768 | 50 | 0.16 | 0.46 | 0 | 15 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.78 | 1.00 | 0 | 11 | 1 |  |
+| updated | 32768 | 50 | 0.56 | 0.94 | 2 | 21 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> realmix seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.85 | 0.99 | 1 | 22 | 1 |  |
+| heldout_many | 1024 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 2048 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 4096 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 8192 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 16384 | 25 | 0.96 | 0.96 | 1 | 1 | 0.75 |  |
+| heldout_many | 32768 | 25 | 0.24 | 1.00 | 0 | 19 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> realmix seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.17 | 0.60 | 2 | 67 | 1 |  |
+| multihop | 1024 | 25 | 0.24 | 0.68 | 1 | 12 | 1 |  |
+| multihop | 2048 | 25 | 0.08 | 0.60 | 0 | 13 | 1 |  |
+| multihop | 4096 | 25 | 0.20 | 0.76 | 0 | 14 | 1 |  |
+| multihop | 8192 | 25 | 0.20 | 0.52 | 1 | 9 | 0.999 |  |
+| multihop | 16384 | 25 | 0.16 | 0.44 | 0 | 7 | 1 |  |
+| multihop | 32768 | 25 | 0.12 | 0.60 | 0 | 12 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: base -> realmix seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.38 | 0.58 | 35 | 157 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.70 | 0.85 | 5 | 20 | 1 |  |
+| ruler_qa_1 | 16384 | 100 | 0.39 | 0.72 | 3 | 36 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.12 | 0.48 | 2 | 38 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.50 | 0.56 | 12 | 18 | 0.9 |  |
+| ruler_qa_2 | 16384 | 100 | 0.28 | 0.48 | 7 | 27 | 1 |  |
+| ruler_qa_2 | 32768 | 100 | 0.27 | 0.39 | 6 | 18 | 0.997 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> realmix seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.92 | 3 | 219 | 1 |  |
+| heldout_many | 16384 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| heldout_many | 32768 | 50 | 0.40 | 0.92 | 1 | 27 | 1 |  |
+| many_random | 16384 | 50 | 0.64 | 1.00 | 0 | 18 | 1 |  |
+| many_random | 32768 | 50 | 0.26 | 1.00 | 0 | 37 | 1 |  |
+| many_similar | 16384 | 50 | 0.76 | 1.00 | 0 | 12 | 1 |  |
+| many_similar | 32768 | 50 | 0.24 | 1.00 | 0 | 38 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.66 | 0 | 24 | 1 |  |
+| multihop | 32768 | 50 | 0.06 | 0.52 | 0 | 23 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.86 | 0.98 | 1 | 7 | 0.996 |  |
+| updated | 32768 | 50 | 0.60 | 0.96 | 1 | 19 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> realmix seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.93 | 1 | 223 | 1 |  |
+| heldout_many | 16384 | 50 | 0.92 | 1.00 | 0 | 4 | 1 |  |
+| heldout_many | 32768 | 50 | 0.50 | 0.90 | 0 | 20 | 1 |  |
+| many_random | 16384 | 50 | 0.50 | 1.00 | 0 | 25 | 1 |  |
+| many_random | 32768 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| many_similar | 16384 | 50 | 0.64 | 0.98 | 1 | 18 | 1 |  |
+| many_similar | 32768 | 50 | 0.20 | 1.00 | 0 | 40 | 1 |  |
+| multihop | 16384 | 50 | 0.22 | 0.64 | 0 | 21 | 1 |  |
+| multihop | 32768 | 50 | 0.16 | 0.62 | 0 | 23 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.78 | 1.00 | 0 | 11 | 1 |  |
+| updated | 32768 | 50 | 0.56 | 1.00 | 0 | 22 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> realmix seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.85 | 0.99 | 0 | 20 | 1 |  |
+| heldout_many | 1024 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 2048 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 4096 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 8192 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 16384 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 32768 | 25 | 0.24 | 0.92 | 0 | 17 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> realmix seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.17 | 0.63 | 1 | 70 | 1 |  |
+| multihop | 1024 | 25 | 0.24 | 0.68 | 1 | 12 | 1 |  |
+| multihop | 2048 | 25 | 0.08 | 0.52 | 0 | 11 | 1 |  |
+| multihop | 4096 | 25 | 0.20 | 0.72 | 0 | 13 | 1 |  |
+| multihop | 8192 | 25 | 0.20 | 0.56 | 0 | 9 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 0.60 | 0 | 11 | 1 |  |
+| multihop | 32768 | 25 | 0.12 | 0.68 | 0 | 14 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: base -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.48 | 0.68 | 31 | 151 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.86 | 0.85 | 6 | 5 | 0.5 |  |
+| ruler_qa_1 | 16384 | 100 | 0.65 | 0.83 | 5 | 23 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.19 | 0.78 | 0 | 59 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.51 | 0.61 | 5 | 15 | 0.994 |  |
+| ruler_qa_2 | 16384 | 100 | 0.34 | 0.50 | 10 | 26 | 0.998 |  |
+| ruler_qa_2 | 32768 | 100 | 0.35 | 0.53 | 5 | 23 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.32 | 0.99 | 1 | 399 | 1 |  |
+| heldout_many | 16384 | 50 | 0.24 | 0.98 | 0 | 37 | 1 |  |
+| heldout_many | 32768 | 50 | 0.10 | 1.00 | 0 | 45 | 1 |  |
+| many_random | 16384 | 50 | 0.16 | 1.00 | 0 | 42 | 1 |  |
+| many_random | 32768 | 50 | 0.28 | 1.00 | 0 | 36 | 1 |  |
+| many_similar | 16384 | 50 | 0.12 | 0.98 | 0 | 43 | 1 |  |
+| many_similar | 32768 | 50 | 0.12 | 0.98 | 0 | 43 | 1 |  |
+| multihop | 16384 | 50 | 0.12 | 0.96 | 0 | 42 | 1 |  |
+| multihop | 32768 | 50 | 0.08 | 0.96 | 0 | 44 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.48 | 0.98 | 1 | 26 | 1 |  |
+| updated | 32768 | 50 | 0.18 | 1.00 | 0 | 41 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.34 | 0.98 | 1 | 385 | 1 |  |
+| heldout_many | 16384 | 50 | 0.42 | 1.00 | 0 | 29 | 1 |  |
+| heldout_many | 32768 | 50 | 0.24 | 1.00 | 0 | 38 | 1 |  |
+| many_random | 16384 | 50 | 0.34 | 1.00 | 0 | 33 | 1 |  |
+| many_random | 32768 | 50 | 0.22 | 0.98 | 0 | 38 | 1 |  |
+| many_similar | 16384 | 50 | 0.10 | 0.96 | 0 | 43 | 1 |  |
+| many_similar | 32768 | 50 | 0.06 | 0.92 | 0 | 43 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.98 | 1 | 41 | 1 |  |
+| multihop | 32768 | 50 | 0.04 | 0.94 | 0 | 45 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| updated | 32768 | 50 | 0.14 | 1.00 | 0 | 43 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.61 | 0.99 | 0 | 56 | 1 |  |
+| heldout_many | 1024 | 25 | 0.92 | 1.00 | 0 | 2 | 1 |  |
+| heldout_many | 2048 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 4096 | 25 | 0.76 | 1.00 | 0 | 6 | 1 |  |
+| heldout_many | 8192 | 25 | 0.64 | 0.96 | 0 | 8 | 1 |  |
+| heldout_many | 16384 | 25 | 0.24 | 1.00 | 0 | 19 | 1 |  |
+| heldout_many | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.30 | 1.00 | 0 | 105 | 1 |  |
+| multihop | 1024 | 25 | 0.52 | 1.00 | 0 | 12 | 1 |  |
+| multihop | 2048 | 25 | 0.28 | 1.00 | 0 | 18 | 1 |  |
+| multihop | 4096 | 25 | 0.40 | 1.00 | 0 | 15 | 1 |  |
+| multihop | 8192 | 25 | 0.28 | 1.00 | 0 | 18 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 1.00 | 0 | 21 | 1 |  |
+| multihop | 32768 | 25 | 0.16 | 1.00 | 0 | 21 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: base -> realmix seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.48 | 0.68 | 33 | 149 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.86 | 0.88 | 5 | 7 | 0.806 |  |
+| ruler_qa_1 | 16384 | 100 | 0.65 | 0.80 | 5 | 20 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.19 | 0.78 | 0 | 59 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.51 | 0.57 | 9 | 15 | 0.924 |  |
+| ruler_qa_2 | 16384 | 100 | 0.34 | 0.53 | 7 | 26 | 1 |  |
+| ruler_qa_2 | 32768 | 100 | 0.35 | 0.50 | 7 | 22 | 0.999 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> realmix seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.32 | 0.98 | 0 | 394 | 1 |  |
+| heldout_many | 16384 | 50 | 0.24 | 0.98 | 0 | 37 | 1 |  |
+| heldout_many | 32768 | 50 | 0.10 | 0.96 | 0 | 43 | 1 |  |
+| many_random | 16384 | 50 | 0.16 | 1.00 | 0 | 42 | 1 |  |
+| many_random | 32768 | 50 | 0.28 | 1.00 | 0 | 36 | 1 |  |
+| many_similar | 16384 | 50 | 0.12 | 0.98 | 0 | 43 | 1 |  |
+| many_similar | 32768 | 50 | 0.12 | 0.96 | 0 | 42 | 1 |  |
+| multihop | 16384 | 50 | 0.12 | 1.00 | 0 | 44 | 1 |  |
+| multihop | 32768 | 50 | 0.08 | 0.88 | 0 | 40 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.48 | 1.00 | 0 | 26 | 1 |  |
+| updated | 32768 | 50 | 0.18 | 1.00 | 0 | 41 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> realmix seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.34 | 0.98 | 1 | 386 | 1 |  |
+| heldout_many | 16384 | 50 | 0.42 | 0.98 | 0 | 28 | 1 |  |
+| heldout_many | 32768 | 50 | 0.24 | 1.00 | 0 | 38 | 1 |  |
+| many_random | 16384 | 50 | 0.34 | 1.00 | 0 | 33 | 1 |  |
+| many_random | 32768 | 50 | 0.22 | 1.00 | 0 | 39 | 1 |  |
+| many_similar | 16384 | 50 | 0.10 | 0.96 | 0 | 43 | 1 |  |
+| many_similar | 32768 | 50 | 0.06 | 0.98 | 0 | 46 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.96 | 1 | 40 | 1 |  |
+| multihop | 32768 | 50 | 0.04 | 0.92 | 0 | 44 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| updated | 32768 | 50 | 0.14 | 1.00 | 0 | 43 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> realmix seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.61 | 0.99 | 0 | 57 | 1 |  |
+| heldout_many | 1024 | 25 | 0.92 | 1.00 | 0 | 2 | 1 |  |
+| heldout_many | 2048 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 4096 | 25 | 0.76 | 1.00 | 0 | 6 | 1 |  |
+| heldout_many | 8192 | 25 | 0.64 | 1.00 | 0 | 9 | 1 |  |
+| heldout_many | 16384 | 25 | 0.24 | 1.00 | 0 | 19 | 1 |  |
+| heldout_many | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> realmix seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.30 | 0.96 | 0 | 99 | 1 |  |
+| multihop | 1024 | 25 | 0.52 | 1.00 | 0 | 12 | 1 |  |
+| multihop | 2048 | 25 | 0.28 | 1.00 | 0 | 18 | 1 |  |
+| multihop | 4096 | 25 | 0.40 | 0.96 | 0 | 14 | 1 |  |
+| multihop | 8192 | 25 | 0.28 | 0.96 | 0 | 17 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 0.88 | 0 | 18 | 1 |  |
+| multihop | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+

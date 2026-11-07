@@ -27,10 +27,10 @@ case "${1:-report}" in
   report)
     $PY -m recall_guard.cli report --results $E4/ruler-*.jsonl $QA/ruler-*.jsonl --out exp05_realmix/results/tables-qa.md
     ls $DMG/suite-s*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
-      --results $E3/suite-s*-base-{$JET,$MIL}.jsonl $E3/suite-s*-repair-seed1-$JET.jsonl $E3/suite-s*-repair-seed1-gentle-$MIL.jsonl $DMG/suite-s*-repair-seed1-realmix-*.jsonl \
+      --results $E3/suite-s*-base-{$JET,$MIL}.jsonl $E3/suite-s*-repair-seed1-$JET.jsonl $E3/suite-s*-repair-seed1-gentle-$MIL.jsonl $DMG/suite-s*-repair-seed[123]-realmix-*.jsonl \
       --out exp05_realmix/results/tables-damage.md
     ls $DMG/ruler-*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
-      --results $E3/ruler-*-base-{$JET,$MIL}.jsonl $E3/ruler-*-repair-seed1-$JET.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl $DMG/ruler-*-repair-seed1-realmix-*.jsonl \
+      --results $E3/ruler-*-base-{$JET,$MIL}.jsonl $E3/ruler-*-repair-seed1-$JET.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl $DMG/ruler-*-repair-seed[123]-realmix-*.jsonl \
       --out exp05_realmix/results/tables-ruler.md
     : > exp05_realmix/results/gates.md
     for m in "$JET repair-seed1 $QWEN" "$MIL repair-seed1-gentle $LLAMA"; do
@@ -45,6 +45,10 @@ case "${1:-report}" in
       done
       # no RULER gate: the generator repeats 10 (16K) and 4 (32K) case ids per file, exp03 too, and check refuses them; P4(b) reads tables-ruler.md
     done
+    for H in $JET $MIL; do for s in 2 3; do  # seeds 2-3: the README damage check (base -> adapter); seed spread reads the tables
+      gate "real QA: base -> realmix seed $s ($H)"  $E4/ruler-*-base-$H.jsonl -- $QA/ruler-*-repair-seed$s-realmix-$H.jsonl
+      for S in suite-s1 suite-s2 heldout multihop25; do gate "$S: base -> realmix seed $s ($H)"  $E3/$S-base-$H.jsonl -- $DMG/$S-repair-seed$s-realmix-$H.jsonl; done
+    done; done
     for f in $E3/bench-base-{$JET,$MIL}.json $E3/bench-repair-seed1-$JET.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
              $E3/bpb-base-{$JET,$MIL}.json $E3/bpb-repair-seed1-$JET.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
       [ -f "$f" ] && $PY -c "import json,sys; d=json.load(open(sys.argv[1])); d.pop('bpb_values',None); print(json.dumps(d))" "$f"

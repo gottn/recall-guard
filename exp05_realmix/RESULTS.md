@@ -12,6 +12,11 @@ unchanged (Jet 1.086 = synthetic adapter; 8B 1.056 against gentle's 1.065). Read
 halves compete for one dose, so the next lever is budget, not a split. Predictions P1-P4 below were written on 2026-10-26 before
 any model ran; the Results section is filled in only from `results/raw` by `run_all.sh report`.
 
+**Seeds 2 and 3 (2026-11-07, after the verdict):** P1 holds at every seed (8B qa_1 at 32K 0.72 / 0.78 / 0.78 against the gentle
+seeds' 0.56 / 0.64 / 0.56; 2B 0.44 / 0.47 / 0.48), and Jet's multi-hop loss replicates (0.45 / 0.49 / 0.57 at 32K against
+0.81-0.89 for the synthetic seeds). P4(b)'s RULER loss does not: the realmix seeds sit inside the synthetic adapters' own seed
+range. Section "Seeds 2 and 3".
+
 ## Question
 Exp04 left three things open. The adapter trained only on synthetic key lists repairs 58% of the single-document gap at
 32K at both scales (Jet 0.12 -> 0.26 against Qwen2.5-1.5B at 0.36; Mamba-in-the-Llama 0.19 -> 0.56 against Llama-3.1-8B
@@ -237,9 +242,36 @@ QA (pulled into exp04's run dir by another session, untracked, unreported) and t
 What this changes in Next: item 1 is now a two-outcome test (dose vs prior), running as exp06; item 2 is the single lever for the
 8B qa_1 residual at 32K; two-hop (P2-type predictions) is dropped as a repair target.
 
+## Seeds 2 and 3 (2026-11-07, after the verdict; not pre-registered)
+Same recipes and run dirs with TRAIN_SEED 2 and 3, at 26d25e8 (it differs from 8b5abb6 only by d6523cd, which puts the 55
+SQuAD paragraphs back in the distractor pool), on A40s, all COMPLETED: Jet 1152548 / 1152556 (5 h 07 min / 6 h 47 min),
+Mamba-in-the-Llama 1152550 / 1152558 (7 h 10 min / 7 h 09 min), real QA 1152549 / 1152557 / 1152551 / 1152559 (29-60 min).
+Every number: `run_all.sh report`, whose tables now list seeds 1-3 and whose gates add base -> realmix per seed and file.
+
+| cell | realmix, seeds 1 / 2 / 3 | comparator |
+|---|---|---|
+| 8B qa_1 at 32K | 0.72 / 0.78 / 0.78 | gentle seeds 0.56 / 0.64 / 0.56; Llama 0.83 |
+| 8B qa_2 at 16K / 32K | 0.47 / 0.50 / 0.53, 0.40 / 0.53 / 0.50 | gentle seed 1 0.38 / 0.36; Llama 0.64 / 0.57 |
+| 2B qa_1 at 32K | 0.44 / 0.47 / 0.48 | synthetic seed 1 0.26; Qwen 0.36 |
+| Jet multi-hop suite at 16K / 32K | 0.65 / 0.63 / 0.65, 0.45 / 0.49 / 0.57 | synthetic seeds 0.94-0.97, 0.81-0.89 |
+| Jet RULER multi-value / multi-query at 16K | 0.52 / 0.62 / 0.48, 0.48 / 0.40 / 0.48 | synthetic seeds 0.48-0.70, 0.36-0.62 |
+| 8B RULER multi-value at 32K | 0.60 / 0.86 / 0.56 | gentle seeds 0.80 / 0.72 / 0.68 |
+| bits per byte, 2B / 8B | 1.0861 / 1.0868 / 1.0863, 1.0561 / 1.0447 / 1.0364 | synthetic seed 1 1.0862; gentle seeds 1.063-1.083 |
+
+- **P1 at 8B is now established**, the open point of post-hoc item 1: every realmix seed beats every gentle seed on qa_1 at
+  32K, by 0.08 to 0.22, and stays 0.05-0.11 below Llama. At 2B all three seeds sit above the Qwen source.
+- **P2 at 32K** misses on seed 1 only (0.40); seeds 2 and 3 reach 0.53 / 0.50 against the 0.45 prediction.
+- **P4(a) replicates**: Jet multi-hop at 32K is 0.45-0.57 at every seed, below every synthetic seed, and nearly every
+  failure is stale (0.43-0.55 of cases).
+- **P4(b) is not established.** Jet's multi-value and multi-query at 16K and the 8B multi-value at 32K overlap the
+  synthetic adapters' seed ranges, so the single-seed gaps of 0.12-0.20 in these 50-case cells do not show a loss.
+- The damage check passes at every seed: base -> realmix flags no cell in real QA or the four synthetic files (20 new
+  gates). Bench stays within 0.01 of seed 1 at both scales.
+
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to
    keep qa_1 at 0.44 without losing chained-key multi-hop; then the 8B recipe at 300 synthetic + 300 real.
 2. 32K documents in the 8B recipe (the gentle recipe stops at 16K and qa_2 moved only at 16K): 8K / 16K / 32K, same 300 documents.
-3. Seeds 2 and 3 of the realmix adapters on the headline cells (qa_1 at 32K, both scales; 8B qa_2 at 16K).
+3. Seeds 2 and 3 of the realmix adapters on the headline cells (qa_1 at 32K, both scales; 8B qa_2 at 16K): done 2026-11-07,
+   section "Seeds 2 and 3".
 4. qk-only + real QA: exp04's qk-only adapter moved qa_2 everywhere with no 4K cost; the real half may stack with it.
