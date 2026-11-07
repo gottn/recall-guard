@@ -2,6 +2,7 @@
 
   generate  --out suite.jsonl --tokenizer Qwen/Qwen2.5-1.5B [--seed 0] [--cases 25] [--lengths ...] [--tasks ...]
   run       --suite suite.jsonl --model <id> --out results.jsonl [--adapter DIR] [--attn sdpa] [--trust-remote-code] [--limit N]
+            [--restore-from <id> --restore-pattern RE --restore-scale A --restore-phase all|prompt|answer]   (also bench, ppl)
   train     --model <id> --out DIR [--n-docs 600] [--lengths 8192 12288 16384] [--lr 2e-4] [--rank 16] [--max-steps N]
             [--real-dir DIR --exclude-dir DIR]   every other document real (SQuAD / HotpotQA train), evaluation cases banned
   bench     --model <id> [--adapter DIR] [--n 500] --out bench.json
@@ -31,6 +32,7 @@ from recall_guard.aggregate import (
     separation_markdown,
     separations,
 )
+from recall_guard.backends import restore
 from recall_guard.score import to_result
 from recall_guard.suite import LENGTHS, SuiteSpec, build_suite
 from recall_guard.tasks import TASKS
@@ -69,8 +71,28 @@ def cmd_generate(a: argparse.Namespace) -> None:
 
 
 def add_restore_args(p: argparse.ArgumentParser) -> None:
-    p.add_argument("--restore-qk", default="", help="hf id of the conversion source: copy its q/k projections into the matching layers (training-free baseline)")
+    p.add_argument("--restore-qk", "--restore-from", dest="restore_qk", default="",
+                   help="hf id of a checkpoint whose matching tensors are copied in; by default the conversion source's q/k projections (training-free baseline)")
     p.add_argument("--restore-pattern", default="", help="regex on parameter names to restore (default: self_attn q/k weight and bias)")
+    p.add_argument("--restore-scale", type=float, default=1.0, help="move each matched tensor to W + scale * (W_source - W); 1 copies it")
+    p.add_argument("--restore-phase", choices=restore.PHASES, default="all",
+                   help="prompt / answer: apply the change only while reading the prompt, or only while generating")
+
+
+def restore_tag(a: argparse.Namespace) -> str:
+    """Model-name suffix of a run with restored tensors: '+qk-restore' for the exp03 baseline, else every setting."""
+    if not a.restore_qk:
+        return ""
+    if (a.restore_pattern, a.restore_scale, a.restore_phase) == ("", 1.0, "all"):
+        return "+qk-restore"
+    return f"+restore({a.restore_qk},{a.restore_pattern or restore.PATTERN},{a.restore_scale:g},{a.restore_phase})"
+
+
+def load_model(a: argparse.Namespace, adapter: str = "", adapter_mode: str = "merge"):
+    from recall_guard.backends import hf
+
+    return hf.load(a.model, a.attn, a.trust_remote_code, adapter, adapter_mode, a.restore_qk, a.restore_pattern,
+                   a.restore_scale, a.restore_phase)
 
 
 def cmd_run(a: argparse.Namespace) -> None:
@@ -88,14 +110,14 @@ def cmd_run(a: argparse.Namespace) -> None:
     todo = tuple(c for c in cases if c.id not in done)
     print(f"{a.model}: {len(todo)} cases to run ({len(done)} already in {out})", file=sys.stderr)
     t0 = time.perf_counter()
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, a.adapter_mode, restore_from=a.restore_qk, restore_pattern=a.restore_pattern)
+    tok, model = load_model(a, a.adapter, a.adapter_mode)
     print(f"  loaded in {time.perf_counter() - t0:.0f}s, {hf.peak_memory_gib():.1f} GiB", file=sys.stderr)
     prefill = "" if a.allow_think else hf.no_think_prefill(tok)
     print(f"  prefill after Answer: {prefill!r}; chat={a.chat}; adapter_mode={a.adapter_mode}", file=sys.stderr)
     with out.open("a") as f:
         for i, case in enumerate(sorted(todo, key=lambda c: c.ref_tokens), 1):
             text, wall_s, n_tok = hf.complete(tok, model, case.prompt, prefill, a.max_new_tokens, a.chat)
-            tag = ("+qk-restore" if a.restore_qk else "") + (f"+{Path(a.adapter).name}" if a.adapter else "") + ("+unmerged" if a.adapter_mode == "attach" else "") + ("+chat" if a.chat else "")
+            tag = restore_tag(a) + (f"+{Path(a.adapter).name}" if a.adapter else "") + ("+unmerged" if a.adapter_mode == "attach" else "") + ("+chat" if a.chat else "")
             r = to_result(case, a.model + tag, text, wall_s, n_tok)
             f.write(json.dumps(asdict(r)) + "\n")
             f.flush()
@@ -116,11 +138,11 @@ def cmd_train(a: argparse.Namespace) -> None:
 
 
 def cmd_bench(a: argparse.Namespace) -> None:
-    from recall_guard.backends import hf, mc
+    from recall_guard.backends import mc
 
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, restore_from=a.restore_qk, restore_pattern=a.restore_pattern)
+    tok, model = load_model(a, a.adapter)
     out = {b: mc.accuracy(tok, model, mc.load_items(b, a.n, a.seed)) for b in mc.BENCHES}
-    out["model"] = a.model + ("+qk-restore" if a.restore_qk else "") + (f"+{Path(a.adapter).name}" if a.adapter else "")
+    out["model"] = a.model + restore_tag(a) + (f"+{Path(a.adapter).name}" if a.adapter else "")
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))
     print(json.dumps(out), file=sys.stderr)
@@ -144,11 +166,11 @@ def cmd_ppl(a: argparse.Namespace) -> None:
     """Bits per byte on windows of long natural text (a file), one window per --windows, at --window-tokens each."""
     from recall_guard.backends import hf
 
-    tok, model = hf.load(a.model, a.attn, a.trust_remote_code, a.adapter, restore_from=a.restore_qk, restore_pattern=a.restore_pattern)
+    tok, model = load_model(a, a.adapter)
     text = Path(a.text).read_text()
     step = len(text) // a.windows
     vals = [hf.bits_per_byte(tok, model, text[i * step :], a.window_tokens) for i in range(a.windows)]
-    out = {"model": a.model + ("+qk-restore" if a.restore_qk else "") + (f"+{Path(a.adapter).name}" if a.adapter else ""), "window_tokens": a.window_tokens, "windows": a.windows,
+    out = {"model": a.model + restore_tag(a) + (f"+{Path(a.adapter).name}" if a.adapter else ""), "window_tokens": a.window_tokens, "windows": a.windows,
            "bpb_mean": sum(vals) / len(vals), "bpb_values": vals, "text": a.text}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))

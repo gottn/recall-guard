@@ -16,7 +16,7 @@ DTYPE_KWARG = "dtype" if int(transformers.__version__.split(".")[0]) >= 5 else "
 
 def load(
     model_id: str, attn: str, trust_remote_code: bool, adapter: str = "", adapter_mode: str = "merge",
-    restore_from: str = "", restore_pattern: str = "",
+    restore_from: str = "", restore_pattern: str = "", restore_scale: float = 1.0, restore_phase: str = "all",
 ) -> tuple[AutoTokenizer, AutoModelForCausalLM]:
     """Base model, or base + adapter: merged into the weights (default) or attached unmerged (a check that merging is exact).
     Families registered in loaders.py (converted hybrids AutoModel cannot build) go through their own loader."""
@@ -30,12 +30,16 @@ def load(
         model = AutoModelForCausalLM.from_pretrained(
             model_id, attn_implementation=attn, trust_remote_code=trust_remote_code, device_map=device, **kwargs
         )
-    if restore_from:  # training-free baseline, applied before any adapter
+    if restore_from:  # training-free baseline or exp10's partial edit, applied before any adapter
         from recall_guard.backends import restore
 
-        names = restore.restore(model, restore_from, restore_pattern or restore.PATTERN)
+        pattern = restore_pattern or restore.PATTERN
+        names = restore.restore(model, restore_from, pattern, restore_scale, restore_phase)
+        if not names:  # a silent no-op would make every edit variant look like the base model
+            sys.exit(f"recall-guard: {pattern!r} matches no tensor of {restore_from} with the model's name and shape")
         layers = sorted({int(x) for n in names for x in n.split(".") if x.isdigit()})
-        print(f"  restored {len(names)} q/k tensors from {restore_from} in layers {layers}", file=sys.stderr)
+        print(f"  restored {len(names)} tensors from {restore_from} in layers {layers}, scale {restore_scale:g}, "
+              f"phase {restore_phase}: {', '.join(names)}", file=sys.stderr)
     if adapter:  # the adapter names modules by path, which is the same structure whichever loader built the model
         from recall_guard.backends import lora
 
