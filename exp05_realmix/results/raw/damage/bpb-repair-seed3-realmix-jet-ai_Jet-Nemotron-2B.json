@@ -1,0 +1,17 @@
+{
+ "model": "jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix",
+ "window_tokens": 16384,
+ "windows": 8,
+ "bpb_mean": 1.0863263272373633,
+ "bpb_values": [
+  1.0400436917559321,
+  1.0267165715235227,
+  1.0984321208357366,
+  1.0811349300812292,
+  1.0883883950096938,
+  1.0509122172965584,
+  1.130508437268969,
+  1.174474254127265
+ ],
+ "text": "/home/id.aau.dk/pr04wm/data/rg/mobydick.txt"
+}
