@@ -38,6 +38,42 @@
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | multihop | 0.99 | 0.97 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | needle | 1.00 | 1.00 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | updated | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | heldout_many | 0.98 | 0.96 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | many_random | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | many_similar | 0.98 | 0.94 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 0.96 | 0.94 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | needle | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | updated | 0.99 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | heldout_many |  | 0.88 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | many_random |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | many_similar |  | 0.94 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | multihop |  | 0.82 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | needle |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | updated |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | heldout_many |  | 0.98 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | many_random |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | many_similar |  | 0.94 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | multihop |  | 0.96 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | needle |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | updated |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | heldout_many | 1.00 | 0.99 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | many_random | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | many_similar | 0.98 | 0.99 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 1.00 | 0.99 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | needle | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | updated | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | heldout_many |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | many_random |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | many_similar |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | multihop |  | 0.92 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | needle |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | updated |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | heldout_many |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | many_random |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | many_similar |  | 0.98 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | multihop |  | 0.98 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | needle |  | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | updated |  | 1.00 |
 | jet-ai/Jet-Nemotron-2B | heldout_many | 0.89 | 0.45 |
 | jet-ai/Jet-Nemotron-2B | many_random | 0.57 | 0.31 |
 | jet-ai/Jet-Nemotron-2B | many_similar | 0.70 | 0.22 |
@@ -80,12 +116,48 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 0.94 | 0.88 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | needle | 1.00 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | updated | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | heldout_many | 1.00 | 0.98 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | many_random | 1.00 | 0.99 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | many_similar | 0.99 | 0.99 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 0.62 | 0.49 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | needle | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | updated | 1.00 | 0.98 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | heldout_many |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | many_random |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | many_similar |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | multihop |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | needle |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | updated |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | heldout_many |  | 0.98 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | many_random |  | 0.98 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | many_similar |  | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | multihop |  | 0.44 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | needle |  | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | updated |  | 0.96 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | heldout_many | 0.99 | 0.93 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | many_random | 1.00 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | many_similar | 0.98 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 0.95 | 0.81 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | needle | 1.00 | 1.00 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | updated | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | heldout_many | 0.99 | 0.94 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | many_random | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | many_similar | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 0.68 | 0.61 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | needle | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | updated | 1.00 | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | heldout_many |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | many_random |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | many_similar |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | multihop |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | needle |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | updated |  | 0.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | heldout_many |  | 0.90 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | many_random |  | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | many_similar |  | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | multihop |  | 0.58 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | needle |  | 1.00 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | updated |  | 1.00 |
 
 ## All rows
 
@@ -151,6 +223,54 @@
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.2 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.4 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | heldout_many | 16384 | 100 | 0.98 | 0.98 | 0.02 | 5.5 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | heldout_many | 32768 | 100 | 0.96 | 0.96 | 0.04 | 9.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.5 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | many_random | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | many_similar | 16384 | 100 | 0.98 | 0.98 | 0.02 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | many_similar | 32768 | 100 | 0.94 | 0.94 | 0.06 | 9.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 16384 | 100 | 0.96 | 0.96 | 0.04 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 32768 | 100 | 0.94 | 0.94 | 0.06 | 9.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | updated | 16384 | 100 | 0.99 | 0.99 | 0.01 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | heldout_many | 32768 | 50 | 0.88 | 0.88 | 0.12 | 8.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | many_similar | 32768 | 50 | 0.94 | 0.94 | 0.06 | 8.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | multihop | 32768 | 50 | 0.82 | 0.82 | 0.06 | 8.6 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+chat | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | heldout_many | 32768 | 50 | 0.98 | 0.98 | 0.02 | 10.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 11.0 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | many_similar | 32768 | 50 | 0.94 | 0.94 | 0.06 | 10.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | multihop | 32768 | 50 | 0.96 | 0.96 | 0.04 | 10.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget+unmerged | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | heldout_many | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | heldout_many | 32768 | 100 | 0.99 | 0.99 | 0.01 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | many_random | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | many_similar | 16384 | 100 | 0.98 | 0.98 | 0.02 | 5.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | many_similar | 32768 | 100 | 0.99 | 0.99 | 0.01 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 32768 | 100 | 0.99 | 0.99 | 0.01 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | heldout_many | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.6 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | many_similar | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.0 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | multihop | 32768 | 50 | 0.92 | 0.92 | 0.02 | 8.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 7.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+chat | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 7.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | heldout_many | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | many_similar | 32768 | 50 | 0.98 | 0.98 | 0.02 | 10.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | multihop | 32768 | 50 | 0.98 | 0.98 | 0.02 | 10.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget+unmerged | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.7 |
 | jet-ai/Jet-Nemotron-2B | heldout_many | 16384 | 100 | 0.89 | 0.89 | 0.11 | 1.5 |
 | jet-ai/Jet-Nemotron-2B | heldout_many | 32768 | 100 | 0.45 | 0.45 | 0.51 | 2.1 |
 | jet-ai/Jet-Nemotron-2B | many_random | 16384 | 100 | 0.57 | 0.57 | 0.39 | 1.4 |
@@ -223,6 +343,30 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | heldout_many | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | heldout_many | 32768 | 100 | 0.98 | 0.98 | 0.02 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.1 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | many_random | 32768 | 100 | 0.99 | 0.99 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | many_similar | 16384 | 100 | 0.99 | 0.99 | 0.01 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | many_similar | 32768 | 100 | 0.99 | 0.99 | 0.01 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 16384 | 100 | 0.62 | 0.62 | 0.38 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 32768 | 100 | 0.49 | 0.49 | 0.51 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | updated | 32768 | 100 | 0.98 | 0.98 | 0.02 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | heldout_many | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | many_random | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.7 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | many_similar | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | multihop | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | needle | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+chat | updated | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | heldout_many | 32768 | 50 | 0.98 | 0.98 | 0.02 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | many_random | 32768 | 50 | 0.98 | 0.98 | 0.00 | 8.6 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | many_similar | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | multihop | 32768 | 50 | 0.44 | 0.44 | 0.56 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget+unmerged | updated | 32768 | 50 | 0.96 | 0.96 | 0.04 | 8.2 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | heldout_many | 16384 | 100 | 0.99 | 0.99 | 0.01 | 2.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | heldout_many | 32768 | 100 | 0.93 | 0.93 | 0.07 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 2.0 |
@@ -235,3 +379,27 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 2.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | heldout_many | 16384 | 100 | 0.99 | 0.99 | 0.01 | 4.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | heldout_many | 32768 | 100 | 0.94 | 0.94 | 0.06 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | many_random | 32768 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | many_similar | 16384 | 100 | 1.00 | 1.00 | 0.00 | 3.9 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | many_similar | 32768 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 16384 | 100 | 0.68 | 0.68 | 0.32 | 3.9 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 32768 | 100 | 0.61 | 0.61 | 0.38 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | updated | 32768 | 100 | 1.00 | 1.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | heldout_many | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.4 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | many_random | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | many_similar | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | multihop | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | needle | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+chat | updated | 32768 | 50 | 0.00 | 0.00 | 0.00 | 5.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | heldout_many | 32768 | 50 | 0.90 | 0.90 | 0.10 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.6 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | many_similar | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | multihop | 32768 | 50 | 0.58 | 0.58 | 0.40 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget+unmerged | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |

@@ -6,12 +6,16 @@
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-budget | multihop | 1.00 | 0.96 | 1.00 | 0.96 | 1.00 | 0.80 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-gentle | multihop | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | multihop | 1.00 | 0.96 | 1.00 | 1.00 | 1.00 | 1.00 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 1.00 | 0.96 | 1.00 | 0.92 | 0.92 | 0.92 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 1.00 | 1.00 | 1.00 | 1.00 | 0.96 | 1.00 |
 | jet-ai/Jet-Nemotron-2B | multihop | 0.24 | 0.08 | 0.20 | 0.20 | 0.16 | 0.12 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | multihop | 1.00 | 0.96 | 0.96 | 0.92 | 1.00 | 0.84 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1-budget | multihop | 1.00 | 0.68 | 0.96 | 0.84 | 0.88 | 0.72 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1-realmix | multihop | 0.68 | 0.56 | 0.72 | 0.60 | 0.64 | 0.72 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 1.00 | 0.96 | 1.00 | 0.88 | 1.00 | 0.92 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 0.76 | 0.68 | 0.72 | 0.64 | 0.68 | 0.72 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 1.00 | 0.96 | 1.00 | 0.92 | 1.00 | 0.84 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 0.84 | 0.68 | 0.80 | 0.72 | 0.64 | 0.60 |
 
 ## All rows
 
@@ -41,6 +45,18 @@
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | multihop | 8192 | 25 | 1.00 | 1.00 | 0.00 | 3.8 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | multihop | 16384 | 25 | 1.00 | 1.00 | 0.00 | 5.4 |
 | JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix | multihop | 32768 | 25 | 1.00 | 1.00 | 0.00 | 9.2 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 1024 | 25 | 1.00 | 1.00 | 0.00 | 2.9 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 2048 | 25 | 0.96 | 0.96 | 0.04 | 2.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 4096 | 25 | 1.00 | 1.00 | 0.00 | 3.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 8192 | 25 | 0.92 | 0.92 | 0.08 | 3.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 16384 | 25 | 0.92 | 0.92 | 0.08 | 5.4 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget | multihop | 32768 | 25 | 0.92 | 0.92 | 0.08 | 9.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 1024 | 25 | 1.00 | 1.00 | 0.00 | 2.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 2048 | 25 | 1.00 | 1.00 | 0.00 | 2.7 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 4096 | 25 | 1.00 | 1.00 | 0.00 | 3.1 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 8192 | 25 | 1.00 | 1.00 | 0.00 | 3.8 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 16384 | 25 | 0.96 | 0.96 | 0.04 | 5.3 |
+| JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget | multihop | 32768 | 25 | 1.00 | 1.00 | 0.00 | 9.2 |
 | jet-ai/Jet-Nemotron-2B | multihop | 1024 | 25 | 0.24 | 0.24 | 0.40 | 1.7 |
 | jet-ai/Jet-Nemotron-2B | multihop | 2048 | 25 | 0.08 | 0.08 | 0.40 | 0.7 |
 | jet-ai/Jet-Nemotron-2B | multihop | 4096 | 25 | 0.20 | 0.20 | 0.32 | 0.6 |
@@ -71,9 +87,21 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 8192 | 25 | 0.88 | 0.88 | 0.08 | 1.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 16384 | 25 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2 | multihop | 32768 | 25 | 0.92 | 0.92 | 0.04 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 1024 | 25 | 0.76 | 0.76 | 0.24 | 3.6 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 2048 | 25 | 0.68 | 0.68 | 0.32 | 2.9 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 4096 | 25 | 0.72 | 0.72 | 0.28 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 8192 | 25 | 0.64 | 0.64 | 0.36 | 3.2 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 16384 | 25 | 0.68 | 0.68 | 0.32 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget | multihop | 32768 | 25 | 0.72 | 0.72 | 0.28 | 5.3 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 1024 | 25 | 1.00 | 1.00 | 0.00 | 2.0 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 2048 | 25 | 0.96 | 0.96 | 0.04 | 1.3 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 4096 | 25 | 1.00 | 1.00 | 0.00 | 1.4 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 8192 | 25 | 0.92 | 0.92 | 0.08 | 1.5 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 16384 | 25 | 1.00 | 1.00 | 0.00 | 1.8 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3 | multihop | 32768 | 25 | 0.84 | 0.84 | 0.16 | 2.5 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 1024 | 25 | 0.84 | 0.84 | 0.16 | 3.6 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 2048 | 25 | 0.68 | 0.68 | 0.32 | 2.9 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 4096 | 25 | 0.80 | 0.80 | 0.20 | 3.0 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 8192 | 25 | 0.72 | 0.72 | 0.28 | 3.3 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 16384 | 25 | 0.64 | 0.64 | 0.36 | 3.8 |
+| jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget | multihop | 32768 | 25 | 0.60 | 0.60 | 0.40 | 5.3 |

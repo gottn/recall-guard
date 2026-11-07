@@ -694,3 +694,411 @@ baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mam
 
 PASS: no recall regression
 
+### real QA: base -> budget seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.38 | 0.61 | 31 | 171 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.70 | 0.84 | 6 | 20 | 0.999 |  |
+| ruler_qa_1 | 16384 | 100 | 0.39 | 0.74 | 3 | 38 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.12 | 0.58 | 2 | 48 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.50 | 0.60 | 8 | 18 | 0.986 |  |
+| ruler_qa_2 | 16384 | 100 | 0.28 | 0.51 | 5 | 28 | 1 |  |
+| ruler_qa_2 | 32768 | 100 | 0.27 | 0.39 | 7 | 19 | 0.995 |  |
+
+PASS: no recall regression
+
+### real QA: realmix -> budget seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.58 | 0.61 | 31 | 48 | 0.979 |  |
+| ruler_qa_1 | 4096 | 100 | 0.86 | 0.84 | 6 | 4 | 0.377 |  |
+| ruler_qa_1 | 16384 | 100 | 0.72 | 0.74 | 2 | 4 | 0.891 |  |
+| ruler_qa_1 | 32768 | 100 | 0.47 | 0.58 | 6 | 17 | 0.995 |  |
+| ruler_qa_2 | 4096 | 100 | 0.52 | 0.60 | 3 | 11 | 0.994 |  |
+| ruler_qa_2 | 16384 | 100 | 0.47 | 0.51 | 5 | 9 | 0.91 |  |
+| ruler_qa_2 | 32768 | 100 | 0.45 | 0.39 | 9 | 3 | 0.073 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> budget seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.91 | 3 | 212 | 1 |  |
+| heldout_many | 16384 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| heldout_many | 32768 | 50 | 0.40 | 0.98 | 0 | 29 | 1 |  |
+| many_random | 16384 | 50 | 0.64 | 1.00 | 0 | 18 | 1 |  |
+| many_random | 32768 | 50 | 0.26 | 0.98 | 0 | 36 | 1 |  |
+| many_similar | 16384 | 50 | 0.76 | 0.98 | 1 | 12 | 1 |  |
+| many_similar | 32768 | 50 | 0.24 | 1.00 | 0 | 38 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.58 | 0 | 20 | 1 |  |
+| multihop | 32768 | 50 | 0.06 | 0.42 | 1 | 19 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 32768 | 50 | 0.60 | 0.96 | 1 | 19 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> budget seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.93 | 0 | 224 | 1 |  |
+| heldout_many | 16384 | 50 | 0.92 | 1.00 | 0 | 4 | 1 |  |
+| heldout_many | 32768 | 50 | 0.50 | 0.98 | 0 | 24 | 1 |  |
+| many_random | 16384 | 50 | 0.50 | 1.00 | 0 | 25 | 1 |  |
+| many_random | 32768 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| many_similar | 16384 | 50 | 0.64 | 1.00 | 0 | 18 | 1 |  |
+| many_similar | 32768 | 50 | 0.20 | 0.98 | 0 | 39 | 1 |  |
+| multihop | 16384 | 50 | 0.22 | 0.66 | 0 | 22 | 1 |  |
+| multihop | 32768 | 50 | 0.16 | 0.56 | 0 | 20 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.78 | 1.00 | 0 | 11 | 1 |  |
+| updated | 32768 | 50 | 0.56 | 1.00 | 0 | 22 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> budget seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.85 | 0.99 | 0 | 21 | 1 |  |
+| heldout_many | 1024 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 2048 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 4096 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 8192 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 16384 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 32768 | 25 | 0.24 | 0.96 | 0 | 18 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> budget seed 2 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.17 | 0.70 | 2 | 82 | 1 |  |
+| multihop | 1024 | 25 | 0.24 | 0.76 | 1 | 14 | 1 |  |
+| multihop | 2048 | 25 | 0.08 | 0.68 | 0 | 15 | 1 |  |
+| multihop | 4096 | 25 | 0.20 | 0.72 | 0 | 13 | 1 |  |
+| multihop | 8192 | 25 | 0.20 | 0.64 | 1 | 12 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 0.68 | 0 | 13 | 1 |  |
+| multihop | 32768 | 25 | 0.12 | 0.72 | 0 | 15 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: base -> budget seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.38 | 0.61 | 33 | 173 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.70 | 0.84 | 6 | 20 | 0.999 |  |
+| ruler_qa_1 | 16384 | 100 | 0.39 | 0.71 | 4 | 36 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.12 | 0.56 | 1 | 45 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.50 | 0.60 | 8 | 18 | 0.986 |  |
+| ruler_qa_2 | 16384 | 100 | 0.28 | 0.49 | 8 | 29 | 1 |  |
+| ruler_qa_2 | 32768 | 100 | 0.27 | 0.46 | 6 | 25 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: realmix -> budget seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.58 | 0.61 | 43 | 61 | 0.969 |  |
+| ruler_qa_1 | 4096 | 100 | 0.85 | 0.84 | 6 | 5 | 0.5 |  |
+| ruler_qa_1 | 16384 | 100 | 0.72 | 0.71 | 9 | 8 | 0.5 |  |
+| ruler_qa_1 | 32768 | 100 | 0.48 | 0.56 | 10 | 18 | 0.956 |  |
+| ruler_qa_2 | 4096 | 100 | 0.56 | 0.60 | 6 | 10 | 0.895 |  |
+| ruler_qa_2 | 16384 | 100 | 0.48 | 0.49 | 6 | 7 | 0.709 |  |
+| ruler_qa_2 | 32768 | 100 | 0.39 | 0.46 | 6 | 13 | 0.968 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> budget seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.93 | 2 | 222 | 1 |  |
+| heldout_many | 16384 | 50 | 0.86 | 0.98 | 0 | 6 | 1 |  |
+| heldout_many | 32768 | 50 | 0.40 | 0.90 | 2 | 27 | 1 |  |
+| many_random | 16384 | 50 | 0.64 | 1.00 | 0 | 18 | 1 |  |
+| many_random | 32768 | 50 | 0.26 | 1.00 | 0 | 37 | 1 |  |
+| many_similar | 16384 | 50 | 0.76 | 1.00 | 0 | 12 | 1 |  |
+| many_similar | 32768 | 50 | 0.24 | 1.00 | 0 | 38 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.66 | 0 | 24 | 1 |  |
+| multihop | 32768 | 50 | 0.06 | 0.58 | 0 | 26 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 32768 | 50 | 0.60 | 1.00 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> budget seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.56 | 0.94 | 1 | 232 | 1 |  |
+| heldout_many | 16384 | 50 | 0.92 | 1.00 | 0 | 4 | 1 |  |
+| heldout_many | 32768 | 50 | 0.50 | 0.98 | 0 | 24 | 1 |  |
+| many_random | 16384 | 50 | 0.50 | 1.00 | 0 | 25 | 1 |  |
+| many_random | 32768 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| many_similar | 16384 | 50 | 0.64 | 1.00 | 0 | 18 | 1 |  |
+| many_similar | 32768 | 50 | 0.20 | 1.00 | 0 | 40 | 1 |  |
+| multihop | 16384 | 50 | 0.22 | 0.70 | 1 | 25 | 1 |  |
+| multihop | 32768 | 50 | 0.16 | 0.64 | 0 | 24 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 0.86 | 1.00 | 0 | 7 | 1 |  |
+| updated | 16384 | 50 | 0.78 | 1.00 | 0 | 11 | 1 |  |
+| updated | 32768 | 50 | 0.56 | 1.00 | 0 | 22 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> budget seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.85 | 0.99 | 0 | 20 | 1 |  |
+| heldout_many | 1024 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 2048 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 4096 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 8192 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 16384 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 32768 | 25 | 0.24 | 0.92 | 0 | 17 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> budget seed 3 (jet-ai_Jet-Nemotron-2B)
+baseline ('jet-ai/Jet-Nemotron-2B',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.17 | 0.71 | 2 | 84 | 1 |  |
+| multihop | 1024 | 25 | 0.24 | 0.84 | 1 | 16 | 1 |  |
+| multihop | 2048 | 25 | 0.08 | 0.68 | 0 | 15 | 1 |  |
+| multihop | 4096 | 25 | 0.20 | 0.80 | 0 | 15 | 1 |  |
+| multihop | 8192 | 25 | 0.20 | 0.72 | 1 | 14 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 0.64 | 0 | 12 | 1 |  |
+| multihop | 32768 | 25 | 0.12 | 0.60 | 0 | 12 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: base -> budget seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.48 | 0.67 | 31 | 143 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.86 | 0.91 | 3 | 8 | 0.967 |  |
+| ruler_qa_1 | 16384 | 100 | 0.65 | 0.76 | 9 | 20 | 0.988 |  |
+| ruler_qa_1 | 32768 | 100 | 0.19 | 0.81 | 0 | 62 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.51 | 0.57 | 6 | 12 | 0.952 |  |
+| ruler_qa_2 | 16384 | 100 | 0.34 | 0.50 | 6 | 22 | 1 |  |
+| ruler_qa_2 | 32768 | 100 | 0.35 | 0.47 | 7 | 19 | 0.995 |  |
+
+PASS: no recall regression
+
+### real QA: realmix -> budget seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.68 | 0.67 | 32 | 24 | 0.175 |  |
+| ruler_qa_1 | 4096 | 100 | 0.85 | 0.91 | 0 | 6 | 1 |  |
+| ruler_qa_1 | 16384 | 100 | 0.83 | 0.76 | 8 | 1 | 0.0195 |  |
+| ruler_qa_1 | 32768 | 100 | 0.78 | 0.81 | 2 | 5 | 0.938 |  |
+| ruler_qa_2 | 4096 | 100 | 0.61 | 0.57 | 7 | 3 | 0.172 |  |
+| ruler_qa_2 | 16384 | 100 | 0.50 | 0.50 | 6 | 6 | 0.613 |  |
+| ruler_qa_2 | 32768 | 100 | 0.53 | 0.47 | 9 | 3 | 0.073 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> budget seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.32 | 0.98 | 3 | 397 | 1 |  |
+| heldout_many | 16384 | 50 | 0.24 | 0.96 | 1 | 37 | 1 |  |
+| heldout_many | 32768 | 50 | 0.10 | 0.98 | 0 | 44 | 1 |  |
+| many_random | 16384 | 50 | 0.16 | 1.00 | 0 | 42 | 1 |  |
+| many_random | 32768 | 50 | 0.28 | 1.00 | 0 | 36 | 1 |  |
+| many_similar | 16384 | 50 | 0.12 | 1.00 | 0 | 44 | 1 |  |
+| many_similar | 32768 | 50 | 0.12 | 0.94 | 0 | 41 | 1 |  |
+| multihop | 16384 | 50 | 0.12 | 0.94 | 1 | 42 | 1 |  |
+| multihop | 32768 | 50 | 0.08 | 0.96 | 0 | 44 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.48 | 0.98 | 1 | 26 | 1 |  |
+| updated | 32768 | 50 | 0.18 | 1.00 | 0 | 41 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> budget seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.34 | 0.98 | 1 | 383 | 1 |  |
+| heldout_many | 16384 | 50 | 0.42 | 1.00 | 0 | 29 | 1 |  |
+| heldout_many | 32768 | 50 | 0.24 | 0.94 | 1 | 36 | 1 |  |
+| many_random | 16384 | 50 | 0.34 | 1.00 | 0 | 33 | 1 |  |
+| many_random | 32768 | 50 | 0.22 | 1.00 | 0 | 39 | 1 |  |
+| many_similar | 16384 | 50 | 0.10 | 0.96 | 0 | 43 | 1 |  |
+| many_similar | 32768 | 50 | 0.06 | 0.94 | 0 | 44 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 0.98 | 0 | 40 | 1 |  |
+| multihop | 32768 | 50 | 0.04 | 0.92 | 0 | 44 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| updated | 32768 | 50 | 0.14 | 1.00 | 0 | 43 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> budget seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.61 | 0.99 | 0 | 56 | 1 |  |
+| heldout_many | 1024 | 25 | 0.92 | 1.00 | 0 | 2 | 1 |  |
+| heldout_many | 2048 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 4096 | 25 | 0.76 | 1.00 | 0 | 6 | 1 |  |
+| heldout_many | 8192 | 25 | 0.64 | 0.96 | 0 | 8 | 1 |  |
+| heldout_many | 16384 | 25 | 0.24 | 1.00 | 0 | 19 | 1 |  |
+| heldout_many | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> budget seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.30 | 0.95 | 1 | 99 | 1 |  |
+| multihop | 1024 | 25 | 0.52 | 1.00 | 0 | 12 | 1 |  |
+| multihop | 2048 | 25 | 0.28 | 0.96 | 0 | 17 | 1 |  |
+| multihop | 4096 | 25 | 0.40 | 1.00 | 0 | 15 | 1 |  |
+| multihop | 8192 | 25 | 0.28 | 0.92 | 0 | 16 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 0.92 | 0 | 19 | 1 |  |
+| multihop | 32768 | 25 | 0.16 | 0.92 | 1 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: base -> budget seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.48 | 0.68 | 32 | 152 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.86 | 0.86 | 6 | 6 | 0.613 |  |
+| ruler_qa_1 | 16384 | 100 | 0.65 | 0.79 | 7 | 21 | 0.998 |  |
+| ruler_qa_1 | 32768 | 100 | 0.19 | 0.76 | 0 | 57 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.51 | 0.61 | 6 | 16 | 0.992 |  |
+| ruler_qa_2 | 16384 | 100 | 0.34 | 0.55 | 7 | 28 | 1 |  |
+| ruler_qa_2 | 32768 | 100 | 0.35 | 0.53 | 6 | 24 | 1 |  |
+
+PASS: no recall regression
+
+### real QA: realmix -> budget seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.68 | 0.68 | 37 | 41 | 0.714 |  |
+| ruler_qa_1 | 4096 | 100 | 0.88 | 0.86 | 5 | 3 | 0.363 |  |
+| ruler_qa_1 | 16384 | 100 | 0.80 | 0.79 | 6 | 5 | 0.5 |  |
+| ruler_qa_1 | 32768 | 100 | 0.78 | 0.76 | 8 | 6 | 0.395 |  |
+| ruler_qa_2 | 4096 | 100 | 0.57 | 0.61 | 3 | 7 | 0.945 |  |
+| ruler_qa_2 | 16384 | 100 | 0.53 | 0.55 | 6 | 8 | 0.788 |  |
+| ruler_qa_2 | 32768 | 100 | 0.50 | 0.53 | 9 | 12 | 0.808 |  |
+
+PASS: no recall regression
+
+### suite-s1: base -> budget seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.32 | 0.99 | 0 | 403 | 1 |  |
+| heldout_many | 16384 | 50 | 0.24 | 1.00 | 0 | 38 | 1 |  |
+| heldout_many | 32768 | 50 | 0.10 | 1.00 | 0 | 45 | 1 |  |
+| many_random | 16384 | 50 | 0.16 | 1.00 | 0 | 42 | 1 |  |
+| many_random | 32768 | 50 | 0.28 | 1.00 | 0 | 36 | 1 |  |
+| many_similar | 16384 | 50 | 0.12 | 0.98 | 0 | 43 | 1 |  |
+| many_similar | 32768 | 50 | 0.12 | 0.98 | 0 | 43 | 1 |  |
+| multihop | 16384 | 50 | 0.12 | 1.00 | 0 | 44 | 1 |  |
+| multihop | 32768 | 50 | 0.08 | 0.98 | 0 | 45 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.48 | 1.00 | 0 | 26 | 1 |  |
+| updated | 32768 | 50 | 0.18 | 1.00 | 0 | 41 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: base -> budget seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.34 | 1.00 | 1 | 394 | 1 |  |
+| heldout_many | 16384 | 50 | 0.42 | 1.00 | 0 | 29 | 1 |  |
+| heldout_many | 32768 | 50 | 0.24 | 0.98 | 1 | 38 | 1 |  |
+| many_random | 16384 | 50 | 0.34 | 1.00 | 0 | 33 | 1 |  |
+| many_random | 32768 | 50 | 0.22 | 1.00 | 0 | 39 | 1 |  |
+| many_similar | 16384 | 50 | 0.10 | 0.98 | 0 | 44 | 1 |  |
+| many_similar | 32768 | 50 | 0.06 | 1.00 | 0 | 47 | 1 |  |
+| multihop | 16384 | 50 | 0.18 | 1.00 | 0 | 41 | 1 |  |
+| multihop | 32768 | 50 | 0.04 | 1.00 | 0 | 48 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.36 | 1.00 | 0 | 32 | 1 |  |
+| updated | 32768 | 50 | 0.14 | 1.00 | 0 | 43 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: base -> budget seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.61 | 0.99 | 0 | 57 | 1 |  |
+| heldout_many | 1024 | 25 | 0.92 | 1.00 | 0 | 2 | 1 |  |
+| heldout_many | 2048 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 4096 | 25 | 0.76 | 1.00 | 0 | 6 | 1 |  |
+| heldout_many | 8192 | 25 | 0.64 | 1.00 | 0 | 9 | 1 |  |
+| heldout_many | 16384 | 25 | 0.24 | 1.00 | 0 | 19 | 1 |  |
+| heldout_many | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: base -> budget seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo)
+baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-budget',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.30 | 0.99 | 0 | 104 | 1 |  |
+| multihop | 1024 | 25 | 0.52 | 1.00 | 0 | 12 | 1 |  |
+| multihop | 2048 | 25 | 0.28 | 1.00 | 0 | 18 | 1 |  |
+| multihop | 4096 | 25 | 0.40 | 1.00 | 0 | 15 | 1 |  |
+| multihop | 8192 | 25 | 0.28 | 1.00 | 0 | 18 | 1 |  |
+| multihop | 16384 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+| multihop | 32768 | 25 | 0.16 | 1.00 | 0 | 21 | 1 |  |
+
+PASS: no recall regression
+

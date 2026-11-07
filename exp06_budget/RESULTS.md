@@ -14,6 +14,12 @@ budget flags many_similar@32K, 8 / 0). By the pre-registered rule no recipe is r
 and at 8B C and D hold but the 32K damage gate fails. Outcomes A-D below were written on 2026-11-02 before any model ran;
 the Results section is filled in only from `results/raw` by `run_all.sh report`.
 
+**Seeds 2 and 3 (2026-11-07, after the verdict) overturn the seed-1 readings at 2B and the 8B loss at 32K.** A: the dose
+brings Jet's 32K multi-hop back on seed 1 only (budget 0.87 / 0.49 / 0.61 against realmix 0.45 / 0.49 / 0.57 on the same
+seeds). B at 2B: seeds 2 and 3 recover multi-value and multi-query at 16K (0.82 / 0.70 and 0.56 / 0.60), so the per-seed
+outcomes read prior / dose / dose. The 8B many_similar at 32K is 0.85 / 0.94 / 0.99 (gentle 0.99-1.00). C holds at every
+seed; D fails at 2B at every seed. Section "Seeds 2 and 3".
+
 ## Question
 Exp05 put real-document QA into half the repair mix at an unchanged budget. Single-document recall rose at both scales
 (qa_1 at 32K 0.12 -> 0.44 at 2B, 0.19 -> 0.72 at 8B, no 4K cost), but Jet-Nemotron-2B's chained-key multi-hop suite fell
@@ -201,9 +207,48 @@ the printed bench, bits per byte and failure-shape lines); "a / b" is cases lost
   of the exp05 adapter differed by up to 0.006).
 - exp05's 8 h limit would have killed the Jet job (8 h 55 min): runs with 1,200 documents need the 12 h limit.
 
+## Seeds 2 and 3 (2026-11-07, after the verdict; not pre-registered)
+Same recipes and run dirs with TRAIN_SEED 2 and 3, at 26d25e8 (only d6523cd since 8b5abb6: the 55 SQuAD paragraphs back),
+on A40s, all COMPLETED: Jet 1152552 / 1152560 (8 h 36 min / 8 h 35 min), Mamba-in-the-Llama 1152554 / 1152562 (7 h 58 min /
+7 h 46 min), real QA 1152553 / 1152561 / 1152555 / 1152563 (44-60 min). As for seed 1, budget seed s continues realmix seed
+s's streams for as many steps again, so the same-seed difference is the extra dose. Every number: `run_all.sh report`, whose
+tables now list seeds 1-3 and whose gates add base -> budget and realmix -> budget per seed.
+
+| cell, seeds 1 / 2 / 3 | realmix (exp05) | budget (exp06) | exp03 synthetic (2B) or gentle (8B) |
+|---|---|---|---|
+| A. Jet multi-hop suite 16K | 0.65 / 0.63 / 0.65 | 0.84 / 0.62 / 0.68 | 0.97 / 0.94 / 0.95 |
+| A. Jet multi-hop suite 32K | 0.45 / 0.49 / 0.57 | 0.87 / 0.49 / 0.61 | 0.89 / 0.88 / 0.81 |
+| A. Jet 25-case file, lowest length | 0.56 / - / - | 0.68 / 0.64 / 0.60 | >= 0.84 |
+| B. Jet multi-value / multi-query 16K | 0.52 / 0.62 / 0.48, 0.48 / 0.40 / 0.48 | 0.48 / 0.82 / 0.70, 0.42 / 0.56 / 0.60 | 0.68 / 0.70 / 0.48, 0.62 / 0.50 / 0.36 |
+| B. 8B multi-value 32K | 0.60 / 0.86 / 0.56 | 0.56 / 0.66 / 0.86 | 0.80 / 0.72 / 0.68 |
+| C. qa_1 32K, 2B | 0.44 / 0.47 / 0.48 | 0.45 / 0.58 / 0.56 | 0.26 (seed 1) |
+| C. qa_1 32K, 8B | 0.72 / 0.78 / 0.78 | 0.79 / 0.81 / 0.76 | 0.56 / 0.64 / 0.56 |
+| D. bits per byte, 2B | 1.0861 / 1.0868 / 1.0863 | 1.0901 / 1.0921 / 1.0888 | 1.0862 (seed 1) |
+| D. bits per byte, 8B | 1.0561 / 1.0447 / 1.0364 | 1.0530 / 1.0428 / 1.0814 | 1.063-1.083 |
+| 8B many_similar / multi-hop 32K | 0.97 / 0.95 / 0.97, 0.97 / 0.95 / 0.90 | 0.85 / 0.94 / 0.99, 0.89 / 0.94 / 0.99 | 0.99-1.00, 0.98-0.99 |
+
+- **A, per seed: mixed / prior / mixed.** Seed 2 meets the prior bar (0.62 / 0.49, every failure stale), seed 3 misses it
+  by 0.03 at 16K. Against realmix on the same seed the dose adds +0.19 / -0.01 / +0.03 at 16K and +0.42 / 0.00 / +0.04 at
+  32K. The 25-case file stays below 0.84 at some length on every seed. The chained-key loss survives the full dose on two
+  seeds of three.
+- **B at 2B, per seed against the same synthetic seed: prior / dose / dose.** Seeds 2 and 3 sit 0.06-0.24 above their
+  synthetic seed. The synthetic seeds themselves span 0.22 (multi-value) and 0.26 (multi-query), so a one-seed B outcome
+  carries little. At 8B: mixed / mixed / dose.
+- **C holds at every seed:** qa_1 at 32K clears 0.40 (2B) and 0.68 (8B), and base -> budget and realmix -> budget pass at
+  both scales. The 8B gain from doubling the real half was seed 1's: realmix -> budget is 32 / 24 and 37 / 41 on seeds 2 and 3
+  (lost / gained), against 19 / 47 on seed 1.
+- **D:** at 2B bits per byte sit 0.003-0.005 above the matching realmix seed on every seed, so D fails three times. At 8B D
+  holds on seeds 1 and 2 and fails on seed 3 (1.0814 against 1.0364).
+- **The 8B loss at 32K was mostly seed 1's.** many_similar is 0.85 / 0.94 / 0.99 and multi-hop 0.89 / 0.94 / 0.99. Realmix
+  also sits 0.02-0.08 below gentle on 32K multi-hop, so a small 32K cost of the real half remains.
+- **What survives three seeds:** the real-QA gain (C), Jet's chained-key loss with a real half in the mix (five of six
+  adapters at or below 0.61 at 32K, against 0.81 or more for every synthetic seed), and budget's bits-per-byte cost at 2B.
+  Exp07 was designed on the seed-1 differences of A, B and the 8B 32K check.
+
 ## Next
 1. 32K documents in the 8B recipe (8K / 16K / 32K at budget counts): every 8B loss here sits at 32K, outside the training
-   lengths.
+   lengths. Ran as exp07.
 2. Separate the real half from total training on 2B multi-answer RULER: 1,200 synthetic documents alone against budget.
    If that recovers multi-value / multi-query, the real data is the cause, and the next step is a multi-answer real half.
-3. Seeds 2 and 3 of the budget adapter on the 16K multi-hop and RULER cells.
+   Ran as exp07.
+3. Seeds 2 and 3 of the budget adapter on the 16K multi-hop and RULER cells: done 2026-11-07, section "Seeds 2 and 3".

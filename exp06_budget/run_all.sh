@@ -29,13 +29,13 @@ case "${1:-report}" in
       $E5Q/ruler-*-$R-*.jsonl $QA/ruler-*.jsonl --out $OUT/tables-qa.md
     ls $DMG/suite-s*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
       --results $E3/suite-s*-base-{$JET,$MIL}.jsonl $E3/suite-s*-repair-seed[123]-$JET.jsonl $E3/suite-s*-repair-seed1-gentle-$MIL.jsonl \
-        $E5D/suite-s*-$R-{$JET,$MIL}.jsonl $DMG/suite-s*-$B-*.jsonl --out $OUT/tables-damage.md
+        $E5D/suite-s*-$R-{$JET,$MIL}.jsonl $DMG/suite-s*-repair-seed[123]-budget-*.jsonl --out $OUT/tables-damage.md
     ls $DMG/multihop25-*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
       --results $E3/multihop25-base-{$JET,$MIL}.jsonl $E3/multihop25-repair-seed[123]-$JET.jsonl $E3/multihop25-repair-seed1-gentle-$MIL.jsonl \
-        $E5D/multihop25-$R-*.jsonl $DMG/multihop25-$B-*.jsonl --out $OUT/tables-multihop25.md
+        $E5D/multihop25-$R-*.jsonl $DMG/multihop25-repair-seed[123]-budget-*.jsonl --out $OUT/tables-multihop25.md
     ls $DMG/ruler-*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
       --results $E3/ruler-*-base-{$JET,$MIL}.jsonl $E3/ruler-*-repair-seed1-$JET.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl \
-        $E5D/ruler-*-$R-*.jsonl $DMG/ruler-*-$B-*.jsonl --out $OUT/tables-ruler.md
+        $E5D/ruler-*-$R-*.jsonl $DMG/ruler-*-repair-seed[123]-budget-*.jsonl --out $OUT/tables-ruler.md
     : > $OUT/gates.md
     for m in "$JET repair-seed1" "$MIL repair-seed1-gentle"; do
       set -- $m; H=$1; SYN=$2
@@ -51,7 +51,12 @@ case "${1:-report}" in
       done
       # no RULER gate: the generator repeats 10 (16K) and 4 (32K) case ids per file and check refuses them; outcome B reads tables-ruler.md
     done
-    ls $DMG/ruler-*.jsonl >/dev/null 2>&1 && $PY - $E3/ruler-*-repair-seed1-$JET.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl $E5D/ruler-*-$R-*.jsonl $DMG/ruler-*-$B-*.jsonl <<'EOF'
+    for H in $JET $MIL; do for s in 2 3; do  # seeds 2-3: the README damage check (base -> adapter); seed spread reads the tables
+      gate "real QA: base -> budget seed $s ($H)"  $E4/ruler-*-base-$H.jsonl -- $QA/ruler-*-repair-seed$s-budget-$H.jsonl
+      gate "real QA: realmix -> budget seed $s ($H)"  $E5Q/ruler-*-repair-seed$s-realmix-$H.jsonl -- $QA/ruler-*-repair-seed$s-budget-$H.jsonl
+      for S in suite-s1 suite-s2 heldout multihop25; do gate "$S: base -> budget seed $s ($H)"  $E3/$S-base-$H.jsonl -- $DMG/$S-repair-seed$s-budget-$H.jsonl; done
+    done; done
+    ls $DMG/ruler-*.jsonl >/dev/null 2>&1 && $PY - $E3/ruler-*-repair-seed1-$JET.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl $E5D/ruler-*-$R-*.jsonl $DMG/ruler-*-repair-seed[123]-budget-*.jsonl <<'EOF'
 import json, re, sys  # outcome B readout: a single-span answer to a multi-value / multi-query needle lists at most one 7-digit number
 for f in sys.argv[1:]:
     rows = [json.loads(line) for line in open(f)]
