@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-11-06
+Updated: 2026-11-07
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -167,6 +167,12 @@ qa_2@4K 0.64 vs Llama 0.67); D holds (bpb 1.053); but synthetic recall drops at 
 32K documents in the 8B recipe; 1,200 synthetic-only documents at 2B to split real half from total training on RULER.
 
 ## Seeds 2 and 3 of the realmix and budget adapters (exp05 + exp06)
+**Done 2026-11-07.** All 16 jobs COMPLETED; pulled and reported (exp05 and exp06 RESULTS.md, section "Seeds 2 and 3"; both
+`run_all.sh report` now cover seeds 1-3). Robust across seeds: the real-QA gain (8B qa_1 at 32K realmix 0.72-0.78 and budget
+0.76-0.81, against gentle 0.56-0.64) and Jet's multi-hop loss with a real half (0.45-0.61 at 32K in five of six adapters,
+synthetic seeds 0.81-0.89). Seed 1's alone: exp06's dose recovery of Jet multi-hop (budget 0.87 / 0.49 / 0.61), its 2B RULER
+"prior" (budget multi-value 0.48 / 0.82 / 0.70 at 16K; synthetic seeds 0.48-0.70) and the 8B loss at 32K (many_similar 0.85 /
+0.94 / 0.99). Every new adapter passes the damage check; 2B budget bits per byte sit 0.003-0.005 above realmix at every seed.
 **Submitted 2026-11-06** at 26d25e8 (the cluster pulls origin/main; the code differs from the seed-1 runs at 8b5abb6 only by
 d6523cd, `disjoint` keeping the 55 paragraphs of questionless SQuAD groups in the distractor pool, 0.3 %, and a comment in
 robust.sbatch). Same run dirs as seed 1, so the seeds share seed 1's case files; each real-QA job runs afterany its training job.
@@ -181,6 +187,11 @@ widen each `run_all.sh report` from `seed1` to `seed[123]`. Purpose: seed spread
 scales, 8B qa_2 at 16K) and on the damage trade-off (Jet multi-hop, RULER multi-value / multi-query) for the paper plan on `paper`.
 
 ## Experiment 7 (exp07_len32k) — 32K documents at 8B, and the 2B synthetic-only control
+**Done 2026-11-07** (exp07_len32k/RESULTS.md): both arms mixed; no recipe change. Arm 1 meets the 32K bars on many_similar
+0.98, held-out 0.99 and the 25-case file 0.96, misses on multi-hop 0.94 and RULER multi-value 0.64; C holds (qa_1 at 32K
+0.80), D fails (bits per byte 1.069 > 1.058). Arm 2: multi-value / multi-query at 16K 0.56 / 0.58, mixed; synthetic-only
+steps cost real QA (qa_1 at 4K 0.70 -> 0.44, base -> syn1200 fails). Every arm-1 cell lies inside the budget seeds' range,
+so neither arm separates its change from seed noise; recipe comparisons need three seeds per arm.
 Pre-registered 2026-11-06 at f73a85c before any run (exp07_len32k/RESULTS.md). Arm 1: MIL budget recipe (300 synthetic + 300
 real, lr 5e-5) at 8K / 16K / 32K, tag `-budget32k`; outcome "length" = every 32K synthetic cell back near gentle (>= 0.95, the
 25-case file >= 0.92, RULER multi-value >= 0.74), "not length" = many_similar and multi-hop at 32K both <= 0.90; C real QA
@@ -194,6 +205,10 @@ had 497 jobs pending; both training jobs waited on Priority. Pull: the two rsync
 then `exp07_len32k/run_all.sh report`.
 
 ## Experiment 8 (exp08_wsp_gate) — a training-free weight edit through the gate
+**Done 2026-11-07** (exp08_wsp_gate/RESULTS.md): the edit loses recall. The exp01 suite (32 / 10, p 0.0005) and suite-s1
+(23 / 12, p 0.045) fail pooled, no cell fails; cost (P2) holds. Outside the gate, RULER's single needle falls 1.00 -> 0.00
+at 16K and 32K (the edited model repeats the noise haystack in all 100 cases) and multi-value 0.40 -> 0.18. Next: unique
+RULER case ids at import, so `check` covers the needles.
 Pre-registered 2026-11-06 at ee4eb55 before any full run (exp08_wsp_gate/RESULTS.md): `Qwen/Qwen3.5-0.8B` vs
 `RikiyaT/Qwen3.5-0.8B-weight-space-programming` ("Sparks of Weight-Space Programming": one MLP-output direction removed from 64
 `down_proj` columns in layers 15 and 19; edit_check.py: both tensors match the card's sha256, 130,188 weights differ). Rule: `check`
