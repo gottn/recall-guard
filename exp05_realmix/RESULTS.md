@@ -17,6 +17,10 @@ seeds' 0.56 / 0.64 / 0.56; 2B 0.44 / 0.47 / 0.48), and Jet's multi-hop loss repl
 0.81-0.89 for the synthetic seeds). P4(b)'s RULER loss does not: the realmix seeds sit inside the synthetic adapters' own seed
 range. Section "Seeds 2 and 3".
 
+**exp11 (2026-11-08):** these RULER multi-answer cells were decoded with 64 new tokens. Re-decoded at 192
+(exp11_ruler_cap/RESULTS.md), the cap explains 29 of 2,200 runs, mostly multi-query, and synthetic minus realmix on
+multi-value at 16K is +0.13, the pre-registered "small", with the seeds overlapping. P4(b) stays not established.
+
 ## Question
 Exp04 left three things open. The adapter trained only on synthetic key lists repairs 58% of the single-document gap at
 32K at both scales (Jet 0.12 -> 0.26 against Qwen2.5-1.5B at 0.36; Mamba-in-the-Llama 0.19 -> 0.56 against Llama-3.1-8B

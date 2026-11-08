@@ -12,6 +12,10 @@ have multi-value 0.82 / 0.70 and multi-query 0.56 / 0.60 at 16K. Both arms were 
 its losses belonged to that seed. Outcomes below were written on 2026-11-06 before any model ran; the Results section is
 filled in only from `results/raw` by `run_all.sh report`.
 
+**exp11 (2026-11-08):** re-decoded at 192 tokens (exp11_ruler_cap/RESULTS.md), syn1200 stays at 0.56 / 0.58 at 16K and
+exp03 seed 1 moves to 0.72 / 0.60. Arm 2 stays mixed, under the stored bars and under bars rebuilt from the re-decoded
+exp03 seed 1 (real half >= 0.66 / 0.54, training <= 0.62 / 0.50).
+
 ## Question
 Exp06 doubled both halves of the realmix recipe and left two open questions. At 8B every loss sits at 32K, the one length
 the gentle recipe never trains on: many_similar 0.97 -> 0.85, multi-hop 0.97 -> 0.89, the 25-case multi-hop file 1.00 ->

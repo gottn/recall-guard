@@ -20,6 +20,10 @@ seeds). B at 2B: seeds 2 and 3 recover multi-value and multi-query at 16K (0.82 
 outcomes read prior / dose / dose. The 8B many_similar at 32K is 0.85 / 0.94 / 0.99 (gentle 0.99-1.00). C holds at every
 seed; D fails at 2B at every seed. Section "Seeds 2 and 3".
 
+**exp11 (2026-11-08):** re-decoded at 192 tokens (exp11_ruler_cap/RESULTS.md), the 2B B cells move by at most 0.06 (seed 2
+multi-query 0.56 -> 0.62), and the per-seed outcomes stay prior / dose / dose against the same synthetic seed, also
+re-decoded. The 8B cells were not re-decoded.
+
 ## Question
 Exp05 put real-document QA into half the repair mix at an unchanged budget. Single-document recall rose at both scales
 (qa_1 at 32K 0.12 -> 0.44 at 2B, 0.19 -> 0.72 at 8B, no 4K cost), but Jet-Nemotron-2B's chained-key multi-hop suite fell

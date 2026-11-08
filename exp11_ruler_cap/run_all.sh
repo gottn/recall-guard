@@ -10,7 +10,7 @@
 #   V / A: base / -; synthetic-s{1,2,3} / RS/20261016-171229-9f67d4b/adapter-jet-ai_Jet-Nemotron-2B-seed{s};
 #   realmix-s{s} / RS/20261101-183230-8b5abb6/adapter-...-seed{s}-realmix; budget-s{s} / RS/20261102-145806-8b5abb6/adapter-...-seed{s}-budget;
 #   syn1200 / RS/20261106-103327-50ade98/adapter-...-seed1-syn1200
-# Mac: rsync -a --exclude suite.jsonl --exclude 'slurm-*' aau:runs/rg/rescore/20261107-ruler192/ exp11_ruler_cap/results/raw/ && exp11_ruler_cap/run_all.sh report
+# Mac: rsync -a --exclude suite.jsonl --exclude 'slurm-*' --exclude '*.md' aau:runs/rg/rescore/20261107-ruler192/ exp11_ruler_cap/results/raw/ && exp11_ruler_cap/run_all.sh report
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=.venv/bin/python
@@ -20,6 +20,7 @@ case "${1:-report}" in
     $PY -m recall_guard.cli report --results $OUT/raw/*/jet-ai_Jet-Nemotron-2B.jsonl --out $OUT/tables-192.md
     $PY - <<'EOF'
 import json, re, statistics as st
+from collections import Counter
 # Readout against the stored 64-token outputs: verdict changes, prefix validity, seed means and the pre-registered gap.
 J, OUT = "jet-ai_Jet-Nemotron-2B", "exp11_ruler_cap/results/raw"
 OLD = {"base": "exp03_robust/results/raw/ruler-{L}-base-" + J + ".jsonl"}
@@ -31,31 +32,43 @@ TASKS = ("ruler_niah_multivalue", "ruler_niah_multiquery")
 CUT = re.compile(r"^\s*(?:[\*\-]|\d+\.)?\s*\**\s*\d{0,6}\s*$")  # last line an unfinished list item
 cut = lambda r: not r["contains"] and len(r["output"]) > 40 and bool(CUT.match(r["output"].rstrip("\n").split("\n")[-1]))
 key = lambda r: (r["task"], r["length_bucket"])
-score = {}
+score, same_by, flips = {}, {}, Counter()
 n_prefix = n_all = n_cut = n_cut_fixed = n_other_changed = 0
 for v, pat in OLD.items():
     new = [json.loads(l) for l in open(f"{OUT}/{v}/{J}.jsonl")]
     old = [json.loads(l) for L in (16384, 32768) for l in open(pat.format(L=L)) if json.loads(l)["task"] in TASKS]
     assert [(r["case_id"], key(r)) for r in old] == [(r["case_id"], key(r)) for r in new], f"{v}: case order differs"
-    for o, n in zip(old, new):
-        n_all += 1; n_prefix += n["output"].startswith(o["output"].rstrip())
+    same = [n["output"].startswith(o["output"].rstrip()) for o, n in zip(old, new)]  # the stored greedy path, extended
+    at = [next((i for i, (a, b) in enumerate(zip(o["output"], n["output"])) if a != b), len(n["output"]))
+          for o, n, s in zip(old, new, same) if not s]
+    same_by[v] = (sum(same), st.median(at) if at else 0)
+    for o, n, s in zip(old, new, same):
+        n_all += 1; n_prefix += s
         if cut(o): n_cut += 1; n_cut_fixed += n["contains"]
         elif o["contains"] != n["contains"]: n_other_changed += 1
+        if o["contains"] != n["contains"]:
+            flips[o["task"].split("_")[-1], "cut-off" if cut(o) else "other", "stored path" if s else "diverged",
+                  "gain" if n["contains"] else "loss"] += 1
     for k in {key(r) for r in new}:
-        score[v, k] = (sum(r["contains"] for r in old if key(r) == k) / 50, sum(r["contains"] for r in new if key(r) == k) / 50)
+        rows = [(o["contains"], n["contains"], s) for o, n, s in zip(old, new, same) if key(o) == k]
+        # 64 tokens, 192 tokens, and the stored run with only the cap lifted (gains that keep the stored output as prefix)
+        score[v, k] = tuple(sum(x) / 50 for x in zip(*[(a, b, a or (s and b)) for a, b, s in rows]))
 print(f"V: {n_prefix} of {n_all} new outputs begin with the stored one ({n_prefix / n_all:.0%}); "
       f"{n_other_changed} verdicts changed outside the cut-off misses")
+print("V by variant (kept / 200, median character where the rest diverge):", ", ".join(f"{v} {c} ({m:.0f})" for v, (c, m) in same_by.items()))
+print("verdict changes (task, old miss, path, direction):", ", ".join(f"{'/'.join(k)} {c}" for k, c in sorted(flips.items())))
 print(f"P1: {n_cut_fixed} of {n_cut} cut-off misses become correct ({n_cut_fixed / max(n_cut, 1):.0%})")
 for t in TASKS:
     for L in (16384, 32768):
         row = " | ".join(f"{v} {score[v, (t, L)][0]:.2f}->{score[v, (t, L)][1]:.2f}" for v in OLD)
         print(f"{t.split('_')[-1]} {L}: {row}")
 for t in TASKS:
-    arms = {a: [score[f"{a}-s{s}", (t, 16384)][1] for s in (1, 2, 3)] for a in ("synthetic", "realmix", "budget")}
-    gap = {a: st.mean(arms["synthetic"]) - st.mean(arms[a]) for a in ("realmix", "budget")}
-    sep = min(arms["synthetic"]) > max(arms["realmix"])
-    print(f"{t.split('_')[-1]} 16K at 192: " + ", ".join(f"{a} {'/'.join(f'{x:.2f}' for x in xs)} (mean {st.mean(xs):.2f}, sd {st.stdev(xs):.2f})" for a, xs in arms.items())
-          + f"; synthetic - realmix {gap['realmix']:+.2f}, synthetic - budget {gap['budget']:+.2f}, complete separation {sep}")
+    for i, at in enumerate(("64", "192", "64 with the cap lifted on the stored path")):
+        arms = {a: [score[f"{a}-s{s}", (t, 16384)][i] for s in (1, 2, 3)] for a in ("synthetic", "realmix", "budget")}
+        gap = {a: st.mean(arms["synthetic"]) - st.mean(arms[a]) for a in ("realmix", "budget")}
+        sep = min(arms["synthetic"]) > max(arms["realmix"])
+        print(f"{t.split('_')[-1]} 16K at {at}: " + ", ".join(f"{a} {'/'.join(f'{x:.2f}' for x in xs)} (mean {st.mean(xs):.2f}, sd {st.stdev(xs):.2f})" for a, xs in arms.items())
+              + f"; synthetic - realmix {gap['realmix']:+.2f}, synthetic - budget {gap['budget']:+.2f}, complete separation {sep}")
 g = st.mean(score[f"synthetic-s{s}", ("ruler_niah_multivalue", 16384)][1] for s in (1, 2, 3)) - st.mean(score[f"realmix-s{s}", ("ruler_niah_multivalue", 16384)][1] for s in (1, 2, 3))
 print("outcome (multi-value 16K gap):", "cost" if g >= 0.15 else "no cost" if g <= 0.08 else "small", f"({g:+.2f})")
 EOF
