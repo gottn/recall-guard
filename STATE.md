@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-11-07
+Updated: 2026-11-08
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -56,7 +56,7 @@ then `exp03_robust/run_all.sh report`.
 **2B stage complete (night of 2026-10-16):** three hybrid seeds and two control seeds; the hybrid reaches the control's post-training level on our suites (1.00); on RULER the control was already at ceiling so the hybrid's gains are repair; single-answer training hurts multi-answer RULER tasks in both models (coverage rule, third instance); bpb +0.4-0.6% in both. See exp03_robust/RESULTS.md items 10-13.
 **Base stage (earlier):** RULER multi-key sees the Jet failure (MK1 0.56 vs 0.94 at 32K; MV 0.02 vs 0.46), so the
 harness has no detection advantage over RULER; the 16K random-key gap is confirmed at n=100 (0.57 vs 0.90); Jet's needle at 32K is
-0.86 at n=100 (not 1.00); generation is deterministic (150/150 identical completions across runs). See exp03_robust/RESULTS.md.
+0.86 at n=100 (not 1.00); generation is deterministic (150/150 identical completions across runs); exp11 (2026-11-08): with a 192-token limit, 23% of 16K-32K reruns left the stored greedy path, A40 -> A40 included. See exp03_robust/RESULTS.md.
 Item 9 unblocked 2026-10-16 evening: Llama 3.1 licence accepted and a read token configured on the cluster; a real gated download returns 200. A background agent is integrating the Mamba-in-the-Llama and LoLCATs loaders (recall_guard/backends/loaders.py, env `mil`, infra/slurm/mil_smoke.sbatch).
 Candidate 8B checkpoints: JunxiongWang/Llama3.1-Mamba2-8B-dpo (Mamba-in-the-Llama), hazyresearch/lolcats-llama-3.1-8b-ft-lora.
 8B loaders (2026-10-16 18:15): `recall_guard/backends/loaders.py` routes ids to `backends/mil.py` (Mamba-in-the-Llama) and
@@ -220,14 +220,20 @@ within 0.02, bpb within 0.005. Smokes 1152408-09 (T4) load both clean at 1.4 GiB
 rsync lines at the top of exp08_wsp_gate/run_all.sh, then `exp08_wsp_gate/run_all.sh report`.
 
 ## Experiment 11 (exp11_ruler_cap) — 2B RULER multi-answer without the 64-token cap
-Pre-registered 2026-11-07 at b6c263a before any run (exp11_ruler_cap/RESULTS.md). The 64-token cap cuts off 142 stored 2B
-multi-value / multi-query misses, mostly the synthetic adapters'. That biased exp05 P4(b), exp06 B and exp07 arm 2 against
-the synthetic arm (the 8B misses are never cut off). The re-score decodes the same 200 cases (`~/data/rg/ruler-mvmq`) at 192
-tokens for Jet base and its ten adapters. Outcome on the synthetic - realmix multi-value gap at 16K (0.08 at 64 tokens):
-cost >= 0.15, no cost <= 0.08. **Submitted 2026-11-07** at 3e4d01f, no code change (`step1.sbatch` with JOB_ARGS), A40, 2 h each,
+**Done 2026-11-08** (exp11_ruler_cap/RESULTS.md): the cap explains few misses. At 192 tokens 12 of the 142 misses whose last
+line was an unfinished item become correct (P1 refuted; 6 on the stored path): past its retrieved values Jet cycles them or
+counts down round numbers, so a list running at the cap was already a miss. The cap cost 29 of 2,200 runs, 22 of them
+multi-query. Synthetic - realmix on multi-value at 16K is +0.13 at 192 tokens (+0.08 at 64), "small", seeds overlapping;
+exp05 P4(b), exp06 B and exp07 arm 2 stand (dated notes in each). V fails: 505 of 2,200 reruns leave the stored greedy
+path within the first value or two, A40 -> A40 included, and 37 verdicts moved, 19 up and 18 down. Next: one 64-token rerun
+to tell GPU noise from the token limit, because the gate needs that noise floor. exp08's "19 of 21 multi-value losses cut
+off" (exp10's reading of the 64-token outputs) is unverified until exp10's 192-token runs.
+Pre-registered 2026-11-07 at b6c263a before any run: do the 142 stored 2B misses that end in an unfinished list item come
+from the 64-token cap, biasing exp05 P4(b), exp06 B and exp07 arm 2 against the synthetic arm? The same 200 cases
+(`~/data/rg/ruler-mvmq`) at 192 tokens for Jet base and its ten adapters; outcome on the synthetic - realmix multi-value gap
+at 16K: cost >= 0.15, no cost <= 0.08. Submitted 2026-11-07 at 3e4d01f, no code change (`step1.sbatch` with JOB_ARGS), A40,
 run dirs `~/runs/rg/rescore/20261107-ruler192/<variant>`: base 1155277, synthetic seeds 1-3 1155278-80, realmix 1155281-83,
 budget 1155284-86, syn1200 1155287. Pull: the rsync line at the top of exp11_ruler_cap/run_all.sh, then `run_all.sh report`.
-After it: dated notes in exp05 / exp06 / exp07 RESULTS.md (and exp08's multi-value: 19 of 21 lost cases were the cap).
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
