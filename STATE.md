@@ -235,6 +235,15 @@ at 16K: cost >= 0.15, no cost <= 0.08. Submitted 2026-11-07 at 3e4d01f, no code 
 run dirs `~/runs/rg/rescore/20261107-ruler192/<variant>`: base 1155277, synthetic seeds 1-3 1155278-80, realmix 1155281-83,
 budget 1155284-86, syn1200 1155287. Pull: the rsync line at the top of exp11_ruler_cap/run_all.sh, then `run_all.sh report`.
 
+## Experiment 12 (exp12_rerun_noise) — does a rerun reproduce the stored answers?
+Pre-registered 2026-11-08 at 1c5c71c before any run (exp12_rerun_noise/RESULTS.md): exp11's realmix seed 2 job again at 192
+tokens (rerun192, against exp11's run) and at 64 (cap64, against the stored exp05 run), to tell apart why 28 of its 200
+outputs left the stored path with the same node, GPU model, evaluation path and code. Outcomes: noise (rerun192 differs
+anywhere), token limit (both match), surroundings (cap64 differs from the stored run but is a prefix of exp11's output),
+mixed. **Submitted 2026-11-08** at 3e4d01f, no code change (`step1.sbatch` with JOB_ARGS), A40, 1 h each, run dirs
+`~/runs/rg/rescore/20261108-rerun/<variant>`: rerun192 1155969, cap64 1155970. Pull: the rsync line at the top of
+exp12_rerun_noise/run_all.sh, then `run_all.sh report`.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
