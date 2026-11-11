@@ -251,6 +251,18 @@ mixed. **Submitted 2026-11-08** at 3e4d01f, no code change (`step1.sbatch` with 
 `~/runs/rg/rescore/20261108-rerun/<variant>`: rerun192 1155969, cap64 1155970. Pull: the rsync line at the top of
 exp12_rerun_noise/run_all.sh, then `run_all.sh report`.
 
+## Experiment 13 (exp13_decode_layout) — does what a process decodes first set the path of its 32K answers?
+Pre-registered 2026-11-11 at 6652ed5 before any run (exp13_decode_layout/RESULTS.md): four decodes of realmix seed 2 at 64
+tokens, one process each: the stored 16K and 32K RULER files (full16, full32), the 100 multi-answer cases at 32K alone
+(only32), and the 200 with the 32K half first (rev). Suspect, read from the code: fla's Triton kernels keep the
+configuration that was fastest at a process's first call, and the key holds no sequence length. Outcomes: not layout
+(full32 differs from the stored run), first prompt (only32 matches the stored run), composition (only32 matches cap64),
+mixed. **Submitted 2026-11-11** at 3e4d01f, no code change (`step1.sbatch` with JOB_ARGS, `TRITON_PRINT_AUTOTUNING=1`),
+A40, pinned to a256-a40-04, 1 h each, run dirs `~/runs/rg/rescore/20261111-layout/<arm>`: full16 1163668, full32 1163672,
+only32 1163673, rev 1163674. Reordered cases: `~/data/rg/ruler-mvmq/ruler-mvmq-rev.jsonl` (sha256 bf32921339a0deae...).
+Pull: write each arm's `autotune.txt`, then the rsync line, both at the top of exp13_decode_layout/run_all.sh, then
+`run_all.sh report`.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine

@@ -62,4 +62,5 @@ process 0.50, one state per length 0.20, other 0.30.
 One adapter, one node, RULER multi-answer cases. The 8B model runs other kernels (env `mil`) and is not tested here.
 
 ## Results
-Pending: job ids, then `run_all.sh report`.
+Pending. Submitted 2026-11-11 at 3e4d01f, pinned to a256-a40-04: full16 1163668, full32 1163672, only32 1163673, rev
+1163674; `ruler-mvmq-rev.jsonl` has sha256 bf32921339a0deae.... Then `run_all.sh report`.
