@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-11-08
+Updated: 2026-11-11
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -236,6 +236,13 @@ run dirs `~/runs/rg/rescore/20261107-ruler192/<variant>`: base 1155277, syntheti
 budget 1155284-86, syn1200 1155287. Pull: the rsync line at the top of exp11_ruler_cap/run_all.sh, then `run_all.sh report`.
 
 ## Experiment 12 (exp12_rerun_noise) — does a rerun reproduce the stored answers?
+**Done 2026-11-11** (exp12_rerun_noise/RESULTS.md): surroundings. rerun192 reproduces exp11's run in 200 of 200 outputs,
+cap64 is a prefix of it in 200 of 200, and cap64 differs from the stored run in 28 outputs and 3 verdicts: not noise, not
+the token limit. Post-hoc: all 28 are 32K cases; six of the seven adapters stored on A40s show the same split against
+exp11 (16K 0 / 100, 32K 28-36 / 100) and budget seed 3 the mirror (33 / 0). Node, environment, evaluation path and resumed
+jobs are excluded. What differs at 32K: the stored jobs decode the 32K file in a fresh process, the reruns after 100 cases
+at 16K. Compare runs only when both decoded the same suite file, one process per file. Next: the full RULER files at 64
+tokens as robust.sbatch runs them, the 32K cases alone, and the 200 cases with the 32K half first.
 Pre-registered 2026-11-08 at 1c5c71c before any run (exp12_rerun_noise/RESULTS.md): exp11's realmix seed 2 job again at 192
 tokens (rerun192, against exp11's run) and at 64 (cap64, against the stored exp05 run), to tell apart why 28 of its 200
 outputs left the stored path with the same node, GPU model, evaluation path and code. Outcomes: noise (rerun192 differs
