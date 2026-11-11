@@ -1,0 +1,2 @@
+3e4d01f1da3ca0c8e21971cd00738ab8cf60c046
+docs(state): exp07, exp08 and seeds 2-3 done; verdicts and next steps
