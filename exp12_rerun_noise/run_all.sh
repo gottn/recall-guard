@@ -38,6 +38,23 @@ c = compare("cap64 vs stored (64)", cap, stored)
 p = compare("cap64 as prefix of exp11 (192)", cap, exp11, prefix=True)
 compare("stored (64) as prefix of exp11 (192)", stored, exp11, prefix=True)
 print("outcome:", "noise" if r < 200 else "token limit" if c == 200 else "surroundings" if p == 200 else "mixed")
+
+# Post-hoc (2026-11-11): where the diverging outputs sit, by length. cap64 against the stored run, then exp11's eleven runs
+# against their stored ones by the prefix test (the base and synthetic seeds were stored on A100s, the other seven on A40s).
+def by_length(a, b, prefix):
+    return {L: sum(not (y["output"].startswith(x["output"].rstrip()) if prefix else x["output"] == y["output"])
+                   for x, y in zip(a, b) if x["length_bucket"] == L) for L in (16384, 32768)}
+
+print("diverging of 100 per length, cap64 vs stored:", by_length(stored, cap, False))
+E3, E5 = "exp03_robust/results/raw", "exp05_realmix/results/raw/damage"
+E6, E7 = "exp06_budget/results/raw/damage", "exp07_len32k/results/raw/damage"
+OLD = {"base": f"{E3}/ruler-{{L}}-base-{J}.jsonl"} | {f"synthetic-s{s}": f"{E3}/ruler-{{L}}-repair-seed{s}-{J}.jsonl" for s in (1, 2, 3)}
+OLD |= {f"realmix-s{s}": f"{E5}/ruler-{{L}}-repair-seed{s}-realmix-{J}.jsonl" for s in (1, 2, 3)}
+OLD |= {f"budget-s{s}": f"{E6}/ruler-{{L}}-repair-seed{s}-budget-{J}.jsonl" for s in (1, 2, 3)}
+OLD["syn1200"] = f"{E7}/ruler-{{L}}-repair-seed1-syn1200-{J}.jsonl"
+for v, pat in OLD.items():
+    old = [r for L in (16384, 32768) for r in load(pat.format(L=L)) if r["task"] in TASKS]
+    print(f"diverging of 100 per length, {v} stored vs exp11:", by_length(old, load(f"exp11_ruler_cap/results/raw/{v}/{J}.jsonl"), True))
 EOF
     ;;
   *) echo "usage: run_all.sh report"; exit 1 ;;
