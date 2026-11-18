@@ -2,6 +2,8 @@
 # Experiment 10: is the weight edit's recall damage on repeated structure separable from its thinking-loop fix?
 # Variants, measures, rules and odds in RESULTS.md, pre-registered before any run. No training; exp10.sbatch runs one
 # variant per job on an A40 (4 h, 32G). Cluster, from the front end, in this order:
+# 2026-11-18: `cli run` now pins Triton autotuning (exp14), and Qwen3.5 calls fla's kernels. exp08's stored runs, which
+# this experiment reuses, were made before the pin: prefix every submit line with RG_AUTOTUNE=1.
 #   smokes, a run dir of their own (-> M):
 #     TAG=smoke-cm5 SCALE=1 CASES=2 LIMIT=4 PER_LEVEL=1 MATH_TOKENS=256 infra/cluster/submit.sh exp10
 #     RUN_IN=$M TAG=smoke-answer SCALE=1 PHASE=answer CASES=2 LIMIT=4 PER_LEVEL=1 MATH_TOKENS=256 infra/cluster/submit.sh exp10
