@@ -859,3 +859,75 @@ baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('JunxiongWang/Llama
 
 FAIL: recall regression in all cases pooled, ruler_qa_2@16384
 
+### suite-s1: source -> source + realmix (control)
+baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.69 | 0.98 | 3 | 181 | 1 |  |
+| heldout_many | 16384 | 50 | 0.90 | 1.00 | 0 | 5 | 1 |  |
+| heldout_many | 32768 | 50 | 0.98 | 1.00 | 0 | 1 | 1 |  |
+| many_random | 16384 | 50 | 0.90 | 1.00 | 0 | 5 | 1 |  |
+| many_random | 32768 | 50 | 0.92 | 1.00 | 0 | 4 | 1 |  |
+| many_similar | 16384 | 50 | 0.86 | 0.98 | 1 | 7 | 0.996 |  |
+| many_similar | 32768 | 50 | 0.76 | 0.96 | 2 | 12 | 0.999 |  |
+| multihop | 16384 | 50 | 0.16 | 0.94 | 0 | 39 | 1 |  |
+| multihop | 32768 | 50 | 0.12 | 0.94 | 0 | 41 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.38 | 1.00 | 0 | 31 | 1 |  |
+| updated | 32768 | 50 | 0.24 | 0.96 | 0 | 36 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s2: source -> source + realmix (control)
+baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.71 | 0.99 | 1 | 168 | 1 |  |
+| heldout_many | 16384 | 50 | 0.92 | 1.00 | 0 | 4 | 1 |  |
+| heldout_many | 32768 | 50 | 0.90 | 1.00 | 0 | 5 | 1 |  |
+| many_random | 16384 | 50 | 0.90 | 1.00 | 0 | 5 | 1 |  |
+| many_random | 32768 | 50 | 0.88 | 1.00 | 0 | 6 | 1 |  |
+| many_similar | 16384 | 50 | 0.90 | 0.98 | 1 | 5 | 0.984 |  |
+| many_similar | 32768 | 50 | 0.74 | 0.98 | 0 | 12 | 1 |  |
+| multihop | 16384 | 50 | 0.24 | 0.98 | 0 | 37 | 1 |  |
+| multihop | 32768 | 50 | 0.16 | 0.96 | 0 | 40 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.46 | 1.00 | 0 | 27 | 1 |  |
+| updated | 32768 | 50 | 0.44 | 0.98 | 0 | 27 | 1 |  |
+
+PASS: no recall regression
+
+### heldout: source -> source + realmix (control)
+baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.95 | 1.00 | 0 | 8 | 1 |  |
+| heldout_many | 1024 | 25 | 0.96 | 1.00 | 0 | 1 | 1 |  |
+| heldout_many | 2048 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 4096 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 8192 | 25 | 0.92 | 1.00 | 0 | 2 | 1 |  |
+| heldout_many | 16384 | 25 | 0.92 | 1.00 | 0 | 2 | 1 |  |
+| heldout_many | 32768 | 25 | 0.88 | 1.00 | 0 | 3 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: source -> source + realmix (control)
+baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.20 | 0.97 | 0 | 115 | 1 |  |
+| multihop | 1024 | 25 | 0.12 | 1.00 | 0 | 22 | 1 |  |
+| multihop | 2048 | 25 | 0.24 | 0.96 | 0 | 18 | 1 |  |
+| multihop | 4096 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+| multihop | 8192 | 25 | 0.20 | 0.92 | 0 | 18 | 1 |  |
+| multihop | 16384 | 25 | 0.32 | 1.00 | 0 | 17 | 1 |  |
+| multihop | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+

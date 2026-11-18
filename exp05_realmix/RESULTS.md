@@ -348,7 +348,31 @@ training is 0.25-0.28 at 32K. The run-on text does not carry the result.
 Limits: one control seed against Jet's three; n = 100 per cell; qa_1 questions are 96% from one article; the 8B pair has no
 such control, so its realmix numbers (0.72-0.78 against Llama's untrained 0.83) do not show a closed gap either.
 
-Damage checks (reported, not criteria): pending, job 1185235 was still running when this was written.
+**Damage checks** (reported, not criteria). Job 1185235 COMPLETED after 3 h 48 min; ten result files, sha256 as on the
+cluster. Every number: `run_all.sh report` (results/tables-damage.md, tables-ruler.md, gates.md, and its bench / bpb
+lines). Recall at 16K / 32K, n = 100 per suite cell and 50 per RULER cell:
+
+| | Qwen2.5-1.5B | + synthetic control (exp03, seed 1) | + realmix (this control) |
+|---|---:|---:|---:|
+| multihop | 0.20 / 0.14 | 0.99 / 0.98 | 0.96 / 0.95 |
+| updated | 0.42 / 0.34 | 1.00 / 1.00 | 1.00 / 0.97 |
+| many_similar | 0.88 / 0.75 | 0.99 / 0.95 | 0.98 / 0.97 |
+| many_random, heldout_many, needle | 0.90-1.00 | 1.00 | 1.00 |
+| RULER multi-value | 0.74 / 0.46 | 0.54 / 0.36 | 0.72 / 0.54 |
+| RULER multi-query | 0.64 / 0.48 | 0.52 / 0.46 | 0.72 / 0.54 |
+| RULER multikey_3 (UUID keys) | 0.40 / 0.40 | 0.62 / 0.64 | 0.60 / 0.46 |
+| ARC-Easy / HellaSwag (acc, n = 500) | 0.746 / 0.520 | 0.736 / 0.520 | 0.754 / 0.512 |
+| bits per byte, Moby Dick at 16K | 1.0636 | 1.0701 | 1.0757 |
+
+- The control passes all four suite gates: pooled 3 lost / 181 gained (s1), 1 / 168 (s2), 0 / 8 (held-out), 0 / 115
+  (multihop25). The benchmarks stay within 0.01 (acc). Bits per byte rise by 0.012, against 0.007 for the synthetic control.
+- **Halving the synthetic dose costs the source 0.03 on multi-hop** (0.96 / 0.95 against 0.99 / 0.98). Jet with the same
+  recipe reaches only 0.63-0.65 / 0.45-0.57 over three seeds, against 0.94-0.97 / 0.81-0.89 with the full dose (P4(a)).
+  That loss needs the hybrid.
+- No RULER cell falls more than 0.02 below the source. The synthetic control's drops on multi-value and multi-query
+  (0.74 -> 0.54, 0.46 -> 0.36, 0.64 -> 0.52) are absent; the other RULER cells are 0.96-1.00.
+- Variants at 32K on suite seed 1 (n = 50): unmerged 0.94-1.00. Under the chat template 0.00-0.12; Qwen2.5-1.5B is a base
+  model, and the synthetic control ranged from 0.20 to 0.98 there over two seeds (exp03).
 
 ## Control at 8B: the gentle recipe on the source (pre-registered 2026-11-18, before the run)
 **Question.** The 2B control showed that the realmix recipe lifts the source as much as the hybrid. The 8B numbers still

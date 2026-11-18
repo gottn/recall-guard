@@ -27,10 +27,10 @@ case "${1:-report}" in
   report)
     $PY -m recall_guard.cli report --results $E4/ruler-*.jsonl $QA/ruler-*.jsonl --out exp05_realmix/results/tables-qa.md
     ls $DMG/suite-s*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
-      --results $E3/suite-s*-base-{$JET,$MIL}.jsonl $E3/suite-s*-repair-seed1-$JET.jsonl $E3/suite-s*-repair-seed1-gentle-$MIL.jsonl $DMG/suite-s*-repair-seed[123]-realmix-*.jsonl \
+      --results $E3/suite-s*-base-{$JET,$MIL,$QWEN,$LLAMA}.jsonl $E3/suite-s*-repair-seed1-{$JET,$QWEN}.jsonl $E3/suite-s*-repair-seed1-gentle-$MIL.jsonl $DMG/suite-s*-repair-seed[123]-realmix-*.jsonl \
       --out exp05_realmix/results/tables-damage.md
     ls $DMG/ruler-*.jsonl >/dev/null 2>&1 && $PY -m recall_guard.cli report \
-      --results $E3/ruler-*-base-{$JET,$MIL}.jsonl $E3/ruler-*-repair-seed1-$JET.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl $DMG/ruler-*-repair-seed[123]-realmix-*.jsonl \
+      --results $E3/ruler-*-base-{$JET,$MIL,$QWEN,$LLAMA}.jsonl $E3/ruler-*-repair-seed1-{$JET,$QWEN}.jsonl $E3/ruler-*-repair-seed1-gentle-$MIL.jsonl $DMG/ruler-*-repair-seed[123]-realmix-*.jsonl \
       --out exp05_realmix/results/tables-ruler.md
     : > exp05_realmix/results/gates.md
     for m in "$JET repair-seed1 $QWEN" "$MIL repair-seed1-gentle $LLAMA"; do
@@ -64,6 +64,10 @@ case "${1:-report}" in
     for s in 1 2 3; do
       gate "real QA: source + realmix -> Mamba-in-the-Llama + realmix seed $s, the deficit after equal training"  $CTL8 -- $QA/ruler-*-repair-seed$s-realmix-$MIL.jsonl
     done
+    for S in suite-s1 suite-s2 heldout multihop25; do  # the controls' damage checks: reported, not criteria
+      gate "$S: source -> source + realmix (control)"     $E3/$S-base-$QWEN.jsonl  -- $DMG/$S-repair-seed1-realmix-$QWEN.jsonl
+      gate "$S: source -> source + realmix (8B control)"  $E3/$S-base-$LLAMA.jsonl -- $DMG/$S-repair-seed1-realmix-$LLAMA.jsonl
+    done
     $PY - <<'EOF'  # the controls' gains on qa_1 in cases of 100, and the pre-registered labels (RESULTS.md, Control and Control at 8B)
 import json, os
 from recall_guard.score import first_line, strip_think
@@ -90,8 +94,8 @@ if os.path.exists(ctl8.format(L=16384)):  # the label reads 16K, where the hybri
     G16 = hits(ctl8.format(L=16384)) - hits(f"{E4}/ruler-16384-base-{L8}.jsonl")
     print("8B control label at 16K:", "repair" if G16 <= 5 else "training" if G16 >= 10 else "mixed")
 EOF
-    for f in $E3/bench-base-{$JET,$MIL}.json $E3/bench-repair-seed1-$JET.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
-             $E3/bpb-base-{$JET,$MIL}.json $E3/bpb-repair-seed1-$JET.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
+    for f in $E3/bench-base-{$JET,$MIL,$QWEN,$LLAMA}.json $E3/bench-repair-seed1-{$JET,$QWEN}.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
+             $E3/bpb-base-{$JET,$MIL,$QWEN,$LLAMA}.json $E3/bpb-repair-seed1-{$JET,$QWEN}.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
       [ -f "$f" ] && $PY -c "import json,sys; d=json.load(open(sys.argv[1])); d.pop('bpb_values',None); print(json.dumps(d))" "$f"
     done
     echo "wrote exp05_realmix/results/tables-qa.md, tables-damage.md, tables-ruler.md and gates.md" ;;
