@@ -111,3 +111,6 @@ both result files matches the cluster.
 Three decodes at 64 tokens with this adapter, pre-registered before they run, to tell process history from file
 composition: the full RULER files as `robust.sbatch` runs them (the follow-up named above; it should reproduce the stored
 run), the 100 cases at 32K alone, and the 200 cases with the 32K half first.
+
+2026-11-18: exp13 ran them. The first prompt a process decodes sets the path, through the configuration the l2norm
+kernel keeps from its autotuning (exp13_decode_layout/RESULTS.md).

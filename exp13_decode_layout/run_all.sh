@@ -46,6 +46,7 @@ r32 = diff("rev 32K half vs S", mv(arm["rev"], 32768), mv(S[32768], 32768))
 diff("rev 32K half vs C", mv(arm["rev"], 32768), mv(C, 32768))
 r16 = diff("rev 16K half vs S", mv(arm["rev"], 16384), mv(S[16384], 16384))
 print("outcome:", "not layout" if not layout else "first prompt" if o_s == 0 else "composition" if o_c == 0 else "mixed")
+# The rev reading is void: cli run decodes shortest first, so rev ran its 16K half first (RESULTS.md, Results).
 print("rev:", "one state per process" if r32 == 0 and r16 >= 10 else "one state per length" if r32 == 0 and r16 == 0 else "other")
 
 # Mechanism readout, not a criterion: the configuration each autotuned kernel keeps, per arm, and the ones that differ.
