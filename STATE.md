@@ -110,6 +110,8 @@ flat 0.36 -> 0.38), P3 holds narrowly (4K -0.03/-0.04, within 1 SE; pooled 23 / 
 qa_2 by +0.07-0.08 everywhere, no 4K cost. All 24 files in exp04_realdocs/results/raw; verdict and limits in RESULTS.md.
 
 ## Experiment 5 (exp05_realmix) — real-document QA in the repair mix
+**Control (2026-11-18):** the source gains as much from the same recipe, so the real-QA gains in this section are what the
+training gives any model; the 2B gap at 32K is open after equal training. Section "Controls on the source".
 Pre-registered 2026-10-26 (exp05_realmix/RESULTS.md, P1-P4) at c2c15b2 before any run. Generator `recall_guard/real_data.py`
 (pure; RULER's qa framing with `Document i:` blocks, loss on the answers; SQuAD v2 train + HotpotQA train; every exp04
 evaluation paragraph and question banned by exact string: on the 600 exp04 prompts all 1,304 qa_1 and 26,141 qa_2 strings
@@ -297,8 +299,22 @@ in `~/runs/rg/robust/20261101-183230-8b5abb6` (32G, 6 h), then real QA 1185236 (
 `~/runs/rg/realdocs/20261101-183233-8b5abb6`; (b) real QA 1185237 in `~/runs/rg/realdocs/20261025-161716-734dbf3`.
 Pull (a) with the two rsync lines at the top of exp05_realmix/run_all.sh, then `exp05_realmix/run_all.sh report` (it
 prints the control's gain and label); pull (b) with the rsync line at the top of exp04_realdocs/run_all.sh, then
-`exp04_realdocs/run_all.sh report`. exp04's report also picks up the Jet and 8B seed 2-3 files that sit untracked in
-exp04_realdocs/results/raw: commit them with (b).
+`exp04_realdocs/run_all.sh report`.
+**(b) done 2026-11-18** (exp04_realdocs/RESULTS.md, "Control seed 2"; 95166d6, 2d0173d): flat. Both gates pass (pooled 63
+lost / 76 gained). qa_1 at 4K goes 0.69 -> 0.74 where Jet's seed 2 adapter went 0.70 -> 0.37, so that loss needs the
+hybrid; the seed's training data alone does not produce it. Post hoc: qa_2 at 4K drops 0.06 on both control seeds (8 lost
+/ 2 gained each, not flagged) and qa_1 at 16K gains on both (0.05, 0.11). The Jet and 8B seed 2-3 raw files of exp04,
+untracked since 2026-10-25, are committed with it.
+**(a) done 2026-11-18** (exp05_realmix/RESULTS.md, "Control"; b82606c, fa9562f): training, and the deficit stays open at
+32K. From the same recipe the source gains 0.31 on qa_1 at 16K and 0.40 at 32K (0.45 -> 0.76, 0.36 -> 0.76), about as
+much as Jet (0.33-0.36, 0.32-0.36), and 0.20 at 4K. So Jet's real-QA gain is what the training gives any model: for
+real QA the adapter raises recall, and repair is not shown. After equal training the source holds 0.76 from 16K to 32K
+and Jet falls from 0.72-0.75 to 0.44-0.48: source + realmix -> Jet + realmix fails qa_1 at 32K for all three seeds (gap
+0.28-0.32, against 0.24 before training) and passes at 4K and 16K. Scored on the first line only, the picture is the
+same (post hoc). The 8B realmix numbers (0.72-0.78 against Llama's untrained 0.83) have no such control. Departure:
+1185236 was released from its dependency once the adapter was saved (19:02) and ran beside the damage checks.
+**Open:** the control's damage checks (job 1185235) were still running at 20:00. When it ends, pull with the first rsync
+line of exp05_realmix/run_all.sh and report them in the "Control" section (reported, not criteria).
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
@@ -308,6 +324,8 @@ restore jobs finished or cancelled; nothing queued. Open follow-up: whether thei
 and our adapter compose.
 
 ## Next
+0. (2026-11-18, from the source control) The same control at 8B: the gentle realmix recipe on Llama-3.1-8B-Instruct, then
+   the exp04 cases. Until it runs, the 8B realmix gain reads as "raises", not "repairs", and its remaining gap is unknown.
 1. (done 2026-10-25) Exp04 real-document QA. Follow-ups in exp04_realdocs/RESULTS.md: real-document QA in the training mix;
    more adapter seeds on the two headline cells; a `gentle + qk` recipe (they repair different things).
 2. Capacity frontier after repair: 32/64/128 keys at 32K.
@@ -322,6 +340,8 @@ Done since this list was written: length generalisation at 8B, multi-hop in the 
 - Two cluster envs: `modern` (transformers main, Qwen3/3.5) and `jet` (transformers 4.53 + jet-ai fla fork).
 - `cli run` pins Triton autotuning (3cdb23e, exp14): one answer per model and prompt, whatever the process decoded
   first. Runs from before the pin compare only among themselves and in the same layout; `RG_AUTOTUNE=1` reproduces them.
+- A real-QA gain counts as repair only against a source given the same training (exp05, "Control"). The synthetic
+  adapter passes that test (the source stays flat on two seeds); the realmix adapter does not, so it "raises" recall.
 
 ## Prior art
 Key points: Qwen2.5-1.5B is Jet's initialisation checkpoint, not a weight-identical base (stage 2 trained the MLPs for 350B tokens); Jet-Long already shows an unpaired RULER drop at 32K (46.59); Lizard (50% softmax) reports parity to 32K, so the deficit depends on how few attention layers survive; no published post-hoc repair with transfer and no-damage numbers.
