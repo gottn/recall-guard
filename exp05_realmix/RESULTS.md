@@ -21,6 +21,11 @@ range. Section "Seeds 2 and 3".
 (exp11_ruler_cap/RESULTS.md), the cap explains 29 of 2,200 runs, mostly multi-query, and synthetic minus realmix on
 multi-value at 16K is +0.13, the pre-registered "small", with the seeds overlapping. P4(b) stays not established.
 
+**Control (2026-11-18):** the same recipe lifts the Qwen source as much as Jet (qa_1 0.45 -> 0.76 at 16K, 0.36 -> 0.76 at
+32K). The real-QA gain above is what this training gives any model, and "closes the single-document gap" holds only against
+the untrained source: after equal training the 2B gap at 32K is 0.28-0.32, against 0.24 before. The 8B numbers have no such
+control. Section "Control".
+
 ## Question
 Exp04 left three things open. The adapter trained only on synthetic key lists repairs 58% of the single-document gap at
 32K at both scales (Jet 0.12 -> 0.26 against Qwen2.5-1.5B at 0.36; Mamba-in-the-Llama 0.19 -> 0.56 against Llama-3.1-8B
@@ -273,7 +278,9 @@ Every number: `run_all.sh report`, whose tables now list seeds 1-3 and whose gat
   gates). Bench stays within 0.01 of seed 1 at both scales.
 
 ## Control: the 2B recipe on the source (pre-registered 2026-11-18, before the run)
-**Verdict: pending.**
+**Verdict: training, and the deficit stays open at 32K.** The source gains 0.31 on qa_1 at 16K and 0.40 at 32K from the
+same recipe, as much as Jet. After equal training the source holds 0.76 from 16K to 32K and Jet falls from 0.72-0.75 to
+0.44-0.48: the gap at 32K is 0.28-0.32, against 0.24 before any training.
 
 **Question.** Jet's realmix adapters score 0.72-0.75 on qa_1 at 16K, where the Qwen2.5-1.5B it was converted from scores
 0.45. The adapters trained on SQuAD and HotpotQA documents in the evaluation's own framing, so part of that gain may be
@@ -298,8 +305,50 @@ at 16K and 0.32-0.36 at 32K over three seeds.
 
 Expectation, not a criterion: training 0.55, mixed 0.25, repair 0.20. Deficit: open 0.55 (at 32K), closed 0.25.
 
-**Results.** Pending. Submitted 2026-11-18 at 01cb0b7: training + damage checks 1185235, real QA 1185236 (after it). Then
-`run_all.sh report`.
+**Results.** Jobs 1185235 (training 49 min, then the damage checks) and 1185236 (real QA, 29 min) on 2026-11-18 at
+01cb0b7, both on a256-a40-05 (`sacct`). Departure from the method: 1185236 was released from its dependency once the
+adapter was saved (19:02), so it ran beside the damage checks, not after them. `train_stats.json` matches Jet's seed 1: 600
+documents, 150 steps, lr 2e-4, rank 16, the same pools and bans. The source has four kinds of projection to adapt (0.28% of
+its weights) where Jet has nine, and ends at loss 0.209 against Jet's 0.381. The sha256 of the three result files matches
+the cluster. Every number: `run_all.sh report` (results/tables-qa.md, results/gates.md; it prints the label).
+
+| qa_1 | 4K | 16K | 32K |
+|---|---:|---:|---:|
+| Qwen2.5-1.5B | 0.69 | 0.45 | 0.36 |
+| Qwen2.5-1.5B + realmix (the control) | 0.89 | 0.76 | 0.76 |
+| Jet-Nemotron-2B | 0.70 | 0.39 | 0.12 |
+| Jet-Nemotron-2B + realmix, seeds 1 / 2 / 3 | 0.79 / 0.86 / 0.85 | 0.75 / 0.72 / 0.72 | 0.44 / 0.47 / 0.48 |
+| gain of the control (G) | 0.20 | 0.31 | 0.40 |
+| gain of Jet | 0.09-0.16 | 0.33-0.36 | 0.32-0.36 |
+| gap, source minus Jet, before training | -0.01 | 0.06 | 0.24 |
+| gap after equal training | 0.03-0.10 | 0.01-0.04 | 0.28-0.32 |
+
+**Outcome: training**, by the rule (G = 0.31 at 16K, 0.40 at 32K; 2 lost / 33 gained and 3 lost / 43 gained).
+**Deficit after equal training: open.** Source + realmix -> Jet + realmix fails pooled and on qa_1 at 32K for all three
+seeds (40 lost / 8 gained, 35 / 6, 37 / 9; p < 3e-5). Seed 1 also fails qa_2 at 32K (19 / 6, p 0.007). No cell at 4K or
+16K fails for any seed. Both expectations (training 0.55, open 0.55) were right.
+
+- **Jet's real-QA gain is what the training gives any model.** The source gains about as much: 0.31 against Jet's
+  0.33-0.36 at 16K, 0.40 against 0.32-0.36 at 32K, and 0.20 even at 4K, where length is not the difficulty. For real QA
+  the adapter raises recall; "repairs" is not shown.
+- **The 32K deficit is the hybrid's, and this training does not close it.** At 16K the trained hybrid matches the trained
+  source (0.01-0.04 below, passes). At 32K it is 0.28-0.32 below. The trained source no longer loses anything from 16K to
+  32K; the trained hybrid loses 0.24-0.31.
+- **Against the untrained source the earlier reading stands as measured**: Jet + realmix is above Qwen's 0.36 at 32K. That
+  comparison gave one model the training and not the other.
+- qa_2 (reported): the control gains 0.07 / 0.17 / 0.17 (0.57 / 0.56 / 0.49). The gap after equal training is 0.01-0.05 at
+  4K, 0.08-0.10 at 16K (p 0.03-0.08, not flagged) and 0.04-0.13 at 32K.
+- The synthetic adapter is the arm where the source stays flat (exp04, two seeds). Its gain on Jet's qa_1 at 32K is small
+  and seed-dependent: 0.12 -> 0.26 / 0.11 / 0.22.
+
+Post hoc, not in the rule: RULER's rule counts the answer anywhere in the output, and every model runs on after its answer.
+Scored on the first line only, the control still gains 0.31 at 16K and 0.36 at 32K (0.72), and the gap after equal
+training is 0.25-0.28 at 32K. The run-on text does not carry the result.
+
+Limits: one control seed against Jet's three; n = 100 per cell; qa_1 questions are 96% from one article; the 8B pair has no
+such control, so its realmix numbers (0.72-0.78 against Llama's untrained 0.83) do not show a closed gap either.
+
+Damage checks (reported, not criteria): pending, job 1185235 was still running when this was written.
 
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to

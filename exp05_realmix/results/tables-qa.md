@@ -22,6 +22,10 @@
 | Qwen/Qwen2.5-1.5B | ruler_qa_2 | 0.50 | 0.39 | 0.32 |
 | Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1 | ruler_qa_1 | 0.70 | 0.50 | 0.38 |
 | Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1 | ruler_qa_2 | 0.44 | 0.34 | 0.38 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_1 | 0.89 | 0.76 | 0.76 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_2 | 0.57 | 0.56 | 0.49 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_1 | 0.74 | 0.56 | 0.40 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_2 | 0.44 | 0.35 | 0.35 |
 | jet-ai/Jet-Nemotron-2B | ruler_qa_1 | 0.70 | 0.39 | 0.12 |
 | jet-ai/Jet-Nemotron-2B | ruler_qa_2 | 0.50 | 0.28 | 0.27 |
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1 | ruler_qa_1 | 0.67 | 0.42 | 0.26 |
@@ -103,6 +107,18 @@
 | Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1 | ruler_qa_2 | 4096 | 100 | 0.44 | 0.00 | 0.00 | 1.7 |
 | Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1 | ruler_qa_2 | 16384 | 100 | 0.34 | 0.00 | 0.00 | 2.4 |
 | Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1 | ruler_qa_2 | 32768 | 100 | 0.38 | 0.00 | 0.00 | 3.7 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_1 | 4096 | 100 | 0.89 | 0.00 | 0.00 | 1.8 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_1 | 16384 | 100 | 0.76 | 0.00 | 0.00 | 2.4 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_1 | 32768 | 100 | 0.76 | 0.00 | 0.00 | 3.7 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_2 | 4096 | 100 | 0.57 | 0.00 | 0.00 | 1.7 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_2 | 16384 | 100 | 0.56 | 0.00 | 0.00 | 2.4 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix | ruler_qa_2 | 32768 | 100 | 0.49 | 0.00 | 0.00 | 3.7 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_1 | 4096 | 100 | 0.74 | 0.00 | 0.00 | 1.7 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_1 | 16384 | 100 | 0.56 | 0.00 | 0.00 | 2.4 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_1 | 32768 | 100 | 0.40 | 0.00 | 0.00 | 3.6 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_2 | 4096 | 100 | 0.44 | 0.00 | 0.00 | 1.7 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_2 | 16384 | 100 | 0.35 | 0.00 | 0.00 | 2.4 |
+| Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2 | ruler_qa_2 | 32768 | 100 | 0.35 | 0.00 | 0.00 | 3.6 |
 | jet-ai/Jet-Nemotron-2B | ruler_qa_1 | 4096 | 100 | 0.70 | 0.00 | 0.00 | 2.1 |
 | jet-ai/Jet-Nemotron-2B | ruler_qa_1 | 16384 | 100 | 0.39 | 0.00 | 0.00 | 3.0 |
 | jet-ai/Jet-Nemotron-2B | ruler_qa_1 | 32768 | 100 | 0.12 | 0.00 | 0.00 | 4.4 |

@@ -754,3 +754,78 @@ baseline ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',) vs candidate ('JunxiongWang/Ll
 
 PASS: no recall regression
 
+### real QA: source -> source + realmix (control)
+baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.45 | 0.67 | 34 | 166 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.69 | 0.89 | 5 | 25 | 1 |  |
+| ruler_qa_1 | 16384 | 100 | 0.45 | 0.76 | 2 | 33 | 1 |  |
+| ruler_qa_1 | 32768 | 100 | 0.36 | 0.76 | 3 | 43 | 1 |  |
+| ruler_qa_2 | 4096 | 100 | 0.50 | 0.57 | 7 | 14 | 0.961 |  |
+| ruler_qa_2 | 16384 | 100 | 0.39 | 0.56 | 9 | 26 | 0.999 |  |
+| ruler_qa_2 | 32768 | 100 | 0.32 | 0.49 | 8 | 25 | 0.999 |  |
+
+PASS: no recall regression
+
+### real QA: source + realmix -> source, FAIL cells are the control's gains
+baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',) vs candidate ('Qwen/Qwen2.5-1.5B',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.67 | 0.45 | 166 | 34 | 2.31e-22 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.89 | 0.69 | 25 | 5 | 0.000162 | FAIL |
+| ruler_qa_1 | 16384 | 100 | 0.76 | 0.45 | 33 | 2 | 1.84e-08 | FAIL |
+| ruler_qa_1 | 32768 | 100 | 0.76 | 0.36 | 43 | 3 | 2.31e-10 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.57 | 0.50 | 14 | 7 | 0.0946 |  |
+| ruler_qa_2 | 16384 | 100 | 0.56 | 0.39 | 26 | 9 | 0.00299 | FAIL |
+| ruler_qa_2 | 32768 | 100 | 0.49 | 0.32 | 25 | 8 | 0.00228 | FAIL |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@4096, ruler_qa_1@16384, ruler_qa_1@32768, ruler_qa_2@16384, ruler_qa_2@32768
+
+### real QA: source + realmix -> Jet + realmix seed 1, the deficit after equal training
+baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.67 | 0.56 | 115 | 46 | 2.64e-08 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.89 | 0.79 | 14 | 4 | 0.0154 |  |
+| ruler_qa_1 | 16384 | 100 | 0.76 | 0.75 | 13 | 12 | 0.5 |  |
+| ruler_qa_1 | 32768 | 100 | 0.76 | 0.44 | 40 | 8 | 1.65e-06 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.57 | 0.54 | 12 | 9 | 0.332 |  |
+| ruler_qa_2 | 16384 | 100 | 0.56 | 0.46 | 17 | 7 | 0.032 |  |
+| ruler_qa_2 | 32768 | 100 | 0.49 | 0.36 | 19 | 6 | 0.00732 | FAIL |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@32768, ruler_qa_2@32768
+
+### real QA: source + realmix -> Jet + realmix seed 2, the deficit after equal training
+baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.67 | 0.58 | 102 | 48 | 6.15e-06 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.89 | 0.86 | 6 | 3 | 0.254 |  |
+| ruler_qa_1 | 16384 | 100 | 0.76 | 0.72 | 12 | 8 | 0.252 |  |
+| ruler_qa_1 | 32768 | 100 | 0.76 | 0.47 | 35 | 6 | 2.44e-06 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.57 | 0.52 | 15 | 10 | 0.212 |  |
+| ruler_qa_2 | 16384 | 100 | 0.56 | 0.47 | 20 | 11 | 0.0748 |  |
+| ruler_qa_2 | 32768 | 100 | 0.49 | 0.45 | 14 | 10 | 0.271 |  |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@32768
+
+### real QA: source + realmix -> Jet + realmix seed 3, the deficit after equal training
+baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',) vs candidate ('jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.67 | 0.58 | 103 | 48 | 4.48e-06 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.89 | 0.85 | 9 | 5 | 0.212 |  |
+| ruler_qa_1 | 16384 | 100 | 0.76 | 0.72 | 12 | 8 | 0.252 |  |
+| ruler_qa_1 | 32768 | 100 | 0.76 | 0.48 | 37 | 9 | 2.03e-05 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.57 | 0.56 | 12 | 11 | 0.5 |  |
+| ruler_qa_2 | 16384 | 100 | 0.56 | 0.48 | 16 | 8 | 0.0758 |  |
+| ruler_qa_2 | 32768 | 100 | 0.49 | 0.39 | 17 | 7 | 0.032 |  |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@32768
+

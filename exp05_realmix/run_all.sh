@@ -64,6 +64,13 @@ ctl = f"{QA}/ruler-{{L}}-repair-seed1-realmix-{Q}.jsonl"
 if os.path.exists(ctl.format(L=16384)):
     G = {L: hits(ctl.format(L=L)) - hits(f"{E4}/ruler-{L}-base-{Q}.jsonl") for L in (16384, 32768)}
     print("control gain on qa_1, cases of 100:", G, "->", "repair" if max(G.values()) <= 10 else "training" if max(G.values()) >= 20 else "mixed")
+    # post hoc: RULER's rule reads the whole output and every model runs on after its answer, so count the first line only
+    from recall_guard.score import first_line, strip_think
+    gold = {c["id"]: c["answer"].lower().split("|") for L in (16384, 32768) for c in map(json.loads, open(f"exp04_realdocs/results/cases/ruler-{L}.jsonl"))}
+    first = lambda p: sum(any(a in first_line(strip_think(r["output"])).lower() for a in gold[r["case_id"]]) for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
+    print("first line only, qa_1 hits of 100 at 16K and 32K: source", [first(f"{E4}/ruler-{L}-base-{Q}.jsonl") for L in (16384, 32768)],
+          "control", [first(ctl.format(L=L)) for L in (16384, 32768)],
+          "| Jet + realmix seeds 1-3 at 32K", [first(f"{QA}/ruler-32768-repair-seed{s}-realmix-jet-ai_Jet-Nemotron-2B.jsonl") for s in (1, 2, 3)])
 EOF
     for f in $E3/bench-base-{$JET,$MIL}.json $E3/bench-repair-seed1-$JET.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
              $E3/bpb-base-{$JET,$MIL}.json $E3/bpb-repair-seed1-$JET.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
