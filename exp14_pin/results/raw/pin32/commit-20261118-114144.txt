@@ -1,0 +1,2 @@
+0416769e92a82c77eadafc39f931e4b0eee96f26
+exp(exp14): pre-register two pinned decodes, 32K alone against 16K first — before any run
