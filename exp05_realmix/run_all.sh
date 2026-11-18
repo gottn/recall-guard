@@ -49,6 +49,22 @@ case "${1:-report}" in
       gate "real QA: base -> realmix seed $s ($H)"  $E4/ruler-*-base-$H.jsonl -- $QA/ruler-*-repair-seed$s-realmix-$H.jsonl
       for S in suite-s1 suite-s2 heldout multihop25; do gate "$S: base -> realmix seed $s ($H)"  $E3/$S-base-$H.jsonl -- $DMG/$S-repair-seed$s-realmix-$H.jsonl; done
     done; done
+    # control (2026-11-18): the 2B recipe on the source. FAIL cells of the reverse gate are the control's gains.
+    CTL="$QA/ruler-*-repair-seed1-realmix-$QWEN.jsonl"
+    gate "real QA: source -> source + realmix (control)"  $E4/ruler-*-base-$QWEN.jsonl -- $CTL
+    gate "real QA: source + realmix -> source, FAIL cells are the control's gains"  $CTL -- $E4/ruler-*-base-$QWEN.jsonl
+    for s in 1 2 3; do
+      gate "real QA: source + realmix -> Jet + realmix seed $s, the deficit after equal training"  $CTL -- $QA/ruler-*-repair-seed$s-realmix-$JET.jsonl
+    done
+    $PY - <<'EOF'  # the control's gain on qa_1 in cases of 100, and the pre-registered label (RESULTS.md, Control)
+import json, os
+E4, QA, Q = "exp04_realdocs/results/raw", "exp05_realmix/results/raw/qa", "Qwen_Qwen2.5-1.5B"
+hits = lambda p: sum(r["contains"] for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
+ctl = f"{QA}/ruler-{{L}}-repair-seed1-realmix-{Q}.jsonl"
+if os.path.exists(ctl.format(L=16384)):
+    G = {L: hits(ctl.format(L=L)) - hits(f"{E4}/ruler-{L}-base-{Q}.jsonl") for L in (16384, 32768)}
+    print("control gain on qa_1, cases of 100:", G, "->", "repair" if max(G.values()) <= 10 else "training" if max(G.values()) >= 20 else "mixed")
+EOF
     for f in $E3/bench-base-{$JET,$MIL}.json $E3/bench-repair-seed1-$JET.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
              $E3/bpb-base-{$JET,$MIL}.json $E3/bpb-repair-seed1-$JET.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
       [ -f "$f" ] && $PY -c "import json,sys; d=json.load(open(sys.argv[1])); d.pop('bpb_values',None); print(json.dumps(d))" "$f"

@@ -272,6 +272,34 @@ Every number: `run_all.sh report`, whose tables now list seeds 1-3 and whose gat
 - The damage check passes at every seed: base -> realmix flags no cell in real QA or the four synthetic files (20 new
   gates). Bench stays within 0.01 of seed 1 at both scales.
 
+## Control: the 2B recipe on the source (pre-registered 2026-11-18, before the run)
+**Verdict: pending.**
+
+**Question.** Jet's realmix adapters score 0.72-0.75 on qa_1 at 16K, where the Qwen2.5-1.5B it was converted from scores
+0.45. The adapters trained on SQuAD and HotpotQA documents in the evaluation's own framing, so part of that gain may be
+what this training gives any model, and the source never got it. exp04's control (the synthetic adapter on the source)
+stayed flat, but it saw no real documents.
+
+**Method.** The Jet recipe unchanged (600 documents, half real, lr 2e-4, 8K-32K, seed 1, tag `-realmix`) on
+`Qwen/Qwen2.5-1.5B`, env `modern`, through `robust.sbatch` in exp05's run dirs, then `realdocs.sbatch` on the exp04 cases.
+Decodes run with `RG_AUTOTUNE=1`, the path of the stored Qwen2.5 runs (Qwen2.5 has no autotuned kernel; the variable
+removes the doubt). The code is origin/main 01cb0b7; the trainer has not changed since 26d25e8.
+
+**Outcomes**, on qa_1, n = 100 per cell. G is the control's gain: source + realmix minus source. Jet's gain is 0.33-0.36
+at 16K and 0.32-0.36 at 32K over three seeds.
+- **repair**: G <= 0.10 at 16K and at 32K. The source barely moves, so Jet's gain is recall the conversion lost.
+- **training**: G >= 0.20 at 16K or at 32K. A full-attention model gains from the same documents, so Jet's gain is at
+  least partly what the training gives any model, and "repairs" has to become "raises".
+- **mixed**: anything else.
+- Read separately, the deficit after equal training: `check` from source + realmix to Jet + realmix (seeds 1, 2, 3) over
+  the six real-QA cells. **closed** if every seed passes, **open** if a cell fails for at least two seeds, otherwise
+  seed-dependent.
+- Reported, not criteria: qa_2, the 4K cells, and the control's damage checks (suites, RULER, benchmarks, bits per byte).
+
+Expectation, not a criterion: training 0.55, mixed 0.25, repair 0.20. Deficit: open 0.55 (at 32K), closed 0.25.
+
+**Results.** Pending: job ids, then `run_all.sh report`.
+
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to
    keep qa_1 at 0.44 without losing chained-key multi-hop; then the 8B recipe at 300 synthetic + 300 real.
