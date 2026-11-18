@@ -350,6 +350,37 @@ such control, so its realmix numbers (0.72-0.78 against Llama's untrained 0.83) 
 
 Damage checks (reported, not criteria): pending, job 1185235 was still running when this was written.
 
+## Control at 8B: the gentle recipe on the source (pre-registered 2026-11-18, before the run)
+**Question.** The 2B control showed that the realmix recipe lifts the source as much as the hybrid. The 8B numbers still
+compare a trained hybrid with an untrained source: Mamba-in-the-Llama + realmix scores 0.72-0.78 on qa_1 at 32K against
+Llama-3.1-8B-Instruct's 0.83. What does the same training give Llama, and is the single-document gap still closed after it?
+
+**Method.** The 8B recipe unchanged (300 documents, half real, lr 5e-5, 8K-16K, seed 1, tag `-realmix`) on
+`meta-llama/Llama-3.1-8B-Instruct`, env `modern`, through `robust.sbatch` in exp05's run dirs, then `realdocs.sbatch` on
+the exp04 cases; `RG_AUTOTUNE=1` as for the 2B control. The real-QA job is queued behind the training job and released
+once the adapter is saved, so it runs beside the damage checks (done by hand for the 2B control, planned here). The code
+is origin/main 01cb0b7.
+
+**What the run cannot change.** Llama scores 0.82 at 16K and 0.83 at 32K, so its gain G (Llama + realmix minus Llama) is
+at most 0.18 and 0.17. The hybrid gained 0.53-0.59 at 32K. So the 2B rule (training: G >= 0.20) cannot fire, and at 32K
+the gap after equal training is at most 0.22-0.28, against 0.64 before: at least 56% of it closes whatever the control
+shows.
+
+**Outcomes**, on qa_1, n = 100 per cell.
+- **Deficit after equal training** (the criterion): `check` from Llama + realmix to Mamba-in-the-Llama + realmix (seeds 1,
+  2, 3), read on the three qa_1 cells. Against the untrained Llama no qa_1 cell fails for any seed (closest: 32K seed 1,
+  17 lost / 6 gained, p 0.017; 4K seed 2, 10 / 3, p 0.046). **closed**: still none. **open**: a qa_1 cell fails for at
+  least two seeds. Otherwise **seed-dependent**.
+- **Gain of the source at 16K**, the length where the hybrid's gain (0.15-0.18) fits in the source's room: **repair** if
+  G <= 0.05, **training** if G >= 0.10, otherwise **mixed**. These are the 2B thresholds in proportion: about 30% and 60%
+  of the hybrid's gain.
+- Reported, not criteria: G at 4K and 32K and the gap after equal training at each length; the same counted on the first
+  line of the output only; qa_2 (against the untrained Llama it already fails at 16K for all three seeds); the control's
+  damage checks.
+
+Expectation, not a criterion: deficit seed-dependent 0.40, open 0.30, closed 0.30; at 16K repair 0.40, mixed 0.30,
+training 0.30. Power is low: one control seed and n = 100, and the 16K labels are five cases apart.
+
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to
    keep qa_1 at 0.44 without losing chained-key multi-hop; then the 8B recipe at 300 synthetic + 300 real.

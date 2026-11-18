@@ -829,3 +829,33 @@ baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',) vs candi
 
 FAIL: recall regression in all cases pooled, ruler_qa_1@32768
 
+### real QA: source -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo), the remaining deficit
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.74 | 0.68 | 72 | 37 | 0.000516 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.92 | 0.85 | 10 | 3 | 0.0461 |  |
+| ruler_qa_1 | 16384 | 100 | 0.82 | 0.83 | 7 | 8 | 0.696 |  |
+| ruler_qa_1 | 32768 | 100 | 0.83 | 0.78 | 13 | 8 | 0.192 |  |
+| ruler_qa_2 | 4096 | 100 | 0.67 | 0.61 | 11 | 5 | 0.105 |  |
+| ruler_qa_2 | 16384 | 100 | 0.64 | 0.50 | 20 | 6 | 0.00468 | FAIL |
+| ruler_qa_2 | 32768 | 100 | 0.57 | 0.53 | 11 | 7 | 0.24 |  |
+
+FAIL: recall regression in all cases pooled, ruler_qa_2@16384
+
+### real QA: source -> realmix seed 3 (JunxiongWang_Llama3.1-Mamba2-8B-dpo), the remaining deficit
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.74 | 0.68 | 78 | 39 | 0.000198 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.92 | 0.88 | 7 | 3 | 0.172 |  |
+| ruler_qa_1 | 16384 | 100 | 0.82 | 0.80 | 11 | 9 | 0.412 |  |
+| ruler_qa_1 | 32768 | 100 | 0.83 | 0.78 | 13 | 8 | 0.192 |  |
+| ruler_qa_2 | 4096 | 100 | 0.67 | 0.57 | 17 | 7 | 0.032 |  |
+| ruler_qa_2 | 16384 | 100 | 0.64 | 0.53 | 14 | 3 | 0.00636 | FAIL |
+| ruler_qa_2 | 32768 | 100 | 0.57 | 0.50 | 16 | 9 | 0.115 |  |
+
+FAIL: recall regression in all cases pooled, ruler_qa_2@16384
+

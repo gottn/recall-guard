@@ -56,21 +56,39 @@ case "${1:-report}" in
     for s in 1 2 3; do
       gate "real QA: source + realmix -> Jet + realmix seed $s, the deficit after equal training"  $CTL -- $QA/ruler-*-repair-seed$s-realmix-$JET.jsonl
     done
-    $PY - <<'EOF'  # the control's gain on qa_1 in cases of 100, and the pre-registered label (RESULTS.md, Control)
+    # control at 8B (pre-registered 2026-11-18): the gentle recipe on the source. The rule reads the qa_1 cells of the last gate.
+    CTL8="$QA/ruler-*-repair-seed1-realmix-$LLAMA.jsonl"
+    gate "real QA: source -> source + realmix (8B control)"  $E4/ruler-*-base-$LLAMA.jsonl -- $CTL8
+    gate "real QA: source + realmix -> source (8B), FAIL cells are the control's gains"  $CTL8 -- $E4/ruler-*-base-$LLAMA.jsonl
+    for s in 2 3; do gate "real QA: source -> realmix seed $s ($MIL), the remaining deficit"  $E4/ruler-*-base-$LLAMA.jsonl -- $QA/ruler-*-repair-seed$s-realmix-$MIL.jsonl; done
+    for s in 1 2 3; do
+      gate "real QA: source + realmix -> Mamba-in-the-Llama + realmix seed $s, the deficit after equal training"  $CTL8 -- $QA/ruler-*-repair-seed$s-realmix-$MIL.jsonl
+    done
+    $PY - <<'EOF'  # the controls' gains on qa_1 in cases of 100, and the pre-registered labels (RESULTS.md, Control and Control at 8B)
 import json, os
+from recall_guard.score import first_line, strip_think
 E4, QA, Q = "exp04_realdocs/results/raw", "exp05_realmix/results/raw/qa", "Qwen_Qwen2.5-1.5B"
+LENGTHS = (4096, 16384, 32768)
 hits = lambda p: sum(r["contains"] for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
+# RULER's rule reads the whole output and every model runs on after its answer, so also count the first line only
+gold = {c["id"]: c["answer"].lower().split("|") for L in LENGTHS for c in map(json.loads, open(f"exp04_realdocs/results/cases/ruler-{L}.jsonl"))}
+first = lambda p: sum(any(a in first_line(strip_think(r["output"])).lower() for a in gold[r["case_id"]]) for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
 ctl = f"{QA}/ruler-{{L}}-repair-seed1-realmix-{Q}.jsonl"
 if os.path.exists(ctl.format(L=16384)):
     G = {L: hits(ctl.format(L=L)) - hits(f"{E4}/ruler-{L}-base-{Q}.jsonl") for L in (16384, 32768)}
     print("control gain on qa_1, cases of 100:", G, "->", "repair" if max(G.values()) <= 10 else "training" if max(G.values()) >= 20 else "mixed")
-    # post hoc: RULER's rule reads the whole output and every model runs on after its answer, so count the first line only
-    from recall_guard.score import first_line, strip_think
-    gold = {c["id"]: c["answer"].lower().split("|") for L in (16384, 32768) for c in map(json.loads, open(f"exp04_realdocs/results/cases/ruler-{L}.jsonl"))}
-    first = lambda p: sum(any(a in first_line(strip_think(r["output"])).lower() for a in gold[r["case_id"]]) for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
     print("first line only, qa_1 hits of 100 at 16K and 32K: source", [first(f"{E4}/ruler-{L}-base-{Q}.jsonl") for L in (16384, 32768)],
           "control", [first(ctl.format(L=L)) for L in (16384, 32768)],
           "| Jet + realmix seeds 1-3 at 32K", [first(f"{QA}/ruler-32768-repair-seed{s}-realmix-jet-ai_Jet-Nemotron-2B.jsonl") for s in (1, 2, 3)])
+L8, M8 = "meta-llama_Llama-3.1-8B-Instruct", "JunxiongWang_Llama3.1-Mamba2-8B-dpo"
+ctl8 = f"{QA}/ruler-{{L}}-repair-seed1-realmix-{L8}.jsonl"
+if os.path.exists(ctl8.format(L=16384)):  # the label reads 16K, where the hybrid's gain fits in the source's room
+    for name, n in (("whole output", hits), ("first line only", first)):
+        src, c8 = ([n(p.format(L=L)) for L in LENGTHS] for p in (f"{E4}/ruler-{{L}}-base-{L8}.jsonl", ctl8))
+        print(f"8B control, qa_1 hits of 100 at 4K/16K/32K, {name}: source", src, "control", c8, "gain", [b - a for a, b in zip(src, c8)],
+              "| hybrid + realmix seeds 1-3", [[n(f"{QA}/ruler-{L}-repair-seed{s}-realmix-{M8}.jsonl") for s in (1, 2, 3)] for L in LENGTHS])
+    G16 = hits(ctl8.format(L=16384)) - hits(f"{E4}/ruler-16384-base-{L8}.jsonl")
+    print("8B control label at 16K:", "repair" if G16 <= 5 else "training" if G16 >= 10 else "mixed")
 EOF
     for f in $E3/bench-base-{$JET,$MIL}.json $E3/bench-repair-seed1-$JET.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
              $E3/bpb-base-{$JET,$MIL}.json $E3/bpb-repair-seed1-$JET.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do
