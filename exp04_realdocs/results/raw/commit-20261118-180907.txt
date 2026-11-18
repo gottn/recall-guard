@@ -1,0 +1,2 @@
+01cb0b769fa8932712b4ba418c5e1ed98cfc299f
+docs(state): exp14 done — pinned; Jet runs from before the pin compare only among themselves

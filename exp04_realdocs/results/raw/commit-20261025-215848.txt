@@ -1,0 +1,2 @@
+95766cae724da0124c8c97f93658efa9ea045b08
+exp(exp04): 8B real QA — MIL 0.19 vs Llama 0.83 at 32K; gentle adapter 0.56, qk 0.35, no cell lost
