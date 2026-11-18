@@ -1,6 +1,6 @@
 # STATE
 
-Updated: 2026-11-11
+Updated: 2026-11-18
 
 ## Goal
 Build a recall-regression tool production teams would run in CI, and prove it catches long-context
@@ -252,6 +252,13 @@ mixed. **Submitted 2026-11-08** at 3e4d01f, no code change (`step1.sbatch` with 
 exp12_rerun_noise/run_all.sh, then `run_all.sh report`.
 
 ## Experiment 13 (exp13_decode_layout) — does what a process decodes first set the path of its 32K answers?
+**Done 2026-11-18** (exp13_decode_layout/RESULTS.md): first prompt. The stored layout reproduces the stored run in 300 of
+300 outputs at both lengths, and the 32K cases alone give the stored answers in 100 of 100, so the path is set by what the
+process decodes first. Triton's log names the kernel: `l2norm_fwd_kernel` keeps BT 8 with 1 warp when the process starts at
+16K and BT 16 with 16 warps when it starts at 32K, one tuning per process; the other eight autotuned kernels are excluded.
+rev is void: `cli run` decodes shortest first (`cmd_run` sorts by ref_tokens), so it repeated cap64's layout (200 of 200).
+Decodes of one suite file are like for like; filtered or resumed decodes are not. Next: pin one configuration per kernel in
+the `jet` backend and show that both layouts agree at 32K; one pair of layouts on the 8B model.
 Pre-registered 2026-11-11 at 6652ed5 before any run (exp13_decode_layout/RESULTS.md): four decodes of realmix seed 2 at 64
 tokens, one process each: the stored 16K and 32K RULER files (full16, full32), the 100 multi-answer cases at 32K alone
 (only32), and the 200 with the 32K half first (rev). Suspect, read from the code: fla's Triton kernels keep the
