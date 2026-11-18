@@ -43,6 +43,36 @@ baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qw
 
 PASS: no recall regression
 
+### base-Qwen_Qwen2.5-1.5B -> repair-seed2-Qwen_Qwen2.5-1.5B
+baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.45 | 0.47 | 63 | 76 | 0.883 |  |
+| ruler_qa_1 | 4096 | 100 | 0.69 | 0.74 | 12 | 17 | 0.868 |  |
+| ruler_qa_1 | 16384 | 100 | 0.45 | 0.56 | 12 | 23 | 0.98 |  |
+| ruler_qa_1 | 32768 | 100 | 0.36 | 0.40 | 13 | 17 | 0.819 |  |
+| ruler_qa_2 | 4096 | 100 | 0.50 | 0.44 | 8 | 2 | 0.0547 |  |
+| ruler_qa_2 | 16384 | 100 | 0.39 | 0.35 | 12 | 8 | 0.252 |  |
+| ruler_qa_2 | 32768 | 100 | 0.32 | 0.35 | 6 | 9 | 0.849 |  |
+
+PASS: no recall regression
+
+### repair-seed2-Qwen_Qwen2.5-1.5B -> base-Qwen_Qwen2.5-1.5B
+baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed2',) vs candidate ('Qwen/Qwen2.5-1.5B',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.47 | 0.45 | 76 | 63 | 0.154 |  |
+| ruler_qa_1 | 4096 | 100 | 0.74 | 0.69 | 17 | 12 | 0.229 |  |
+| ruler_qa_1 | 16384 | 100 | 0.56 | 0.45 | 23 | 12 | 0.0448 |  |
+| ruler_qa_1 | 32768 | 100 | 0.40 | 0.36 | 17 | 13 | 0.292 |  |
+| ruler_qa_2 | 4096 | 100 | 0.44 | 0.50 | 2 | 8 | 0.989 |  |
+| ruler_qa_2 | 16384 | 100 | 0.35 | 0.39 | 8 | 12 | 0.868 |  |
+| ruler_qa_2 | 32768 | 100 | 0.35 | 0.32 | 9 | 6 | 0.304 |  |
+
+PASS: no recall regression
+
 ### base-meta-llama_Llama-3.1-8B-Instruct -> base-JunxiongWang_Llama3.1-Mamba2-8B-dpo
 baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo',): 600 shared cases, alpha 0.05
 

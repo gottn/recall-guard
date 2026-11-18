@@ -112,7 +112,8 @@ McNemar p of `check`.
   short-context cost; qk-only is damage-free and repairs less.
 
 ## Control seed 2 (pre-registered 2026-11-18, before the run)
-**Verdict: pending.**
+**Verdict: flat.** Both gates pass (pooled 63 lost / 76 gained). The control does not move on two seeds, and seed 2's stream
+does not cost the source short-context QA: qa_1 at 4K goes 0.69 -> 0.74 where Jet's seed 2 adapter went 0.70 -> 0.37.
 
 **Question.** The control (the exp03 synthetic adapter on Qwen2.5-1.5B) rests on seed 1, which left real QA flat (pooled
 61 lost / 64 gained). Jet's seed 2 adapter lost 0.33 of qa_1 at 4K (0.70 -> 0.37) while passing every synthetic gate.
@@ -129,14 +130,39 @@ origin/main 01cb0b7 with `RG_AUTOTUNE=1` (the path of the stored Qwen2.5 runs). 
 
 Expectation, not a criterion: flat 0.55, stream 0.30, other 0.15.
 
-**Results.** Pending. Submitted 2026-11-18 at 01cb0b7: job 1185237. Then `run_all.sh report`.
+**Results.** Job 1185237 completed on 2026-11-18 at 01cb0b7 (31 min, a256-a40-05, `sacct`), 200 rows per length. Every
+number: `run_all.sh report` (results/tables.md, results/gates.md).
+
+| model | qa_1 4K | 16K | 32K | qa_2 4K | 16K | 32K | pooled lost / gained |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Qwen2.5-1.5B | 0.69 | 0.45 | 0.36 | 0.50 | 0.39 | 0.32 | |
+| + control adapter seed 1 | 0.70 | 0.50 | 0.38 | 0.44 | 0.34 | 0.38 | 61 / 64, passes |
+| + control adapter seed 2 | 0.74 | 0.56 | 0.40 | 0.44 | 0.35 | 0.35 | 63 / 76, passes; the reverse passes |
+| Jet-Nemotron-2B | 0.70 | 0.39 | 0.12 | 0.50 | 0.28 | 0.27 | |
+| + adapter seed 2 (exp05, post hoc 5) | 0.37 | 0.26 | 0.11 | 0.20 | 0.17 | 0.15 | fails |
+
+**Outcome: flat**, by the rule. The expectation (flat 0.55) was right.
+- Jet seed 2's loss at 4K (-0.33 on qa_1, -0.30 on qa_2) is not in the source with the same seed (+0.05, -0.06). The loss
+  needs the hybrid; the seed's training data alone does not produce it.
+- The closest cells, neither flagged: qa_2 at 4K, 8 lost / 2 gained (p 0.055), and in the reverse gate qa_1 at 16K, 23
+  gained / 12 lost (p 0.045, above the corrected level).
+
+Post hoc, not in the rule:
+- qa_2 at 4K reads 0.50 -> 0.44 with 8 lost / 2 gained for both seeds, and 4 of the lost cases are the same. The synthetic
+  adapter may cost the source a few points of two-hop QA at 4K; n = 100 per seed cannot settle it.
+- qa_1 at 16K gains on both seeds (0.05, 0.11; 15 gained cases shared). Training on synthetic recall may lift the source a
+  little there, which matters when reading the realmix control (exp05).
+
+The seed 2 / 3 cells of line 55 (jobs 1121466-1121469) completed on 2026-10-25; their raw files are committed with this
+control and their numbers are read in exp05 (post hoc 5) and `exp03_robust/results/gates.md`.
 
 ## Failures and limits
 - The size of P1 at 8B was mispredicted (0.64 against a 0.10-0.30 band); the direction and the length dependence were right.
 - P3 fails for the 8B gentle adapter by 0.01 beyond the bound; one seed, n = 100.
 - qa_1 questions are 96% from one article (RULER's ordering), so topical diversity rests on qa_2.
 - Prompts were sized with the Qwen2.5 tokenizer; the Llama-family models see somewhat fewer tokens than the nominal length.
-- One adapter seed per model on real QA; the exp03 three-seed replication covers the synthetic suites only.
+- One adapter seed per model on real QA; the exp03 three-seed replication covers the synthetic suites only. (2026-11-18:
+  the control now has two seeds, above; the hybrids' seeds 2 and 3 are in exp05, post hoc.)
 
 ## Next
 1. Put real-document QA into the training mix (documents built from SQuAD / HotpotQA-style paragraphs, held-out questions)
