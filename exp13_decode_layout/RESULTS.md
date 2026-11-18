@@ -128,3 +128,6 @@ those follows the outputs:
 - Pin one configuration per autotuned kernel in the `jet` backend, then decode only32 and cap64's layout again. The
   32K outputs must then agree in 100 of 100. That is both the test of the reading and the fix.
 - The 8B model (env `mil`) runs other Triton kernels. One pair of decodes in two layouts tells whether it has paths.
+
+2026-11-18: exp14 ran the pinned decode. The two layouts agree in 100 of 100, so the kept configuration is the cause
+(exp14_pin/RESULTS.md).

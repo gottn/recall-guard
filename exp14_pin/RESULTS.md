@@ -1,7 +1,13 @@
 # Experiment 14: does pinning the kernel configurations make the two layouts agree?
 
-**Verdict: pending.** The outcomes below were written on 2026-11-18 before any run; the Results section is filled in only
-from `results/raw` by `run_all.sh report`.
+**Verdict (2026-11-18): pinned.** With the pin, the 100 cases at 32K give the same output whether the process starts at
+32K (pin32) or at 16K (pinmix): 100 of 100, against 72 of 100 unpinned. Neither log holds an autotuning line. So the
+configuration a kernel keeps was the cause of the two paths (exp13), and a pinned decode no longer depends on its first
+prompt. The cost is a break with the stored runs: the pinned answers follow neither stored path and differ from the stored
+run in 24 of 100 outputs at 16K and 31 at 32K, so a pinned Jet run cannot be compared case by case with an unpinned one.
+No cost in speed shows against an unpinned run on the same node. The expectation that the pinned answers would equal
+cap64's (0.60) was wrong. The outcomes below were written on 2026-11-18 before any run; the Results section is filled in
+only from `results/raw` by `run_all.sh report`, plus `sacct`.
 
 ## Question
 exp13 found that the first prompt a process decodes sets the path of its 32K answers, and that one autotuned kernel
@@ -48,6 +54,36 @@ One adapter, one node, RULER multi-answer cases, two layouts. The pin trades spe
 configuration is not the fastest one.
 
 ## Results
-Pending. Submitted 2026-11-18 at 0416769: pin32 1184260, pinmix 1184261. Departure from the method above: the jobs are
-not held to a256-a40-04, whose three GPUs were booked for about 20 more hours; the nodes are reported. Then
-`run_all.sh report`.
+Jobs 1184260 (pin32, 18 min) and 1184261 (pinmix, 26 min) completed on 2026-11-18 at 0416769, both on a256-a40-05
+(`sacct`). Departure from the method above: the jobs were not held to a256-a40-04, whose three GPUs were booked for about
+20 more hours. Both logs print the pin's line. The sha256 of both result files matches the cluster.
+
+| comparison | outputs identical | verdicts that differ |
+|---|---|---|
+| pin32 against the 32K half of pinmix | 100 / 100 | 0 |
+| pin32 against S (the stored run) | 69 / 100 | 4 |
+| pin32 against C (exp12's cap64) | 71 / 100 | 5 |
+| pinmix, 16K half, against S | 76 / 100 | 3 |
+| pinmix against C, all 200 | 147 / 200 | 8 |
+
+**Outcome: pinned**, by the rule.
+- Two processes with different first prompts now give the same 32K answers. Unpinned, the same two layouts differ in 28
+  of 100 (exp13: only32 against cap64). With exp13's correlation, this makes the kept configuration the cause.
+- The pin reached every kernel: neither log holds a line "Triton autotuning for function".
+- **The pinned answers are a third path.** They match neither the stored run nor cap64, at 32K or at 16K. exp13 saw only
+  the l2norm kernel change the outputs because the other kernels happened to keep the same block sizes in all four
+  processes; their first configurations differ from those, and they change the rounding too. So there are more than two
+  possible paths, and the autotuner had been choosing among them consistently.
+- **Speed.** Median seconds per case, pinned: 6.49 at 16K and 7.97 at 32K. An unpinned run on the same node (the stored
+  realmix seed 3 job 1152556, a256-a40-05) took 6.52 and 8.03. cap64 took 4.39 and 5.18 on a256-a40-04, so the node
+  sets the speed, not the pin. One comparison, with a different adapter seed.
+
+## What it means
+- From 3cdb23e on, `cli run` gives one answer per model and prompt, whatever else the process decodes and whether or not
+  the run was resumed or filtered. The commit marker in a run directory tells which side of the pin a run is on.
+- A Jet-Nemotron-2B run from before the pin cannot be compared case by case with one after it: 24-31 outputs of 100
+  differ and 3-5 verdicts of 100 move. A comparison needs both runs on the same side.
+- Models without Triton-autotuned kernels are not touched by the pin.
+
+## Next
+- One pair of layouts on the 8B model. Its kernels may be autotuned too; that test needs one decode with the pin off.

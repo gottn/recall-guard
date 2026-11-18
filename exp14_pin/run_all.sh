@@ -6,7 +6,7 @@
 #   D=~/runs/rg/rescore/20261118-pin/$V; mkdir -p $D && ln -sf ~/data/rg/ruler-mvmq/ruler-mvmq.jsonl $D/suite.jsonl
 #   TRITON_PRINT_AUTOTUNING=1 RUN_IN=$D MODEL=jet-ai/Jet-Nemotron-2B RG_ENV=jet JOB_ARGS="--max-new-tokens 64 --adapter $A $X" \
 #     infra/cluster/submit.sh step1 --partition=prioritized --qos=normal --gres=gpu:a40:1 --mem=32G --time=01:00:00 --nodelist=a256-a40-04
-#   after the jobs, per arm: grep -h -E -A3 'Triton autotuning' $D/slurm-*.out > $D/autotune.txt
+#   after the jobs, per arm: grep -h -A3 'Triton autotuning for function' $D/slurm-*.out > $D/autotune.txt
 # Mac: rsync -a --exclude suite.jsonl --exclude 'slurm-*' --exclude '*.md' aau:runs/rg/rescore/20261118-pin/ exp14_pin/results/raw/ && exp14_pin/run_all.sh report
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -40,7 +40,7 @@ diff("pinmix vs C, all 200", pinmix, C)
 print("outcome:", "pinned" if d == 0 else "not pinned")
 for v in ("pin32", "pinmix"):
     p = f"{RAW}/{v}/autotune.txt"
-    print(f"{v}: {open(p).read().count('Triton autotuning') if os.path.exists(p) else 'no'} autotuning lines in the log")
+    print(f"{v}: {open(p).read().count('Triton autotuning for function') if os.path.exists(p) else 'no'} autotuning lines in the log")
 wall = lambda rows, L: st.median(r["wall_s"] for r in rows if r["length_bucket"] == L)
 print("median seconds per case, pinned / unpinned (cap64):",
       {L: (round(wall(pinmix, L), 2), round(wall(C, L), 2)) for L in (16384, 32768)}, "| pin32:", round(wall(pin32, 32768), 2))
