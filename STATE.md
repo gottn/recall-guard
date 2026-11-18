@@ -271,6 +271,12 @@ Pull: write each arm's `autotune.txt`, then the rsync line, both at the top of e
 `run_all.sh report`.
 
 ## Experiment 14 (exp14_pin) — does pinning the kernel configurations make the two layouts agree?
+**Done 2026-11-18** (exp14_pin/RESULTS.md): pinned. The 100 cases at 32K give the same output whether the process starts
+at 32K or at 16K (100 of 100; 72 unpinned), and neither log holds an autotuning line, so the kept configuration was the
+cause. The pinned answers are a third path: against the stored run they differ in 24 of 100 outputs at 16K and 31 at 32K
+(3-4 verdicts), so a Jet run from before the pin cannot be compared case by case with one after it. No cost in speed
+against an unpinned run on the same node (6.49 / 7.97 s per case against 6.52 / 8.03). `RG_AUTOTUNE=1` leaves the tuning
+on. Next: one pair of layouts on the 8B model, with one decode unpinned.
 The pin: `hf.pin_autotune`, called by `cli run` before the model loads (3cdb23e), offers every Triton-autotuned kernel
 only the first configuration of its list, so nothing is timed. Pre-registered 2026-11-18 at 0416769 before any run
 (exp14_pin/RESULTS.md): two pinned decodes of realmix seed 2 at 64 tokens, the 100 cases at 32K alone (pin32) and all 200
@@ -301,11 +307,17 @@ Done since this list was written: length generalisation at 8B, multi-hop in the 
 - Completion-style prompts, no chat template, greedy decoding, 16 new tokens, for every model.
 - Suite is generated once with the Qwen2.5 tokenizer as reference and shared by all models.
 - Two cluster envs: `modern` (transformers main, Qwen3/3.5) and `jet` (transformers 4.53 + jet-ai fla fork).
+- `cli run` pins Triton autotuning (3cdb23e, exp14): one answer per model and prompt, whatever the process decoded
+  first. Runs from before the pin compare only among themselves and in the same layout; `RG_AUTOTUNE=1` reproduces them.
 
 ## Prior art
 Key points: Qwen2.5-1.5B is Jet's initialisation checkpoint, not a weight-identical base (stage 2 trained the MLPs for 350B tokens); Jet-Long already shows an unpaired RULER drop at 32K (46.59); Lizard (50% softmax) reports parity to 32K, so the deficit depends on how few attention layers survive; no published post-hoc repair with transfer and no-damage numbers.
 
 ## Traps
+- exp10 reuses exp08's stored runs, made before the pin, and Qwen3.5 calls fla's kernels in env `modern`
+  (`use_kernel_func_from_hub_with_fallback`): submit exp10 with `RG_AUTOTUNE=1`, or its reproduction rule V1 may fail.
+- `cli run` decodes a file shortest prompt first, whatever the order of its lines (exp13's rev arm was void for this).
+- A node sets decode speed more than anything else: a256-a40-05 takes about 1.5 times a256-a40-04 per case.
 - PEFT >= 0.21 refuses the image's torchao 0.13; torchao >= 0.16 needs torch 2.10 (image has 2.9). Use the own LoRA; never add peft/torchao.
 - Full-vocabulary logits at 16K are 9.3 GiB in float32: apply lm_head only at answer positions (train.answer_loss).
 - Commit subjects are measured in bytes by the hook: the em dash costs 3, so keep subjects under ~95 characters.

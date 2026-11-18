@@ -45,6 +45,10 @@ cells). On the runs above it fails `many_random` and `many_similar` at 32K and l
 once about ten cases are lost and none gained, so use `--cases 50` or more to catch a 0.2 drop in a single cell; the
 pooled row catches smaller drops spread across the suite.
 
+`run` pins the autotuning of Triton kernels, so an answer does not depend on which prompt the process decoded first
+(`exp13_decode_layout/`, `exp14_pin/`). Compare a run made before that pin only with other such runs decoded from the
+same suite file; `RG_AUTOTUNE=1` reproduces them.
+
 Repair:
 
 ```
