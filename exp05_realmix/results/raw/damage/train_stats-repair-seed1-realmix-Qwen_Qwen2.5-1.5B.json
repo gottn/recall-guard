@@ -1,0 +1,36 @@
+{
+ "docs": 600,
+ "steps": 150,
+ "tokens": 11498139,
+ "wall_s": 2948.5725277662277,
+ "final_loss": 0.20866414215925033,
+ "targets": [
+  "k_proj",
+  "o_proj",
+  "q_proj",
+  "v_proj"
+ ],
+ "config": {
+  "model_id": "Qwen/Qwen2.5-1.5B",
+  "out_dir": "/home/id.aau.dk/pr04wm/runs/rg/robust/20261101-183230-8b5abb6/adapter-Qwen_Qwen2.5-1.5B-seed1-realmix",
+  "n_docs": 600,
+  "lengths": [
+   8192,
+   16384,
+   32768
+  ],
+  "seed": 1,
+  "lr": 0.0002,
+  "rank": 16,
+  "alpha": 32,
+  "grad_accum": 4,
+  "max_steps": 0,
+  "trust_remote_code": false,
+  "targets": "",
+  "weight_decay": 0.0,
+  "replay_text": "",
+  "replay_frac": 0.5,
+  "real_dir": "/home/id.aau.dk/pr04wm/data/rg/realqa",
+  "exclude_dir": "/home/id.aau.dk/pr04wm/data/rg/ruler-qa"
+ }
+}
