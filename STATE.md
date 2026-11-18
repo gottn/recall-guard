@@ -313,8 +313,24 @@ and Jet falls from 0.72-0.75 to 0.44-0.48: source + realmix -> Jet + realmix fai
 0.28-0.32, against 0.24 before training) and passes at 4K and 16K. Scored on the first line only, the picture is the
 same (post hoc). The 8B realmix numbers (0.72-0.78 against Llama's untrained 0.83) have no such control. Departure:
 1185236 was released from its dependency once the adapter was saved (19:02) and ran beside the damage checks.
-**Open:** the control's damage checks (job 1185235) were still running at 20:00. When it ends, pull with the first rsync
-line of exp05_realmix/run_all.sh and report them in the "Control" section (reported, not criteria).
+**(a) damage checks done 2026-11-18** (job 1185235 COMPLETED, 3 h 48 min; reported, not criteria): the control passes
+all four suite gates, benchmarks within 0.01, bits per byte +0.012. Halving the synthetic dose costs the source 0.03 on
+multi-hop (0.96 / 0.95) where Jet falls to 0.63-0.65 / 0.45-0.57, so that loss needs the hybrid. No RULER cell falls more
+than 0.02 below the source. The report now lists the two sources beside the hybrids in the damage and RULER tables.
+**(c) The same control at 8B: pre-registered 2026-11-18 at e925dd7, submitted 22:04 at 01cb0b7** (exp05_realmix/RESULTS.md,
+"Control at 8B"). The gentle realmix recipe on Llama-3.1-8B-Instruct, seed 1, A40, env `modern`, `RG_AUTOTUNE=1`:
+`RUN_IN=<R> STAGE=repair TRAIN_SEED=1 TRAIN_TAG=-realmix TRAIN_DOCS=300 TRAIN_LENGTHS="8192 16384" TRAIN_EXTRA="--lr 5e-5
+<D>" MODEL=meta-llama/Llama-3.1-8B-Instruct RG_ENV=modern infra/cluster/submit.sh robust <A40> --mem=56G --time=12:00:00`
+is job 1187070 (training + damage checks, started 22:05 on a256-a40-04) in `~/runs/rg/robust/20261101-183230-8b5abb6`; real
+QA is job 1187071 (afterany 1187070, 48G, 3 h) in `~/runs/rg/realdocs/20261101-183233-8b5abb6`. A background loop on the
+Mac releases 1187071 once the adapter is saved; if it is gone, run `ssh aau "scontrol update JobId=1187071 Dependency=''"`
+once `<R>/adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix/adapter_config.json` exists, or wait for 1187070 to end
+(about 6 h). Criterion: `check` from Llama + realmix to Mamba-in-the-Llama + realmix (seeds 1-3) on the three qa_1 cells:
+closed (none fails, as today against the untrained Llama), open (a cell fails for two seeds), seed-dependent. Label at 16K
+by the source's gain: repair <= 0.05, training >= 0.10, mixed. Known before the run: Llama can gain at most 0.17 at 32K,
+so the gap after equal training is at most 0.22-0.28 against 0.64 before. Pull with the two rsync lines at the top of
+exp05_realmix/run_all.sh, then `exp05_realmix/run_all.sh report` (it prints the 8B gains, the first-line counts and the
+label; read the criterion in results/gates.md under "the deficit after equal training").
 
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
@@ -325,7 +341,9 @@ and our adapter compose.
 
 ## Next
 0. (2026-11-18, from the source control) The same control at 8B: the gentle realmix recipe on Llama-3.1-8B-Instruct, then
-   the exp04 cases. Until it runs, the 8B realmix gain reads as "raises", not "repairs", and its remaining gap is unknown.
+   the exp04 cases. **Submitted 2026-11-18** (jobs 1187070 / 1187071; section "Controls on the source", (c)): pull, report
+   and write the verdict. Until then the 8B gap after equal training is only bounded (at most 0.22-0.28 at 32K). The gentle
+   synthetic adapter has no source control at 8B either; that one is not submitted.
 1. (done 2026-10-25) Exp04 real-document QA. Follow-ups in exp04_realdocs/RESULTS.md: real-document QA in the training mix;
    more adapter seeds on the two headline cells; a `gentle + qk` recipe (they repair different things).
 2. Capacity frontier after repair: 32/64/128 keys at 32K.
