@@ -111,6 +111,26 @@ McNemar p of `check`.
   qk-only +1.8%) the picture is consistent: adapters on every projection buy the most long-context recall for a small
   short-context cost; qk-only is damage-free and repairs less.
 
+## Control seed 2 (pre-registered 2026-11-18, before the run)
+**Verdict: pending.**
+
+**Question.** The control (the exp03 synthetic adapter on Qwen2.5-1.5B) rests on seed 1, which left real QA flat (pooled
+61 lost / 64 gained). Jet's seed 2 adapter lost 0.33 of qa_1 at 4K (0.70 -> 0.37) while passing every synthetic gate.
+Does the control's second seed stay flat, or does seed 2's training stream cost short-context QA in the source too?
+
+**Method.** `realdocs.sbatch` with exp03's `adapter-Qwen_Qwen2.5-1.5B-seed2` on the same cases, in exp04's run dir, at
+origin/main 01cb0b7 with `RG_AUTOTUNE=1` (the path of the stored Qwen2.5 runs). No training.
+
+**Outcomes**, from `check` over the six cells, source -> source + adapter seed 2 and its reverse:
+- **flat**: both directions pass, pooled row included. The control does not move on two seeds.
+- **stream**: the forward gate fails at 4K (qa_1 or qa_2) or pooled. Seed 2's stream costs short-context QA in a
+  full-attention model too, so Jet seed 2's loss is not the hybrid's.
+- **other**: anything else: a gain, or a drop only at 16K or 32K.
+
+Expectation, not a criterion: flat 0.55, stream 0.30, other 0.15.
+
+**Results.** Pending: job id, then `run_all.sh report`.
+
 ## Failures and limits
 - The size of P1 at 8B was mispredicted (0.64 against a 0.10-0.30 band); the direction and the length dependence were right.
 - P3 fails for the 8B gentle adapter by 0.01 beyond the bound; one seed, n = 100.

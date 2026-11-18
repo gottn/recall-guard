@@ -24,6 +24,7 @@ case "${1:-report}" in
     # the gates, each over all lengths: source -> hybrid is the deficit, base -> repaired must not lose a cell
     : > exp04_realdocs/results/gates.md
     for pair in "base-$QWEN base-$JET" "base-$JET repair-seed1-$JET" "base-$QWEN repair-seed1-$QWEN" \
+                "base-$QWEN repair-seed2-$QWEN" "repair-seed2-$QWEN base-$QWEN" \
                 "base-$LLAMA base-$MIL" "base-$MIL repair-seed1-gentle-$MIL" "base-$MIL repair-seed1-qk-$MIL"; do
       set -- $pair
       ls $RAW/ruler-*-"$1".jsonl $RAW/ruler-*-"$2".jsonl >/dev/null 2>&1 || continue
