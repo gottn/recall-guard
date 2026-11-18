@@ -1,0 +1,44 @@
+Triton autotuning for function l2norm_fwd_kernel,
+with key as (96, 1, 'torch.bfloat16', 'torch.bfloat16'),
+finished after 2.90s,
+best config selected: BT: 16, num_warps: 16, num_ctas: 1, num_stages: 3, maxnreg: None;
+--
+Triton autotuning for function chunk_local_cumsum_scalar_kernel,
+with key as (1, 12, 64, True, False, 'torch.float32', 'torch.float32', 'torch.int32', 'torch.int32'),
+finished after 0.43s,
+best config selected: num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None;
+--
+Triton autotuning for function chunk_scaled_dot_kkt_fwd_kernel,
+with key as (12, 96, 64, True, True, 'torch.bfloat16', 'torch.bfloat16', 'torch.float32', 'torch.float32', 'torch.int32', 'torch.int32'),
+finished after 3.18s,
+best config selected: BK: 128, num_warps: 2, num_ctas: 1, num_stages: 2, maxnreg: None;
+--
+Triton autotuning for function solve_tril_16x16_kernel,
+with key as (64, 'torch.float32', 'torch.float32', 'torch.int32', 'torch.int32'),
+finished after 1.84s,
+best config selected: num_warps: 1, num_ctas: 1, num_stages: 4, maxnreg: None;
+--
+Triton autotuning for function merge_16x16_to_64x64_inverse_kernel,
+with key as (12, 64, True, 'torch.float32', 'torch.float32', 'torch.bfloat16', 'torch.int32', 'torch.int32'),
+finished after 1.37s,
+best config selected: num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None;
+--
+Triton autotuning for function recompute_w_u_fwd_kernel,
+with key as (12, 96, 256, 64, 64, 64, True, 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.float32', 'torch.int32', 'torch.int32'),
+finished after 1.16s,
+best config selected: num_warps: 2, num_ctas: 1, num_stages: 4, maxnreg: None;
+--
+Triton autotuning for function chunk_gated_delta_rule_fwd_kernel_h_blockdim64,
+with key as (12, 96, 256, 64, True, 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.float32', 'torch.bfloat16', 'torch.float32', 'torch.int32', 'torch.int64'),
+finished after 0.84s,
+best config selected: BV: 64, num_warps: 4, num_ctas: 1, num_stages: 2, maxnreg: None;
+--
+Triton autotuning for function chunk_fwd_kernel_o,
+with key as (12, 96, 256, 64, 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.float32', 'torch.bfloat16', 'torch.int32', 'torch.int32'),
+finished after 4.85s,
+best config selected: BK: 64, BV: 64, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None;
+--
+Triton autotuning for function layer_norm_gated_fwd_kernel,
+with key as (256, 1, True, False, False, True, 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.bfloat16', 'torch.float32'),
+finished after 1.14s,
+best config selected: BT: 64, num_warps: 8, num_ctas: 1, num_stages: 3, maxnreg: None;
