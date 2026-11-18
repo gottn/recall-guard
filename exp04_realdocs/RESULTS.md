@@ -129,7 +129,7 @@ origin/main 01cb0b7 with `RG_AUTOTUNE=1` (the path of the stored Qwen2.5 runs). 
 
 Expectation, not a criterion: flat 0.55, stream 0.30, other 0.15.
 
-**Results.** Pending: job id, then `run_all.sh report`.
+**Results.** Pending. Submitted 2026-11-18 at 01cb0b7: job 1185237. Then `run_all.sh report`.
 
 ## Failures and limits
 - The size of P1 at 8B was mispredicted (0.64 against a 0.10-0.30 band); the direction and the length dependence were right.

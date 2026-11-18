@@ -298,7 +298,8 @@ at 16K and 0.32-0.36 at 32K over three seeds.
 
 Expectation, not a criterion: training 0.55, mixed 0.25, repair 0.20. Deficit: open 0.55 (at 32K), closed 0.25.
 
-**Results.** Pending: job ids, then `run_all.sh report`.
+**Results.** Pending. Submitted 2026-11-18 at 01cb0b7: training + damage checks 1185235, real QA 1185236 (after it). Then
+`run_all.sh report`.
 
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to

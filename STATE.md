@@ -287,6 +287,19 @@ and `TRITON_PRINT_AUTOTUNING=1`, A40, 1 h each, run dirs `~/runs/rg/rescore/2026
 about 20 more hours. Pull: write each arm's `autotune.txt`, then the rsync line, both at the top of exp14_pin/run_all.sh,
 then `run_all.sh report`.
 
+## Controls on the source (sections "Control" in exp05_realmix/RESULTS.md and exp04_realdocs/RESULTS.md)
+Pre-registered 2026-11-18 at 6905f01 and c4a1b78 before any run. (a) The 2B realmix recipe on Qwen2.5-1.5B, seed 1: how
+much of Jet's real-QA gain (0.33-0.36 at 16K) does any model get from that training? Outcomes repair (the control gains
+<= 0.10 on qa_1 at 16K and 32K), training (>= 0.20 at either), mixed; plus the gate source + realmix -> Jet + realmix.
+(b) The exp03 control adapter seed 2 on the exp04 cases: flat, stream (a drop at 4K, as Jet's seed 2), or other.
+**Submitted 2026-11-18** at 01cb0b7, A40, env `modern`, decodes with `RG_AUTOTUNE=1`: (a) training + damage checks 1185235
+in `~/runs/rg/robust/20261101-183230-8b5abb6` (32G, 6 h), then real QA 1185236 (afterany 1185235) in
+`~/runs/rg/realdocs/20261101-183233-8b5abb6`; (b) real QA 1185237 in `~/runs/rg/realdocs/20261025-161716-734dbf3`.
+Pull (a) with the two rsync lines at the top of exp05_realmix/run_all.sh, then `exp05_realmix/run_all.sh report` (it
+prints the control's gain and label); pull (b) with the rsync line at the top of exp04_realdocs/run_all.sh, then
+`exp04_realdocs/run_all.sh report`. exp04's report also picks up the Jet and 8B seed 2-3 files that sit untracked in
+exp04_realdocs/results/raw: commit them with (b).
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine
