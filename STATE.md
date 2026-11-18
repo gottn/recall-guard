@@ -270,6 +270,17 @@ only32 1163673, rev 1163674. Reordered cases: `~/data/rg/ruler-mvmq/ruler-mvmq-r
 Pull: write each arm's `autotune.txt`, then the rsync line, both at the top of exp13_decode_layout/run_all.sh, then
 `run_all.sh report`.
 
+## Experiment 14 (exp14_pin) — does pinning the kernel configurations make the two layouts agree?
+The pin: `hf.pin_autotune`, called by `cli run` before the model loads (3cdb23e), offers every Triton-autotuned kernel
+only the first configuration of its list, so nothing is timed. Pre-registered 2026-11-18 at 0416769 before any run
+(exp14_pin/RESULTS.md): two pinned decodes of realmix seed 2 at 64 tokens, the 100 cases at 32K alone (pin32) and all 200
+with the 16K half first (pinmix). Outcomes: pinned (the 32K outputs agree in 100 of 100; unpinned they differ in 28), not
+pinned. **Submitted 2026-11-18** at 0416769 (pushed; origin/main holds everything up to it), `step1.sbatch` with JOB_ARGS
+and `TRITON_PRINT_AUTOTUNING=1`, A40, 1 h each, run dirs `~/runs/rg/rescore/20261118-pin/<arm>`: pin32 1184260, pinmix
+1184261. Departure from the pre-registration: the jobs are not held to a256-a40-04, whose three GPUs were booked for
+about 20 more hours. Pull: write each arm's `autotune.txt`, then the rsync line, both at the top of exp14_pin/run_all.sh,
+then `run_all.sh report`.
+
 ## Training-free baseline
 Done 2026-10-18 (exp03_robust/RESULTS.md item 31): QK-Restore (arXiv 2606.11052) with the
 conversion source as reference fails at both scales (Jet 0.00 everywhere, no reference exists: attention layers cosine

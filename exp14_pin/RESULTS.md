@@ -48,4 +48,6 @@ One adapter, one node, RULER multi-answer cases, two layouts. The pin trades spe
 configuration is not the fastest one.
 
 ## Results
-Pending: job ids, then `run_all.sh report`.
+Pending. Submitted 2026-11-18 at 0416769: pin32 1184260, pinmix 1184261. Departure from the method above: the jobs are
+not held to a256-a40-04, whose three GPUs were booked for about 20 more hours; the nodes are reported. Then
+`run_all.sh report`.
