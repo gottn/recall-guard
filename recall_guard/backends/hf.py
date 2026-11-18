@@ -55,6 +55,25 @@ def load(
     return tok, model.eval()
 
 
+def pin_autotune() -> bool:
+    """Keep only the first configuration of every Triton-autotuned kernel imported after this call; False without Triton.
+    Autotuning times a kernel's configurations at its first call and keeps the fastest for the process, so the rounding
+    of every later prompt depended on which prompt the process decoded first (exp13)."""
+    try:
+        import triton
+    except ImportError:
+        return False
+    if not getattr(triton.autotune, "rg_pinned", False):
+        original = triton.autotune
+
+        def pinned(configs: list, key: list, **kwargs: object) -> object:
+            return original(configs[:1], key, **kwargs)
+
+        pinned.rg_pinned = True  # type: ignore[attr-defined]
+        triton.autotune = pinned
+    return True
+
+
 def peak_memory_gib() -> float:
     """Peak memory torch allocated on the GPU in this process, GiB (0 on CPU)."""
     return torch.cuda.max_memory_allocated() / 2**30 if torch.cuda.is_available() else 0.0

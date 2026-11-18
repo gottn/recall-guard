@@ -120,6 +120,8 @@ def cmd_run(a: argparse.Namespace) -> None:
     done = {d["case_id"] for d in read_jsonl(out)}
     todo = tuple(c for c in cases if c.id not in done)
     print(f"{a.model}: {len(todo)} cases to run ({len(done)} already in {out})", file=sys.stderr)
+    if hf.pin_autotune():  # before the model's kernels are imported, so a resumed or filtered run decodes the same way
+        print("  Triton autotuning pinned to each kernel's first configuration", file=sys.stderr)
     t0 = time.perf_counter()
     tok, model = load_model(a, a.adapter, a.adapter_mode)
     print(f"  loaded in {time.perf_counter() - t0:.0f}s, {hf.peak_memory_gib():.1f} GiB", file=sys.stderr)
