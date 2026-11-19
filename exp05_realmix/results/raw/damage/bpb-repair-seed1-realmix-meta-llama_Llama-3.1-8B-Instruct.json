@@ -1,0 +1,17 @@
+{
+ "model": "meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix",
+ "window_tokens": 16384,
+ "windows": 8,
+ "bpb_mean": 0.841435032013315,
+ "bpb_values": [
+  0.6508424479277954,
+  0.803817323229077,
+  0.853213356576456,
+  0.8579660103410435,
+  0.8564192622584275,
+  0.8263854691862821,
+  0.9052941745299468,
+  0.9775422120574924
+ ],
+ "text": "/home/id.aau.dk/pr04wm/data/rg/mobydick.txt"
+}
