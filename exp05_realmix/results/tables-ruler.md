@@ -86,6 +86,12 @@
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multiquery | 1.00 | 1.00 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multivalue | 0.92 | 0.98 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_single_1 | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_1 | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_2 | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_3 | 1.00 | 0.98 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multiquery | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multivalue | 0.94 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_single_1 | 1.00 | 1.00 |
 
 ## All rows
 
@@ -259,3 +265,15 @@
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_multivalue | 32768 | 50 | 0.98 | 0.00 | 0.00 | 5.5 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_single_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 3.2 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_niah_single_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 5.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 5.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 11.3 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_2 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 5.0 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_2 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 9.2 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_3 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 4.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multikey_3 | 32768 | 50 | 0.98 | 0.00 | 0.00 | 8.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multiquery | 16384 | 50 | 1.00 | 0.00 | 0.00 | 5.9 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multiquery | 32768 | 50 | 1.00 | 0.00 | 0.00 | 11.4 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multivalue | 16384 | 50 | 0.94 | 0.00 | 0.00 | 5.9 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_multivalue | 32768 | 50 | 1.00 | 0.00 | 0.00 | 11.4 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_single_1 | 16384 | 50 | 1.00 | 0.00 | 0.00 | 5.9 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_niah_single_1 | 32768 | 50 | 1.00 | 0.00 | 0.00 | 11.5 |

@@ -829,6 +829,36 @@ baseline ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',) vs candi
 
 FAIL: recall regression in all cases pooled, ruler_qa_1@32768
 
+### real QA: source -> source + realmix (8B control)
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.74 | 0.81 | 16 | 55 | 1 |  |
+| ruler_qa_1 | 4096 | 100 | 0.92 | 0.97 | 0 | 5 | 1 |  |
+| ruler_qa_1 | 16384 | 100 | 0.82 | 0.89 | 2 | 9 | 0.994 |  |
+| ruler_qa_1 | 32768 | 100 | 0.83 | 0.90 | 2 | 9 | 0.994 |  |
+| ruler_qa_2 | 4096 | 100 | 0.67 | 0.71 | 6 | 10 | 0.895 |  |
+| ruler_qa_2 | 16384 | 100 | 0.64 | 0.70 | 2 | 8 | 0.989 |  |
+| ruler_qa_2 | 32768 | 100 | 0.57 | 0.67 | 4 | 14 | 0.996 |  |
+
+PASS: no recall regression
+
+### real QA: source + realmix -> source (8B), FAIL cells are the control's gains
+baseline ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',) vs candidate ('meta-llama/Llama-3.1-8B-Instruct',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.81 | 0.74 | 55 | 16 | 1.88e-06 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.97 | 0.92 | 5 | 0 | 0.0312 |  |
+| ruler_qa_1 | 16384 | 100 | 0.89 | 0.82 | 9 | 2 | 0.0327 |  |
+| ruler_qa_1 | 32768 | 100 | 0.90 | 0.83 | 9 | 2 | 0.0327 |  |
+| ruler_qa_2 | 4096 | 100 | 0.71 | 0.67 | 10 | 6 | 0.227 |  |
+| ruler_qa_2 | 16384 | 100 | 0.70 | 0.64 | 8 | 2 | 0.0547 |  |
+| ruler_qa_2 | 32768 | 100 | 0.67 | 0.57 | 14 | 4 | 0.0154 |  |
+
+FAIL: recall regression in all cases pooled
+
 ### real QA: source -> realmix seed 2 (JunxiongWang_Llama3.1-Mamba2-8B-dpo), the remaining deficit
 baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 600 shared cases, alpha 0.05
 
@@ -859,6 +889,51 @@ baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('JunxiongWang/Llama
 
 FAIL: recall regression in all cases pooled, ruler_qa_2@16384
 
+### real QA: source + realmix -> Mamba-in-the-Llama + realmix seed 1, the deficit after equal training
+baseline ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.81 | 0.64 | 113 | 13 | 2.26e-21 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.97 | 0.91 | 7 | 1 | 0.0352 |  |
+| ruler_qa_1 | 16384 | 100 | 0.89 | 0.80 | 13 | 4 | 0.0245 |  |
+| ruler_qa_1 | 32768 | 100 | 0.90 | 0.72 | 19 | 1 | 2e-05 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.71 | 0.54 | 20 | 3 | 0.000244 | FAIL |
+| ruler_qa_2 | 16384 | 100 | 0.70 | 0.47 | 25 | 2 | 2.82e-06 | FAIL |
+| ruler_qa_2 | 32768 | 100 | 0.67 | 0.40 | 29 | 2 | 2.31e-07 | FAIL |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@32768, ruler_qa_2@4096, ruler_qa_2@16384, ruler_qa_2@32768
+
+### real QA: source + realmix -> Mamba-in-the-Llama + realmix seed 2, the deficit after equal training
+baseline ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed2-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.81 | 0.68 | 90 | 16 | 5.5e-14 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.97 | 0.85 | 13 | 1 | 0.000916 | FAIL |
+| ruler_qa_1 | 16384 | 100 | 0.89 | 0.83 | 11 | 5 | 0.105 |  |
+| ruler_qa_1 | 32768 | 100 | 0.90 | 0.78 | 14 | 2 | 0.00209 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.71 | 0.61 | 13 | 3 | 0.0106 |  |
+| ruler_qa_2 | 16384 | 100 | 0.70 | 0.50 | 22 | 2 | 1.79e-05 | FAIL |
+| ruler_qa_2 | 32768 | 100 | 0.67 | 0.53 | 17 | 3 | 0.00129 | FAIL |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@4096, ruler_qa_1@32768, ruler_qa_2@16384, ruler_qa_2@32768
+
+### real QA: source + realmix -> Mamba-in-the-Llama + realmix seed 3, the deficit after equal training
+baseline ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',) vs candidate ('JunxiongWang/Llama3.1-Mamba2-8B-dpo+adapter-JunxiongWang_Llama3.1-Mamba2-8B-dpo-seed3-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.81 | 0.68 | 97 | 19 | 4.32e-14 | FAIL |
+| ruler_qa_1 | 4096 | 100 | 0.97 | 0.88 | 9 | 0 | 0.00195 | FAIL |
+| ruler_qa_1 | 16384 | 100 | 0.89 | 0.80 | 14 | 5 | 0.0318 |  |
+| ruler_qa_1 | 32768 | 100 | 0.90 | 0.78 | 14 | 2 | 0.00209 | FAIL |
+| ruler_qa_2 | 4096 | 100 | 0.71 | 0.57 | 19 | 5 | 0.00331 | FAIL |
+| ruler_qa_2 | 16384 | 100 | 0.70 | 0.53 | 19 | 2 | 0.000111 | FAIL |
+| ruler_qa_2 | 32768 | 100 | 0.67 | 0.50 | 22 | 5 | 0.000757 | FAIL |
+
+FAIL: recall regression in all cases pooled, ruler_qa_1@4096, ruler_qa_1@32768, ruler_qa_2@4096, ruler_qa_2@16384, ruler_qa_2@32768
+
 ### suite-s1: source -> source + realmix (control)
 baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 600 shared cases, alpha 0.05
 
@@ -877,6 +952,27 @@ baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qw
 | needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
 | updated | 16384 | 50 | 0.38 | 1.00 | 0 | 31 | 1 |  |
 | updated | 32768 | 50 | 0.24 | 0.96 | 0 | 36 | 1 |  |
+
+PASS: no recall regression
+
+### suite-s1: source -> source + realmix (8B control)
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.88 | 0.99 | 2 | 70 | 1 |  |
+| heldout_many | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| many_random | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| many_random | 32768 | 50 | 0.98 | 1.00 | 0 | 1 | 1 |  |
+| many_similar | 16384 | 50 | 0.96 | 1.00 | 0 | 2 | 1 |  |
+| many_similar | 32768 | 50 | 1.00 | 0.98 | 1 | 0 | 0.5 |  |
+| multihop | 16384 | 50 | 0.60 | 1.00 | 0 | 20 | 1 |  |
+| multihop | 32768 | 50 | 0.44 | 0.92 | 1 | 25 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.90 | 1.00 | 0 | 5 | 1 |  |
+| updated | 32768 | 50 | 0.66 | 1.00 | 0 | 17 | 1 |  |
 
 PASS: no recall regression
 
@@ -901,6 +997,27 @@ baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qw
 
 PASS: no recall regression
 
+### suite-s2: source -> source + realmix (8B control)
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',): 600 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 600 | 0.90 | 0.99 | 2 | 58 | 1 |  |
+| heldout_many | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| many_random | 16384 | 50 | 0.98 | 1.00 | 0 | 1 | 1 |  |
+| many_random | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| many_similar | 16384 | 50 | 0.94 | 1.00 | 0 | 3 | 1 |  |
+| many_similar | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| multihop | 16384 | 50 | 0.66 | 0.98 | 0 | 16 | 1 |  |
+| multihop | 32768 | 50 | 0.54 | 0.94 | 1 | 21 | 1 |  |
+| needle | 16384 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| needle | 32768 | 50 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| updated | 16384 | 50 | 0.84 | 1.00 | 0 | 8 | 1 |  |
+| updated | 32768 | 50 | 0.82 | 0.98 | 1 | 9 | 0.999 |  |
+
+PASS: no recall regression
+
 ### heldout: source -> source + realmix (control)
 baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 150 shared cases, alpha 0.05
 
@@ -916,6 +1033,21 @@ baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qw
 
 PASS: no recall regression
 
+### heldout: source -> source + realmix (8B control)
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 1024 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 2048 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 4096 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 8192 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 16384 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+| heldout_many | 32768 | 25 | 1.00 | 1.00 | 0 | 0 | 1 |  |
+
+PASS: no recall regression
+
 ### multihop25: source -> source + realmix (control)
 baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qwen2.5-1.5B-seed1-realmix',): 150 shared cases, alpha 0.05
 
@@ -928,6 +1060,21 @@ baseline ('Qwen/Qwen2.5-1.5B',) vs candidate ('Qwen/Qwen2.5-1.5B+adapter-Qwen_Qw
 | multihop | 8192 | 25 | 0.20 | 0.92 | 0 | 18 | 1 |  |
 | multihop | 16384 | 25 | 0.32 | 1.00 | 0 | 17 | 1 |  |
 | multihop | 32768 | 25 | 0.16 | 0.96 | 0 | 20 | 1 |  |
+
+PASS: no recall regression
+
+### multihop25: source -> source + realmix (8B control)
+baseline ('meta-llama/Llama-3.1-8B-Instruct',) vs candidate ('meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix',): 150 shared cases, alpha 0.05
+
+| task | ref tokens | n | baseline | candidate | lost | gained | p | |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| all |  | 150 | 0.65 | 0.99 | 0 | 52 | 1 |  |
+| multihop | 1024 | 25 | 0.76 | 1.00 | 0 | 6 | 1 |  |
+| multihop | 2048 | 25 | 0.72 | 1.00 | 0 | 7 | 1 |  |
+| multihop | 4096 | 25 | 0.76 | 1.00 | 0 | 6 | 1 |  |
+| multihop | 8192 | 25 | 0.52 | 0.96 | 0 | 11 | 1 |  |
+| multihop | 16384 | 25 | 0.64 | 1.00 | 0 | 9 | 1 |  |
+| multihop | 32768 | 25 | 0.48 | 1.00 | 0 | 13 | 1 |  |
 
 PASS: no recall regression
 

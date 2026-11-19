@@ -70,13 +70,15 @@ case "${1:-report}" in
     done
     $PY - <<'EOF'  # the controls' gains on qa_1 in cases of 100, and the pre-registered labels (RESULTS.md, Control and Control at 8B)
 import json, os
+from recall_guard.aggregate import binomial_tail_half
 from recall_guard.score import first_line, strip_think
-E4, QA, Q = "exp04_realdocs/results/raw", "exp05_realmix/results/raw/qa", "Qwen_Qwen2.5-1.5B"
+E4, QA, Q ="exp04_realdocs/results/raw", "exp05_realmix/results/raw/qa", "Qwen_Qwen2.5-1.5B"
 LENGTHS = (4096, 16384, 32768)
 hits = lambda p: sum(r["contains"] for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
 # RULER's rule reads the whole output and every model runs on after its answer, so also count the first line only
 gold = {c["id"]: c["answer"].lower().split("|") for L in LENGTHS for c in map(json.loads, open(f"exp04_realdocs/results/cases/ruler-{L}.jsonl"))}
-first = lambda p: sum(any(a in first_line(strip_think(r["output"])).lower() for a in gold[r["case_id"]]) for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
+hit1 = lambda r: any(a in first_line(strip_think(r["output"])).lower() for a in gold[r["case_id"]])
+first = lambda p: sum(hit1(r) for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1")
 ctl = f"{QA}/ruler-{{L}}-repair-seed1-realmix-{Q}.jsonl"
 if os.path.exists(ctl.format(L=16384)):
     G = {L: hits(ctl.format(L=L)) - hits(f"{E4}/ruler-{L}-base-{Q}.jsonl") for L in (16384, 32768)}
@@ -93,6 +95,18 @@ if os.path.exists(ctl8.format(L=16384)):  # the label reads 16K, where the hybri
               "| hybrid + realmix seeds 1-3", [[n(f"{QA}/ruler-{L}-repair-seed{s}-realmix-{M8}.jsonl") for s in (1, 2, 3)] for L in LENGTHS])
     G16 = hits(ctl8.format(L=16384)) - hits(f"{E4}/ruler-16384-base-{L8}.jsonl")
     print("8B control label at 16K:", "repair" if G16 <= 5 else "training" if G16 >= 10 else "mixed")
+    # post hoc (2026-11-19): the deficit gate on the first line, where the control's later "Answer:" lines cannot score
+    q1 = lambda p: {r["case_id"]: hit1(r) for r in map(json.loads, open(p)) if r["task"] == "ruler_qa_1"}
+    for L in LENGTHS:
+        c = q1(ctl8.format(L=L))
+        for s in (1, 2, 3):
+            h = q1(f"{QA}/ruler-{L}-repair-seed{s}-realmix-{M8}.jsonl")
+            lost, gained = sum(c[k] and not h[k] for k in c), sum(h[k] and not c[k] for k in c)
+            assert lost - gained == sum(c.values()) - sum(h.values())
+            print(f"8B deficit after equal training, first line only, qa_1@{L} seed {s}: {lost} lost / {gained} gained, p {binomial_tail_half(lost, lost + gained):.3g}")
+        for r in map(json.loads, open(ctl8.format(L=L))):
+            if r["task"] == "ruler_qa_1" and r["contains"] and not hit1(r):
+                print(f"8B control scores after its first line only, {r['case_id']}: gold {gold[r['case_id']][0]!r}, output {r['output'][:70]!r}")
 EOF
     for f in $E3/bench-base-{$JET,$MIL,$QWEN,$LLAMA}.json $E3/bench-repair-seed1-{$JET,$QWEN}.json $E3/bench-repair-seed1-gentle-$MIL.json $DMG/bench-*.json \
              $E3/bpb-base-{$JET,$MIL,$QWEN,$LLAMA}.json $E3/bpb-repair-seed1-{$JET,$QWEN}.json $E3/bpb-repair-seed1-gentle-$MIL.json $DMG/bpb-*.json; do

@@ -42,6 +42,8 @@
 | jet-ai/Jet-Nemotron-2B+adapter-jet-ai_Jet-Nemotron-2B-seed3-realmix | ruler_qa_2 | 0.56 | 0.48 | 0.39 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_1 | 0.92 | 0.82 | 0.83 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_2 | 0.67 | 0.64 | 0.57 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_1 | 0.97 | 0.89 | 0.90 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_2 | 0.71 | 0.70 | 0.67 |
 
 ## All rows
 
@@ -167,3 +169,9 @@
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_2 | 4096 | 100 | 0.67 | 0.00 | 0.00 | 2.1 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_2 | 16384 | 100 | 0.64 | 0.00 | 0.00 | 4.2 |
 | meta-llama/Llama-3.1-8B-Instruct | ruler_qa_2 | 32768 | 100 | 0.57 | 0.00 | 0.00 | 8.7 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_1 | 4096 | 100 | 0.97 | 0.00 | 0.00 | 1.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_1 | 16384 | 100 | 0.89 | 0.00 | 0.00 | 4.2 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_1 | 32768 | 100 | 0.90 | 0.00 | 0.00 | 9.0 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_2 | 4096 | 100 | 0.71 | 0.00 | 0.00 | 1.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_2 | 16384 | 100 | 0.70 | 0.00 | 0.00 | 4.1 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | ruler_qa_2 | 32768 | 100 | 0.67 | 0.00 | 0.00 | 8.7 |

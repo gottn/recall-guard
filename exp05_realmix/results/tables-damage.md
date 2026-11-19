@@ -170,6 +170,24 @@
 | meta-llama/Llama-3.1-8B-Instruct | multihop | 0.63 | 0.49 |
 | meta-llama/Llama-3.1-8B-Instruct | needle | 1.00 | 1.00 |
 | meta-llama/Llama-3.1-8B-Instruct | updated | 0.87 | 0.74 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | heldout_many | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | many_random | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | many_similar | 1.00 | 0.99 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | multihop | 0.99 | 0.93 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | needle | 1.00 | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | updated | 1.00 | 0.99 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | heldout_many |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | many_random |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | many_similar |  | 0.98 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | multihop |  | 0.88 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | needle |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | updated |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | heldout_many |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | many_random |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | many_similar |  | 0.98 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | multihop |  | 0.92 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | needle |  | 1.00 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | updated |  | 1.00 |
 
 ## All rows
 
@@ -427,3 +445,27 @@
 | meta-llama/Llama-3.1-8B-Instruct | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 4.5 |
 | meta-llama/Llama-3.1-8B-Instruct | updated | 16384 | 100 | 0.87 | 0.82 | 0.13 | 2.3 |
 | meta-llama/Llama-3.1-8B-Instruct | updated | 32768 | 100 | 0.74 | 0.72 | 0.25 | 4.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | heldout_many | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | heldout_many | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | many_random | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | many_random | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | many_similar | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.5 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | many_similar | 32768 | 100 | 0.99 | 0.99 | 0.01 | 9.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | multihop | 16384 | 100 | 0.99 | 0.99 | 0.01 | 4.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | multihop | 32768 | 100 | 0.93 | 0.93 | 0.07 | 9.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | needle | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | needle | 32768 | 100 | 1.00 | 1.00 | 0.00 | 9.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | updated | 16384 | 100 | 1.00 | 1.00 | 0.00 | 4.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix | updated | 32768 | 100 | 0.99 | 0.99 | 0.00 | 9.8 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | heldout_many | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | many_similar | 32768 | 50 | 0.98 | 0.98 | 0.02 | 8.2 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | multihop | 32768 | 50 | 0.88 | 0.88 | 0.10 | 9.0 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.3 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+chat | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 8.2 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | heldout_many | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | many_random | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | many_similar | 32768 | 50 | 0.98 | 0.98 | 0.02 | 10.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | multihop | 32768 | 50 | 0.92 | 0.92 | 0.08 | 10.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | needle | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.6 |
+| meta-llama/Llama-3.1-8B-Instruct+adapter-meta-llama_Llama-3.1-8B-Instruct-seed1-realmix+unmerged | updated | 32768 | 50 | 1.00 | 1.00 | 0.00 | 10.6 |

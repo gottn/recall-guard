@@ -23,8 +23,12 @@ multi-value at 16K is +0.13, the pre-registered "small", with the seeds overlapp
 
 **Control (2026-11-18):** the same recipe lifts the Qwen source as much as Jet (qa_1 0.45 -> 0.76 at 16K, 0.36 -> 0.76 at
 32K). The real-QA gain above is what this training gives any model, and "closes the single-document gap" holds only against
-the untrained source: after equal training the 2B gap at 32K is 0.28-0.32, against 0.24 before. The 8B numbers have no such
-control. Section "Control".
+the untrained source: after equal training the 2B gap at 32K is 0.28-0.32, against 0.24 before. Section "Control".
+
+**Control at 8B (2026-11-19):** the same recipe lifts Llama-3.1-8B-Instruct by 0.05-0.07 on qa_1 (0.97 / 0.89 / 0.90).
+After equal training the 8B gap at 32K is 0.12-0.18, against 0.64 before, and the gate fails there for all three seeds:
+at 8B too, "closes the single-document gap" holds only against the untrained source. Counted on the first line of the
+output only, one seed of three fails. Section "Control at 8B".
 
 ## Question
 Exp04 left three things open. The adapter trained only on synthetic key lists repairs 58% of the single-document gap at
@@ -345,8 +349,8 @@ Post hoc, not in the rule: RULER's rule counts the answer anywhere in the output
 Scored on the first line only, the control still gains 0.31 at 16K and 0.36 at 32K (0.72), and the gap after equal
 training is 0.25-0.28 at 32K. The run-on text does not carry the result.
 
-Limits: one control seed against Jet's three; n = 100 per cell; qa_1 questions are 96% from one article; the 8B pair has no
-such control, so its realmix numbers (0.72-0.78 against Llama's untrained 0.83) do not show a closed gap either.
+Limits: one control seed against Jet's three; n = 100 per cell; qa_1 questions are 96% from one article. The 8B pair's
+control followed on 2026-11-19 (next section).
 
 **Damage checks** (reported, not criteria). Job 1185235 COMPLETED after 3 h 48 min; ten result files, sha256 as on the
 cluster. Every number: `run_all.sh report` (results/tables-damage.md, tables-ruler.md, gates.md, and its bench / bpb
@@ -375,6 +379,12 @@ lines). Recall at 16K / 32K, n = 100 per suite cell and 50 per RULER cell:
   model, and the synthetic control ranged from 0.20 to 0.98 there over two seeds (exp03).
 
 ## Control at 8B: the gentle recipe on the source (pre-registered 2026-11-18, before the run)
+**Verdict: open, and mixed at 16K.** After the same training Llama scores 0.97 / 0.89 / 0.90 on qa_1, and the trained
+hybrid is below it at 32K for all three seeds (0.72-0.78; 19 lost / 1 gained, 14 / 2, 14 / 2) and at 4K for two. The gap
+at 32K is 0.12-0.18, against 0.64 before any training. Llama gains 0.07 at 16K, where the hybrid gains 0.15-0.18. Post
+hoc: counted on the first line of the output only, the 32K gap is 0.10-0.16 and one seed of three fails, which the rule
+would call seed-dependent.
+
 **Question.** The 2B control showed that the realmix recipe lifts the source as much as the hybrid. The 8B numbers still
 compare a trained hybrid with an untrained source: Mamba-in-the-Llama + realmix scores 0.72-0.78 on qa_1 at 32K against
 Llama-3.1-8B-Instruct's 0.83. What does the same training give Llama, and is the single-document gap still closed after it?
@@ -404,6 +414,86 @@ shows.
 
 Expectation, not a criterion: deficit seed-dependent 0.40, open 0.30, closed 0.30; at 16K repair 0.40, mixed 0.30,
 training 0.30. Power is low: one control seed and n = 100, and the 16K labels are five cases apart.
+
+**Results.** Jobs 1187070 (training 44 min, then the damage checks) and 1187071 (real QA, 51 min) on 2026-11-18 and 19 at
+01cb0b7, both on a256-a40-04 (`sacct`). Departure from the method: 1187071 was not released early (the Mac slept and the
+loop never ran), so it started when 1187070 ended, after the damage checks. `train_stats.json`: 300 documents, 75 steps,
+lr 5e-5, rank 16, 3,675,752 tokens. The hybrid's seed 1 saw 3,676,252: it was trained at 8b5abb6, before d6523cd put 55
+paragraphs back in the distractor pool; seeds 2 and 3 have them, as the control does. Llama has four kinds of projection
+to adapt (0.17% of its weights, training log) where the hybrid has six, and ends at loss 0.223 against the hybrid's 0.304.
+The sha256 of the three result files matches the cluster. Every number: `run_all.sh report` (results/tables-qa.md,
+results/gates.md; it prints the gains, the label and the first-line lines).
+
+| qa_1 | 4K | 16K | 32K |
+|---|---:|---:|---:|
+| Llama-3.1-8B-Instruct | 0.92 | 0.82 | 0.83 |
+| Llama-3.1-8B-Instruct + realmix (the control) | 0.97 | 0.89 | 0.90 |
+| Mamba-in-the-Llama | 0.86 | 0.65 | 0.19 |
+| Mamba-in-the-Llama + realmix, seeds 1 / 2 / 3 | 0.91 / 0.85 / 0.88 | 0.80 / 0.83 / 0.80 | 0.72 / 0.78 / 0.78 |
+| gain of the control (G) | 0.05 | 0.07 | 0.07 |
+| gain of the hybrid | -0.01 to 0.05 | 0.15-0.18 | 0.53-0.59 |
+| gap, source minus hybrid, before training | 0.06 | 0.17 | 0.64 |
+| gap after equal training | 0.06-0.12 | 0.06-0.09 | 0.12-0.18 |
+
+**Deficit after equal training: open.** Llama + realmix -> Mamba-in-the-Llama + realmix fails qa_1 at 32K for all three
+seeds (19 lost / 1 gained, 14 / 2, 14 / 2; p 2e-5, 0.002, 0.002) and qa_1 at 4K for seeds 2 and 3 (13 / 1, 9 / 0; p 0.0009,
+0.002). At 16K no seed fails (13 / 4, 11 / 5, 14 / 5; p 0.02-0.11). All three seeds fail pooled (113 / 13, 90 / 16,
+97 / 19). **Gain of the source at 16K: mixed** (G = 0.07; 2 lost / 9 gained), two cases above the repair threshold.
+Neither was the expected outcome: seed-dependent and repair had 0.40 each, open and mixed 0.30.
+
+- **The 8B gap is not closed, but most of it is.** Against the untrained Llama no qa_1 cell failed (0.83 against
+  0.72-0.78 at 32K). The same training lifts Llama to 0.90, and the gap at 32K is then 0.12-0.18. It was 0.64 before any
+  training, so 72-81% of it closes; 56% was certain before the run.
+- **Unlike at 2B, the source gains much less than the hybrid.** Llama gains 0.05 / 0.07 / 0.07, the hybrid 0.15-0.18 at
+  16K and 0.53-0.59 at 32K. So at least 0.46 of the hybrid's gain at 32K is not what this training gives the source.
+  Llama had only 0.17-0.18 of room there, so the two gains cannot be compared in size; the gap after equal training is
+  the fair number.
+- The control's own gain shows pooled (16 lost / 55 gained over the six cells) and in no single cell at the corrected
+  level (qa_1: 0 / 5, 2 / 9, 2 / 9).
+- qa_2 (reported): the control gains 0.04 / 0.06 / 0.10 (0.71 / 0.70 / 0.67). The gap after equal training is 0.10-0.17
+  at 4K, 0.17-0.23 at 16K and 0.14-0.27 at 32K, against 0.16 / 0.30 / 0.22 before training. The gate fails at 16K and
+  32K for all three seeds and at 4K for seeds 1 and 3. Two-document questions stay the larger deficit.
+
+Post hoc, not in the rule (the first-line counts were pre-registered as reported; the paired test on them was not).
+RULER's rule counts the answer anywhere in the output. The trained Llama runs on with further `Answer:` lines, and in nine
+qa_1 cases (5 / 2 / 2 at 4K / 16K / 32K) only a later line holds the gold answer; in six of the nine the first line names
+a different answer (my reading of the outputs the report prints). The untrained Llama has no such case and the trained
+hybrid 0-2 per cell. On the first line only:
+- Llama's gain is 0.00 / 0.05 / 0.05, so the 16K gain sits on the repair threshold.
+- The gap after equal training is 0.03-0.07 at 4K, 0.04-0.08 at 16K and 0.10-0.16 at 32K.
+- At 32K the gate reads 19 lost / 3 gained (p 0.0004), 14 / 4 (p 0.015) and 13 / 3 (p 0.011). Only seed 1 is under the
+  corrected level of 0.0083, which the rule would call seed-dependent. No 4K or 16K cell fails (4K: 7 / 4, 10 / 3, 7 / 3).
+
+So the 4K failures come from the later lines. The 32K gap is there on both counts and in all three seeds; on the first
+line it clears the corrected level for one seed.
+
+Limits: one control seed against the hybrid's three; n = 100 per cell; qa_1 questions are 96% from one article; the
+first-line gate is post hoc; the gentle synthetic adapter has no control on Llama.
+
+**Damage checks** (reported, not criteria). Job 1187070 COMPLETED after 6 h 40 min; ten result files, sha256 as on the
+cluster. Every number: `run_all.sh report` (results/tables-damage.md, tables-ruler.md, gates.md, and its bench / bpb
+lines). Recall at 16K / 32K, n = 100 per suite cell and 50 per RULER cell:
+
+| | Llama-3.1-8B-Instruct | + realmix (this control) |
+|---|---:|---:|
+| multihop | 0.63 / 0.49 | 0.99 / 0.93 |
+| updated | 0.87 / 0.74 | 1.00 / 0.99 |
+| many_similar | 0.95 / 1.00 | 1.00 / 0.99 |
+| many_random, heldout_many, needle | 0.99-1.00 | 1.00 |
+| RULER multi-value | 0.92 / 0.98 | 0.94 / 1.00 |
+| RULER multi-query | 1.00 / 1.00 | 1.00 / 1.00 |
+| RULER multikey_3 (UUID keys) | 0.98 / 0.96 | 1.00 / 0.98 |
+| ARC-Easy / HellaSwag (acc, n = 500) | 0.808 / 0.598 | 0.814 / 0.596 |
+| bits per byte, Moby Dick at 16K | 0.7997 | 0.8414 |
+
+- The control passes all four suite gates: pooled 2 lost / 70 gained (s1), 2 / 58 (s2), 0 / 0 (held-out), 0 / 52
+  (multihop25). The benchmarks stay within 0.01 (acc). Bits per byte rise by 0.042, against 0.028-0.048 for the hybrid's
+  three realmix seeds.
+- The synthetic half lifts Llama's multi-hop from 0.63 / 0.49 to 0.99 / 0.93 and updated from 0.87 / 0.74 to 1.00 / 0.99.
+  The trained hybrid scores 0.97-0.99 / 0.90-0.97 on multi-hop over three seeds, around the control (no gate was run on
+  that pair).
+- No RULER cell falls below the source.
+- Variants at 32K on suite seed 1 (n = 50): unmerged 0.92-1.00, chat template 0.88-1.00; multi-hop is the lowest in both.
 
 ## Next
 1. Budget, not split: Jet with the full 600 synthetic documents plus 600 real (the pre-registered reading of a P4 failure), to
